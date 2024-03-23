@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Access Denied</title>
+</head>
+<body>
+    <h2 style="color: red; text-shadow: 2px 2px 0px black; font-size: 4em">
+        ACCESS DENIED</h2>
+    <h3 style="color:rgba(119,233,236,0.66); text-shadow: 1px 1px 0px black;">
+        YOUR ROLE:<span sec:authentication="principal.authorities"></span>
+    </h3>
+    <a style="font-size: 2em; color:#fdab2d;" href="#" th:href="@{/}">Take me back</a>
+</body>
+</html>

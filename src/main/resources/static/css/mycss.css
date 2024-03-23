@@ -1,0 +1,139 @@
+
+body {
+    margin: 0;
+    animation: fadeInAnimation ease 3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.affix {
+    top: 0;
+    width: 100%;
+    z-index: 9999 !important;
+}
+
+.affix + .container-fluid {
+    padding-top: 70px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.fixedContainer{
+    width: 950px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+#leftNav{
+    width: 30%;
+    padding: 0;
+    float: left;
+}
+
+.fixedPadding{
+    padding: 20px;
+}
+
+.warning{
+    padding: 10px;
+    background-color: #ffc;
+}
+
+.smallestText{
+    font-size: 0.8em;
+}
+
+.requiredText{
+    color: #c00;
+    font-weight: bold;
+}
+
+.requiredInput label::after{
+    content: " *";
+    color: #c00;
+}
+
+.successNotice{
+    background-color: lightgreen;
+    font-weight: bold;
+}
+
+.errorNotice{
+    background-color: darksalmon;
+    font-weight: bold;
+}
+
+input{
+    width: 100%;
+}
+
+.bodyNav{
+    width: 70%;
+    float: right;
+    padding: 0;
+}
+
+.thirdsDiv{
+    width: 28%;
+    display: inline-block;
+    padding: 2%;
+    vertical-align: top;
+}
+
+.halvesDiv{
+    width: 45%;
+    min-width: 180px;
+    display: inline-block;
+    vertical-align: top;
+    padding: 2%;
+}
+
+article{
+    display: block;
+}
+form{
+    margin: 0;
+    padding: 0;
+}
+h3{
+    font-size: 1.1em;
+}
+h2{
+    font-size: 1.6em;
+}
+fieldset{
+    padding: 10px;
+    margin: 10px 0;
+    border: 3px solid #ddd;
+}
+
+fieldset legend{
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 0 10px;
+    white-space: nowrap;
+}
+
+
+
+
+

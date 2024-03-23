@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script th:src="@{/js/bootstrap/bootstrap.js}"></script>
+    <script th:src="@{/js/bootstrap/bootstrap.bundle.js}"></script>
+    <script th:src="@{/js/script.js}"></script>
+    <script src="https://cdn.tiny.cloud/1/f9zv4s8hx9uxaf7vho9e7m1ozym4y8wpwxc5dpjjaql0d3p4/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script th:src="@{/js/tinymceConfig.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-grid.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-reboot.css}">
+    <link rel="stylesheet" href="../static/css/mycss.css"
+          media="all" th:href="@{/css/mycss.css}"/>
+</head>
+<body>
+<div class="container-fluid" style="background-color:#ffffff;color:#fff;height:300px;">
+    <p align="center">
+        <img src="/images/VOICE%20logo%202023-transparent.png"
+             alt="" title="" border="0" width="714" height="268"><br>
+    </p>
+
+</div>
+<!--Main Menu Nav Bar-->
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+<!--        Links-->
+        <ul class="navbar-nav" id="collapsibleNavbar">
+            <!-- Home -->
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home</a>
+            </li>
+
+        <!-- About us Dropdown -->
+        <li class="nav-item dropdown px-2 ">
+            <a class="nav-link dropdown-toggle" href="#" id="aboutusdrop" data-toggle="dropdown">
+                About us
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Chapters</a>
+                <a class="dropdown-item" href="#">Publications</a>
+                <a class="dropdown-item" href="#">Staff & Board</a>
+                <a class="dropdown-item" href="#">Our Funders And Sponsors</a>
+            </div>
+        </li>
+
+        <li class="nav-item px-2 ">
+            <a class="nav-link" href="#">Donate</a>
+        </li>
+
+        <!-- Our Programs Dropdown -->
+        <li class="nav-item dropdown px-2">
+            <a class="nav-link dropdown-toggle" href="#" id="programsdrop" data-toggle="dropdown">
+                Our Programs
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Parents</a>
+                <a class="dropdown-item" href="#">Children/Youth</a>
+                <a class="dropdown-item" href="#">Early Years</a>
+                <a class="dropdown-item" href="#">Educators/Alumni</a>
+                <a class="dropdown-item" href="#">Advocacy/Public Education</a>
+                <a class="dropdown-item" href="#">Youth Mentorship</a>
+                <a class="dropdown-item" href="#">SEAC</a>
+            </div>
+        </li>
+
+            <!-- Events Dropdown -->
+            <li class="nav-item dropdown px-2 ">
+                <a class="nav-link dropdown-toggle" href="#" id="eventsdrop" data-toggle="dropdown">
+                    Events
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Conference 2024</a>
+                    <a class="dropdown-item" href="#">Conference 2023</a>
+                </div>
+            </li>
+
+            <li class="nav-item px-2 ">
+                <a class="nav-link" href="#">Voice Camp 2024</a>
+            </li>
+
+            <!-- Resources Dropdown -->
+            <li class="nav-item dropdown px-2 ">
+                <a class="nav-link dropdown-toggle" href="#" id="resourcesdrop" data-toggle="dropdown">
+                    Resources
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Financial</a>
+                    <a class="dropdown-item" href="#">Mental Health</a>
+                    <a class="dropdown-item" href="#">Library</a>
+                    <a class="dropdown-item" href="#">Educational</a>
+                    <a class="dropdown-item" href="#">Other Languages</a>
+                    <a class="dropdown-item" href="#">Audiology</a>
+                    <a class="dropdown-item" href="#">AVT/LSLS</a>
+                    <a class="dropdown-item" href="#">Other Organization</a>
+                </div>
+            </li>
+
+            <li class="nav-item px-2 ">
+                <a class="nav-link" href="#" th:href="@{/login}"
+                   sec:authorize="!isAuthenticated()" >Login</a>
+                <a class="nav-link" href="#" th:href="@{/logout}"
+                   sec:authorize="isAuthenticated()" >Logout</a>
+
+            </li>
+    </ul>
+</nav>
+
+
+<h1>TinyMCE Quick Start Guide</h1>
+<form method="post">
+    <textarea id="editor" th:text="${pageContent}"></textarea>
+</form>
+
+
+</body>
+</html>
