@@ -15,7 +15,7 @@ import java.util.Map;
 @Repository
 public class DatabaseAccess {
     @Autowired
-    protected NamedParameterJdbcTemplate jdbc;
+    public NamedParameterJdbcTemplate jdbc;
 
 
     public User findUserAccount(String email){

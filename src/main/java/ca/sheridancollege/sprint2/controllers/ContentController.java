@@ -13,6 +13,7 @@ public class ContentController {
 
     @Autowired
     @Lazy
+    public
     DatabaseAccess da;
 
     @PostMapping("/savecontent")
