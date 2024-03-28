@@ -30,7 +30,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true) //this clears the information after you log out
                 .clearAuthentication(true) //this also clears information after you log out
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))//our mapping to the page after logging out
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/")
                 .permitAll()
                 .and()
                 .exceptionHandling()

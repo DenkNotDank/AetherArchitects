@@ -14,6 +14,10 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-grid.css}">
     <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-reboot.css}">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="../static/css/mycss.css"
           media="all" th:href="@{/css/mycss.css}"/>
 </head>
@@ -25,6 +29,18 @@
     </p>
 
 </div>
+
+
+<div class="loginNotice" sec:authorize="isAuthenticated()">
+    <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+        Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span><a href="/" sec:authentication="name"></a>
+    </div>
+    <div th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+        Logged in as User <span class="glyphicon glyphicon-user"></span>&nbsp;<a href="/" sec:authentication="name"></a>
+    </div>
+
+</div>
+
 <!--Main Menu Nav Bar-->
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
 
@@ -36,7 +52,7 @@
         <ul class="navbar-nav" id="collapsibleNavbar">
             <!-- Home -->
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="/">Home</a>
             </li>
 
         <!-- About us Dropdown -->
