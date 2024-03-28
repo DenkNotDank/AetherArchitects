@@ -10,10 +10,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +26,54 @@ import ca.sheridancollege.sprint2.beans.Content;
 import ca.sheridancollege.sprint2.beans.User;
 import ca.sheridancollege.sprint2.controllers.ContentController;
 import ca.sheridancollege.sprint2.database.DatabaseAccess;
+import org.springframework.ui.Model;
 
 
 @AutoConfigureMockMvc
 @SpringBootTest
 class S2Tests {
+
+    Model model = new Model() {
+        @Override
+        public Model addAttribute(String attributeName, Object attributeValue) {
+            return null;
+        }
+
+        @Override
+        public Model addAttribute(Object attributeValue) {
+            return null;
+        }
+
+        @Override
+        public Model addAllAttributes(Collection<?> attributeValues) {
+            return null;
+        }
+
+        @Override
+        public Model addAllAttributes(Map<String, ?> attributes) {
+            return null;
+        }
+
+        @Override
+        public Model mergeAttributes(Map<String, ?> attributes) {
+            return null;
+        }
+
+        @Override
+        public boolean containsAttribute(String attributeName) {
+            return false;
+        }
+
+        @Override
+        public Object getAttribute(String attributeName) {
+            return null;
+        }
+
+        @Override
+        public Map<String, Object> asMap() {
+            return null;
+        }
+    };
 
     @Test
     public void testContent() {
@@ -76,7 +116,7 @@ class S2Tests {
 
         Content content = new Content(1, "Test content");
 
-        controller.saveContent(content);
+        controller.saveContent(content, model);
 
         verify(databaseAccess).saveContent(1, "Test content");
     }

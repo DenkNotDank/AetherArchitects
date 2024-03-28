@@ -115,10 +115,25 @@
 </nav>
 
 
-<h1>TinyMCE Quick Start Guide</h1>
-<form method="post">
-    <textarea id="editor" th:text="${pageContent}"></textarea>
-</form>
+
+<div class="mainContent">
+    <div class="errorNotice" th:if="${saveResult}">
+        <span>Error Encountered:</span>
+        <p class="smallestText">Content not saved</p>
+    </div>
+
+    <div class="form-group" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+        <form method="post">
+            <textarea id="editor" th:text="${pageContent}"></textarea>
+        </form>
+    </div>
+    <div class="form-group" th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+            <div>
+                [(${pageContent})]
+            </div>
+    </div>
+</div>
+
 
 
 </body>

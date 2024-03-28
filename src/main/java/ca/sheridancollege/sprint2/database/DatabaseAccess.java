@@ -84,12 +84,19 @@ public class DatabaseAccess {
     }
 
 
-    public void saveContent(long id, String content){
+    public boolean saveContent(long id, String content){
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "UPDATE CONTENT SET contentBody = :content WHERE contentId = :id";
         parameters.addValue("content", content);
         parameters.addValue("id", id);
-        jdbc.update(q, parameters);
+        int returnValue =  jdbc.update(q, parameters);
+        if(returnValue >0){
+            return false;
+        }
+        else{
+            return true;
+        }
+
     }
 
     public String getContent(long id){

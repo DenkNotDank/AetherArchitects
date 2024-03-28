@@ -1,10 +1,11 @@
 tinymce.init({
     selector: "#editor",
     plugins:
-        "advlist anchor autosave image link lists media mediaembed pageembed searchreplace table template visualblocks wordcount",
+        "advlist anchor autosave image link lists media mediaembed pageembed searchreplace table template visualblocks wordcount code",
     toolbar:
         "undo redo | styles | bold italic underline strikethrough | align | table link image media pageembed | bullist numlist outdent indent | spellcheckdialog a11ycheck typography code",
     height: 540,
+    invalid_elements: 'script',
     a11ychecker_level: "aaa",
     typography_langs: ["en-US"],
     typography_default_lang: "en-US",
@@ -55,8 +56,9 @@ tinymce.init({
                 data: JSON.stringify(myData),
 
                 success: function(data){
+                    window.alert("Content Saved Successfully")
                     // $('#editor').val('');
-                    console.log(data)
+
                 }
             })
         })

@@ -8,6 +8,11 @@ function verify(){
     }
 }
 
+function alertError(){
+    window.alert("Error saving page content. Please contact an administrator.");
+}
+
+
 $(document).ready(function(){
     $('.dropdown').hover(function(){
         $(this).find('.dropdown-menu')

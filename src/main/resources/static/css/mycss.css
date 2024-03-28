@@ -133,6 +133,13 @@ fieldset legend{
     white-space: nowrap;
 }
 
+.mainContent{
+    margin: 0 auto;
+    width: 960px;
+    height: 900px;
+    background-color: #bde6f2;
+}
+
 
 
 
