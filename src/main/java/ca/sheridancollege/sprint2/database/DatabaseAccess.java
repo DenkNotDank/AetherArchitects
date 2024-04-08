@@ -84,6 +84,12 @@ public class DatabaseAccess {
     }
 
 
+    /**
+     *
+     * @param id - The unique identifier number assigned to the page content
+     * @param content - The stringified html content
+     * @return - False=No errors and page content saved. True=something went wrong.
+     */
     public boolean saveContent(long id, String content){
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "UPDATE CONTENT SET contentBody = :content WHERE contentId = :id";
@@ -99,6 +105,11 @@ public class DatabaseAccess {
 
     }
 
+    /**
+     *
+     * @param id - The unique identifier number assigned to the page content
+     * @return - The stringified html content for the particular section
+     */
     public String getContent(long id){
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "Select * from CONTENT where contentId = :id";

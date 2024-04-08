@@ -38,11 +38,8 @@ tinymce.init({
 
 
     setup: (editor) => {
-        //This is what will get the data from the database
-        // editor.on('init', function() {
-        //
-        // });
         //This is what will send the data to our database
+        //Triggered by clicking off tinymce editor
         editor.on('change', (e) => {
             var myData = {
                 "contentId": 1,
@@ -56,9 +53,6 @@ tinymce.init({
                 data: JSON.stringify(myData),
 
                 success: function(data){
-                    window.alert("Content Saved Successfully")
-                    // $('#editor').val('');
-
                 }
             })
         })

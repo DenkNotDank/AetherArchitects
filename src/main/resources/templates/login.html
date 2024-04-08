@@ -14,6 +14,7 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-reboot.css}">
     <link rel="stylesheet" href="../static/css/mycss.css"
           media="all" th:href="@{/css/mycss.css}"/>
+
 </head>
 <body>
 <div class="container-fluid" style="background-color:#ffffff;color:#fff;height:300px;">
@@ -151,30 +152,31 @@
                 <h2>Don't Have An Account?</h2>
                 <p class="smallestText">No worries! You can set up an account to get started.</p>
                 <p class="requiredText">Fields Marked an asterisk * are required.</p>
+                <p th:if="${userExists}" class="errorNotice">User with email already exists.</p>
+                <p class="errorNotice" id="signupError"></p>
 
                 <form name="form" action="#" th:action="@{/register}"
-                      method="post" onsubmit="return verify()">
+                      method="post" >
 
                     <fieldset>
                         <legend>Account Login Information</legend>
                         <p class="smallestText">Please enter an email and password (minimum 6 characters) for your account.
                         This information will be required to register for products and programs.
                         </p>
-
-                        <div class="requiredInput thirdsDiv"><label>Email </label> <input type="email" name="email"></div>
-                        <div class="requiredInput thirdsDiv"><label>Password </label> <input type="password" name="password"></div>
-                        <div class="requiredInput thirdsDiv"><label>Confirm Password </label><input type="password" name="vpassword"></div>
+                        <div class="requiredInput thirdsDiv"><label>Email </label> <input class="verify" type="email" name="email" required></div>
+                        <div class="requiredInput thirdsDiv"><label>Password </label> <input class="verify password"  type="password" name="password" required></div>
+                        <div class="requiredInput thirdsDiv"><label>Confirm Password </label><input class="verify"  type="password" name="vpassword" required></div>
 
                     </fieldset>
 
                     <fieldset>
                         <legend>Name & Contact</legend>
                         <div>
-                            <div class="requiredInput halvesDiv"><label>First Name </label> <input type="text" name="firstName"></div>
-                            <div class="requiredInput halvesDiv"><label>Last Name </label> <input type="text" name="lastName"></div>
+                            <div class="requiredInput halvesDiv"><label>First Name </label> <input class="verify" type="text" name="firstName" required></div>
+                            <div class="requiredInput halvesDiv"><label>Last Name </label> <input class="verify" type="text" name="lastName" required></div>
                         </div>
                         <div>
-                            <div class="requiredInput halvesDiv"> <label>Phone </label> <input type="number" name="phone" maxlength="10"></div>
+                            <div class="requiredInput halvesDiv"> <label>Phone </label> <input class="verify" type="number" name="phone" maxlength="10" required></div>
                             <div class="halvesDiv"> <label>Secondary Email </label> <input type="email" name="secondaryEmail"></div>
                         </div>
 
@@ -182,13 +184,13 @@
 
                     <fieldset>
                         <legend>Residence</legend>
-                        <div class="requiredInput thirdsDiv"><label>Province </label> <input type="text" name="province"></div>
-                        <div class="requiredInput thirdsDiv"><label>City </label> <input type="text" name="city"></div>
+                        <div class="requiredInput thirdsDiv"><label>Province </label> <input class="verify" type="text" name="province" required></div>
+                        <div class="requiredInput thirdsDiv"><label>City </label> <input  class="verify" type="text" name="city" required></div>
                         <div class="thirdsDiv"><label>Postal Code </label> <input type="text" name="postalCode"></div>
 
                     </fieldset>
 
-                    <input class="btn btn-outline-warning" type="submit" value="Register">
+                    <input id="registerButton" class="btn btn-outline-warning" type="submit" value="Register">
                 </form>
 
             </div>
