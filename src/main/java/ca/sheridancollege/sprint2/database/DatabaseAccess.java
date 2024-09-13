@@ -17,8 +17,7 @@ public class DatabaseAccess {
     @Autowired
     public NamedParameterJdbcTemplate jdbc;
 
-
-    public User findUserAccount(String email){
+    public User findUserAccount(String email) {
         System.out.println(email);
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "Select * from sec_user where email = :email";
@@ -27,14 +26,14 @@ public class DatabaseAccess {
         ArrayList<User> users = (ArrayList<User>) jdbc.query(q, parameters,
                 new BeanPropertyRowMapper<User>(User.class));
 
-        if(users.size() > 0){
+        if (users.size() > 0) {
             System.out.println(users.get(0));
             return users.get(0);
         }
         return null;
     }
 
-    public List<String> getRolesById(long userId){
+    public List<String> getRolesById(long userId) {
         ArrayList<String> roles = new ArrayList<>();
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -45,19 +44,18 @@ public class DatabaseAccess {
         parameters.addValue("userId", userId);
 
         List<Map<String, Object>> rows = jdbc.queryForList(q, parameters);
-        for(Map<String, Object> row: rows)
+        for (Map<String, Object> row : rows)
             roles.add((String) row.get("roleName"));
 
         return roles;
     }
 
-
-
     public BCryptPasswordEncoder passworEncoder() {
         return new BCryptPasswordEncoder();
     }
-    public void createNewUser(String email,String firstName, String lastName,long phone, String secondaryEmail,
-                              String province, String city, String postalCode,String password){
+
+    public void createNewUser(String email, String firstName, String lastName, long phone, String secondaryEmail,
+            String province, String city, String postalCode, String password) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "Insert into SEC_USER (email, firstName, lastName, phone, secondaryEmail, province," +
                 "city,postalCode ,encryptedPassword, accountEnabled)"
@@ -75,7 +73,7 @@ public class DatabaseAccess {
         jdbc.update(q, parameters);
     }
 
-    public void addRole(long userId, long roleId){
+    public void addRole(long userId, long roleId) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "Insert into USER_ROLE (userId, roleId) values (:userId, :roleId)";
         parameters.addValue("userId", userId);
@@ -83,23 +81,21 @@ public class DatabaseAccess {
         jdbc.update(q, parameters);
     }
 
-
     /**
      *
-     * @param id - The unique identifier number assigned to the page content
+     * @param id      - The unique identifier number assigned to the page content
      * @param content - The stringified html content
      * @return - False=No errors and page content saved. True=something went wrong.
      */
-    public boolean saveContent(long id, String content){
+    public boolean saveContent(long id, String content) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "UPDATE CONTENT SET contentBody = :content WHERE contentId = :id";
         parameters.addValue("content", content);
         parameters.addValue("id", id);
-        int returnValue =  jdbc.update(q, parameters);
-        if(returnValue >0){
+        int returnValue = jdbc.update(q, parameters);
+        if (returnValue > 0) {
             return false;
-        }
-        else{
+        } else {
             return true;
         }
 
@@ -110,39 +106,103 @@ public class DatabaseAccess {
      * @param id - The unique identifier number assigned to the page content
      * @return - The stringified html content for the particular section
      */
-    public String getContent(long id){
+    public String getContent(long id) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "Select * from CONTENT where contentId = :id";
         parameters.addValue("id", id);
 
-        //Queries always have a chance of returning more than 1 row so we'll use ArrayList to store results
+        // Queries always have a chance of returning more than 1 row so we'll use
+        // ArrayList to store results
         ArrayList<Content> contents = (ArrayList<Content>) jdbc.query(q, parameters,
                 new BeanPropertyRowMapper<Content>(Content.class));
 
-        //Check that our arrayList actually contains some results
-        if(contents.size() > 0){
+        // Check that our arrayList actually contains some results
+        if (contents.size() > 0) {
             System.out.println(contents.get(0));
 
-            //String inside of the Content object at index 0 will contain our html
+            // String inside of the Content object at index 0 will contain our html
             return contents.get(0).getContentBody();
         }
         return null;
     }
 
+    public void deleteUser(String email) {
+        try {
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            String query = "DELETE FROM SEC_USER WHERE email = :email";
+            parameters.addValue("email", email);
+            jdbc.update(query, parameters);
+            System.out.println("User with email " + email + " deleted successfully.");
+        } catch (Exception e) {
+            System.out.println("Error deleting user: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
+    public User getInfo(String email) {
+        return findUserAccount(email);
+    }
 
+    public void saveInfo(User user) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String query = "UPDATE SEC_USER SET firstName = :firstName, lastName = :lastName, phone = :phone, " +
+                "secondaryEmail = :secondaryEmail, province = :province, city = :city, postalCode = :postalCode " +
+                "WHERE email = :email";
 
+        parameters.addValue("email", user.getEmail());
+        parameters.addValue("firstName", user.getFirstName());
+        parameters.addValue("lastName", user.getLastName());
+        parameters.addValue("phone", user.getPhone());
+        parameters.addValue("secondaryEmail", user.getSecondaryEmail());
+        parameters.addValue("province", user.getProvince());
+        parameters.addValue("city", user.getCity());
+        parameters.addValue("postalCode", user.getPostalCode());
 
+        jdbc.update(query, parameters);
+    }
 
+    public void updateUserInfo(String email, String firstName, String lastName, Long phone, String secondaryEmail,
+            String province, String city, String postalCode) {
+        try {
+            // Retrieve the users info
+            User user = getInfo(email);
 
+            if (user == null) {
+                throw new RuntimeException("User with the email " + email + " not found");
+            }
 
+            // Only update the filled fields
+            if (firstName != null) {
+                user.setFirstName(firstName);
+            }
+            if (lastName != null) {
+                user.setLastName(lastName);
+            }
+            if (phone != null) {
+                user.setPhone(phone);
+            }
+            if (secondaryEmail != null) {
+                user.setSecondaryEmail(secondaryEmail);
+            }
+            if (province != null) {
+                user.setProvince(province);
+            }
+            if (city != null) {
+                user.setCity(city);
+            }
+            if (postalCode != null) {
+                user.setPostalCode(postalCode);
+            }
 
+            // Save the user's updated information
+            saveInfo(user);
 
+            System.out.println("User's Information was updated successfully.");
 
-
-
-
-
-
-
+        } catch (Exception e) {
+            System.out.println("Error updating user info: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to update user information.");
+        }
+    }
 }
