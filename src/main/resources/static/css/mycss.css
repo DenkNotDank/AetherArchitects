@@ -142,9 +142,11 @@ fieldset legend{
 
 .loginNotice{
     background-color: #cde1ff69;
-    margin-left: 55%;
-    width: 20vw;
+    margin-left: 45%;
+    width: 36vw;
     font-size: 1.1em;
+    height: 12vh;
+    padding: 0.5em;
 }
 
 

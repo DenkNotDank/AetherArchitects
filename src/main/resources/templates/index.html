@@ -34,11 +34,11 @@
 <div class="loginNotice" sec:authorize="isAuthenticated()">
     <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
         Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span><a href="/" sec:authentication="name"></a>
+        <a href="#" th:href="@{/admin/dashboard}"><button>ADMIN PANEL</button></a>
     </div>
     <div th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
         Logged in as User <span class="glyphicon glyphicon-user"></span>&nbsp;<a href="/" sec:authentication="name"></a>
     </div>
-
 </div>
 
 <!--Main Menu Nav Bar-->

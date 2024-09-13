@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     DatabaseAccess da;
     @Override
     public UserDetails loadUserByUsername (String email) throws UsernameNotFoundException{
-        System.out.println(email);
+//        System.out.println(email);
         ca.sheridancollege.sprint2.beans.User user = da.findUserAccount(email);
         if(user == null)
         {
