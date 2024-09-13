@@ -1,7 +1,7 @@
 tinymce.init({
     selector: "#editor",
     plugins:
-        "advlist anchor autosave image link lists media mediaembed pageembed searchreplace table template visualblocks wordcount code",
+        "advlist anchor autosave image link lists media searchreplace table template visualblocks wordcount code",
     toolbar:
         "undo redo | styles | bold italic underline strikethrough | align | table link image media pageembed | bullist numlist outdent indent | spellcheckdialog a11ycheck typography code",
     height: 540,

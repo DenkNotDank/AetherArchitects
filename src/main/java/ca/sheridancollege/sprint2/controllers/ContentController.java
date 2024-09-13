@@ -19,8 +19,8 @@ public class ContentController {
 
     @PostMapping("/savecontent")
     public String saveContent(@RequestBody Content content, Model model){
-        System.out.println(content.getContentId());
-        System.out.println(content.getContentBody());
+//        System.out.println(content.getContentId());
+//        System.out.println(content.getContentBody());
 
 
         boolean result = da.saveContent(content.getContentId(), content.getContentBody());
