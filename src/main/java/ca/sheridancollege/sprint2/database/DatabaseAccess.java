@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class DatabaseAccess {
+public class
+
+DatabaseAccess {
     @Autowired
     public NamedParameterJdbcTemplate jdbc;
 
@@ -104,6 +106,19 @@ public class DatabaseAccess {
         parameters.addValue("email", email);
         jdbc.update(q, parameters);
     }
+
+    public void updateUserInfo(String email,String firstName,String lastName,long phone,String province,String city){
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String q = "UPDATE SEC_USER SET firstName = :firstName, lastName = :lastName , phone = :phone , province = :province, city = :city WHERE email =: email ";
+        parameters.addValue("email", email); // using email to identify the user
+        parameters.addValue("firstName", firstName);
+        parameters.addValue("lastName", lastName);
+        parameters.addValue("phone", phone);
+        parameters.addValue("province", province);
+        parameters.addValue("city", city);
+        jdbc.update(q, parameters);
+    }
+
 
     public void addRole(long userId, long roleId){
         MapSqlParameterSource parameters = new MapSqlParameterSource();

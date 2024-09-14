@@ -18,6 +18,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/adminHome").hasRole("ADMIN")
+                .antMatchers("/myAccount/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/", "/css/**", "/img/**", "/jsp/**", "/**").permitAll()
                 .antMatchers("/console/**").permitAll() //this helps us get access to the console
