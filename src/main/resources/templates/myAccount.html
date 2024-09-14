@@ -53,8 +53,16 @@
     <div id="tab2" class="tab">
       <!--Security-->
       <h6>Email</h6><a id ="uName" th:text="${username}"></a><br><button>Change Email</button><br><br>
-        <h6>Password</h6><button>Change Password</button>
-
+      <h6>Password</h6>
+      <form id="hiddenForm" action="#" th:action="@{/changePassword}" method="post">
+        <label id="lb1" for="newPassword" style="display: none;">New Password</label>
+        <input type="password" id="newPassword" name ="newPassword" required style="display: none;"><Br>
+        <label id="lb2" for="confirmPassword" style="display: none;">Confirm Password</label>
+        <input type="password" id="confirmPassword" name ="confirmPassword" required style="display: none;"><Br>
+        <input
+        type="submit" id="pwSubmit" name="pwSubmit" value="Change Password" required style="display: none;">
+      </form>
+<button id="myButton">Change Password</button>
       <br><br><br><br><br><br><br><br><br>
 
         <button id="delAcc">DELETE ACCOUNT</button>

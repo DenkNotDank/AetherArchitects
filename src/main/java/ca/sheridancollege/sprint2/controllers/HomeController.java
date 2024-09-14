@@ -43,10 +43,9 @@ public class HomeController {
         return "myAccount";
     }
 
-    @PostMapping("/myAccount/changePassword")
-    public String changePassword(@RequestParam("newPassword") String newPassword,
-                                 @RequestParam("confirmPassword") String confirmPassword,
-                                 Model model){
+    @PostMapping("/changePassword")
+    public String changePassword(@RequestParam(name = "newPassword") String newPassword,
+                                 @RequestParam(name = "confirmPassword") String confirmPassword){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (newPassword.equals(da.findUserPassword(auth.getName()))) {
@@ -54,7 +53,7 @@ public class HomeController {
         }
         else{
             if(newPassword.equals(confirmPassword)){
-                da.updateUserLogin(newPassword);
+                da.updateUserLogin(newPassword, auth.getName());
                 return "login";
             }
             else{

@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -91,12 +93,15 @@ public class DatabaseAccess {
         jdbc.update(q, parameters);
     }
 
-    public void updateUserLogin(String password){
+    public void updateUserLogin(String password, String email){
+
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String q = "Insert into SEC_USER (encryptedPassword)"
-                + " values (:password)";
+        String q = "UPDATE SEC_USER "
+                + " SET (encryptedPassword) = :password"
+                + " where email = :email";
 
         parameters.addValue("password", passworEncoder().encode(password));
+        parameters.addValue("email", email);
         jdbc.update(q, parameters);
     }
 
