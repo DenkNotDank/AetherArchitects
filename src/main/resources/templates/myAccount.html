@@ -36,8 +36,9 @@
 
   <div class="tab-content">
     <div id="tab1" class="tab active">
+      <p class="errorNotice" id="signupError"></p>
       <!--Account Details-->
-      <form>
+      <form action="#" th:action="@{/changeUserInfo}">
       <label for="fName">First Name</label>
        <input type="text" id="fName" name ="fname"><Br>
         <label for="lName">Last Name</label>
