@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +24,22 @@ public class DatabaseAccess {
         System.out.println(email);
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "Select * from sec_user where email = :email";
+        parameters.addValue("email", email);
+
+        ArrayList<User> users = (ArrayList<User>) jdbc.query(q, parameters,
+                new BeanPropertyRowMapper<User>(User.class));
+
+        if(users.size() > 0){
+            System.out.println(users.get(0));
+            return users.get(0);
+        }
+        return null;
+    }
+
+    public User findUserPassword(String email){
+        System.out.println(email);
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String q = "Select encryptedPassword from sec_user where email = :email";
         parameters.addValue("email", email);
 
         ArrayList<User> users = (ArrayList<User>) jdbc.query(q, parameters,
@@ -72,6 +90,18 @@ public class DatabaseAccess {
         parameters.addValue("city", city);
         parameters.addValue("postalCode", postalCode);
         parameters.addValue("password", passworEncoder().encode(password));
+        jdbc.update(q, parameters);
+    }
+
+    public void updateUserLogin(String password, String email){
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String q = "UPDATE SEC_USER "
+                + " SET (encryptedPassword) = :password"
+                + " where email = :email";
+
+        parameters.addValue("password", passworEncoder().encode(password));
+        parameters.addValue("email", email);
         jdbc.update(q, parameters);
     }
 
