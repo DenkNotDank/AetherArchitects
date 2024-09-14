@@ -52,7 +52,44 @@ function verify(){
         document.getElementById("registerButton").disabled = true
     }
 
+} 
 
+window.addEventListener('load', () => {
+    var elements = document.getElementsByClassName('verify-changes');
+    for (var i = 0; i < elements.length; i++) {
+        elements.item(i).addEventListener('change', verifyChanges);
+    }
+});
+
+
+function verifyChanges() {
+    document.getElementById("saveChangesButton").disabled = false;
+    document.getElementById("editError").innerHTML = "";
+
+    var email = document.forms['form']['email'].value;
+    var firstName = document.forms['form']['firstName'].value;
+    var lastName = document.forms['form']['lastName'].value;
+    var phone = document.forms['form']['phone'].value;
+    var province = document.forms['form']['province'].value;
+    var city = document.forms['form']['city'].value;
+
+    // Ensure required fields are filled
+    if (firstName == "" || lastName == "" || phone == "" || province == "" || city == "") {
+        document.getElementById("editError").innerHTML += "Please fill in all required fields." + "<br/>";
+        document.getElementById("saveChangesButton").disabled = true;
+    }
+
+    // Validate email format
+    if (!validateEmail(email)) {
+        document.getElementById("editError").innerHTML += "Invalid email format." + "<br/>";
+        document.getElementById("saveChangesButton").disabled = true;
+    }
+
+    // Validate phone number format (assuming a 10-digit number)
+    if (!validatePhone(phone)) {
+        document.getElementById("editError").innerHTML += "Invalid phone number format." + "<br/>";
+        document.getElementById("saveChangesButton").disabled = true;
+    }
 }
 
 function passwordStrength(password){
@@ -77,6 +114,11 @@ const validateEmail = (email) => {
     );
 };
 
+const validatePhone = (phone) => {
+    return phone.match(
+        /^\d{10}$/  // Matches exactly 10 digits
+    );
+};
 
 
 function alertError(){
