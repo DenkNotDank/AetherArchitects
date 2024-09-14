@@ -37,7 +37,7 @@ DatabaseAccess {
         return null;
     }
 
-    public User findUserPassword(String email){
+    public User findUserPassword(String email) {
         System.out.println(email);
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "Select encryptedPassword from sec_user where email = :email";
@@ -46,14 +46,14 @@ DatabaseAccess {
         ArrayList<User> users = (ArrayList<User>) jdbc.query(q, parameters,
                 new BeanPropertyRowMapper<User>(User.class));
 
-        if(users.size() > 0){
+        if (users.size() > 0) {
             System.out.println(users.get(0));
             return users.get(0);
         }
         return null;
     }
 
-    public List<String> getRolesById(long userId){
+    public List<String> getRolesById(long userId) {
         ArrayList<String> roles = new ArrayList<>();
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -75,7 +75,7 @@ DatabaseAccess {
     }
 
     public void createNewUser(String email, String firstName, String lastName, long phone, String secondaryEmail,
-            String province, String city, String postalCode, String password) {
+                              String province, String city, String postalCode, String password) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "Insert into SEC_USER (email, firstName, lastName, phone, secondaryEmail, province," +
                 "city,postalCode ,encryptedPassword, accountEnabled)"
@@ -93,7 +93,7 @@ DatabaseAccess {
         jdbc.update(q, parameters);
     }
 
-    public void updateUserLogin(String password, String email){
+    public void updateUserLogin(String password, String email) {
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "UPDATE SEC_USER "
@@ -105,20 +105,33 @@ DatabaseAccess {
         jdbc.update(q, parameters);
     }
 
-    public void updateUserInfo(String email,String firstName,String lastName,long phone,String province,String city){
+    public void updateUserEmail(String email, String newEmail) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String q = "UPDATE SEC_USER SET firstName = :firstName, lastName = :lastName , phone = :phone , province = :province, city = :city WHERE email =: email ";
+        String q = "UPDATE SEC_USER SET email = :newEmail WHERE email = :email";
+        parameters.addValue("newEmail", newEmail);
+        parameters.addValue("email", email);
+        jdbc.update(q, parameters);
+    }
+
+
+    public void updateUserInfo(String email, String firstName, String lastName, long phone, String province, String city, String postalCode, String secondaryEmail) {
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String q = "UPDATE SEC_USER SET firstName = :firstName, lastName = :lastName , phone = :phone , province = :province, city = :city,postalCode = :postalCode,secondaryEmail= :secondaryEmail  WHERE email = :email ";
+
         parameters.addValue("email", email); // using email to identify the user
         parameters.addValue("firstName", firstName);
         parameters.addValue("lastName", lastName);
         parameters.addValue("phone", phone);
         parameters.addValue("province", province);
         parameters.addValue("city", city);
+        parameters.addValue("postalCode", postalCode);
+        parameters.addValue("secondaryEmail", secondaryEmail);
         jdbc.update(q, parameters);
     }
 
 
-    public void addRole(long userId, long roleId){
+    public void addRole(long userId, long roleId) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "Insert into USER_ROLE (userId, roleId) values (:userId, :roleId)";
         parameters.addValue("userId", userId);
@@ -127,7 +140,6 @@ DatabaseAccess {
     }
 
     /**
-     *
      * @param id      - The unique identifier number assigned to the page content
      * @param content - The stringified html content
      * @return - False=No errors and page content saved. True=something went wrong.
@@ -147,7 +159,6 @@ DatabaseAccess {
     }
 
     /**
-     *
      * @param id - The unique identifier number assigned to the page content
      * @return - The stringified html content for the particular section
      */
@@ -205,7 +216,8 @@ DatabaseAccess {
 
         jdbc.update(query, parameters);
     }
-
+}
+    /*
     public void updateUserInfo(String email, String firstName, String lastName, Long phone, String secondaryEmail,
             String province, String city, String postalCode) {
         try {
@@ -250,4 +262,4 @@ DatabaseAccess {
             throw new RuntimeException("Failed to update user information.");
         }
     }
-}
+} */
