@@ -18,22 +18,22 @@ import java.util.List;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-            @Lazy
+    @Lazy
     DatabaseAccess da;
+
     @Override
     public UserDetails loadUserByUsername (String email) throws UsernameNotFoundException{
 //        System.out.println(email);
         ca.sheridancollege.sprint2.beans.User user = da.findUserAccount(email);
-        if(user == null)
-        {
+        if (user == null) {
             System.out.println("User not found: " + email);
             throw new UsernameNotFoundException("User " + email + " was not found");
         }
 
         List<String> rolesNames = da.getRolesById(user.getUserId());
         List<GrantedAuthority> grantList = new ArrayList<>();
-        if(rolesNames != null) {
-            for(String role : rolesNames){
+        if (rolesNames != null) {
+            for (String role : rolesNames) {
                 grantList.add(new SimpleGrantedAuthority(role));
             }
         }

@@ -4,14 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class User {
 
-    //These are the fields / user information we collect
-
+    // These are the fields / user information we collect
     private long userId;
     private String email;
     private String firstName;
@@ -22,8 +20,5 @@ public class User {
     private String city;
     private String postalCode;
     private String encryptedPassword;
-
-
-
 
 }
