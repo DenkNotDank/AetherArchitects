@@ -34,6 +34,22 @@ public class DatabaseAccess {
         return null;
     }
 
+    public User findUserPassword(String email){
+        System.out.println(email);
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String q = "Select encryptedPassword from sec_user where email = :email";
+        parameters.addValue("email", email);
+
+        ArrayList<User> users = (ArrayList<User>) jdbc.query(q, parameters,
+                new BeanPropertyRowMapper<User>(User.class));
+
+        if(users.size() > 0){
+            System.out.println(users.get(0));
+            return users.get(0);
+        }
+        return null;
+    }
+
     public List<String> getRolesById(long userId){
         ArrayList<String> roles = new ArrayList<>();
 
@@ -71,6 +87,15 @@ public class DatabaseAccess {
         parameters.addValue("province", province);
         parameters.addValue("city", city);
         parameters.addValue("postalCode", postalCode);
+        parameters.addValue("password", passworEncoder().encode(password));
+        jdbc.update(q, parameters);
+    }
+
+    public void updateUserLogin(String password){
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String q = "Insert into SEC_USER (encryptedPassword)"
+                + " values (:password)";
+
         parameters.addValue("password", passworEncoder().encode(password));
         jdbc.update(q, parameters);
     }

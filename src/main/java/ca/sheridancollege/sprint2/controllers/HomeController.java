@@ -3,9 +3,12 @@ package ca.sheridancollege.sprint2.controllers;
 import ca.sheridancollege.sprint2.database.DatabaseAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 
 @Controller
 public class HomeController {
@@ -29,6 +32,37 @@ public class HomeController {
 //    public String getRegister(){
 //        return "register";
 //    }
+
+    @GetMapping("/myAccount")
+    public String getMyAccountPage(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth != null){
+            System.out.println("User is " + auth.getName());
+        }
+        model.addAttribute("username", auth.getName());
+        return "myAccount";
+    }
+
+    @PostMapping("/myAccount/changePassword")
+    public String changePassword(@RequestParam("newPassword") String newPassword,
+                                 @RequestParam("confirmPassword") String confirmPassword,
+                                 Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (newPassword.equals(da.findUserPassword(auth.getName()))) {
+            return "/error/changingPassword";
+        }
+        else{
+            if(newPassword.equals(confirmPassword)){
+                da.updateUserLogin(newPassword);
+                return "login";
+            }
+            else{
+                return "/error/changingPassword";
+            }
+        }
+
+    }
 
 
     @GetMapping("/accessDenied")
