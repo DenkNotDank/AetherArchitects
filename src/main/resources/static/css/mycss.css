@@ -142,11 +142,103 @@ fieldset legend{
 
 .loginNotice{
     background-color: #cde1ff69;
-    margin-left: 55%;
-    width: 20vw;
+    margin-left: 45%;
+    width: 36vw;
     font-size: 1.1em;
+    height: 12vh;
+    padding: 0.5em;
 }
 
+/*----- Tabs -----*/
+.tabs {
+    width:100%;
+    display:inline-block;
+}
+
+/*----- Tab Links -----*/
+/* Clearfix */
+.tab-links:after {
+    display:block;
+    clear:both;
+    content:'';
+}
+
+.tab-links li {
+    margin:0px 5px;
+    float:left;
+    list-style:none;
+}
+
+.tab-links a {
+    padding:9px 15px;
+    display:inline-block;
+    border-radius:3px 3px 0px 0px;
+    background:#7FB5DA;
+    font-size:16px;
+    font-weight:600;
+    color:#4c4c4c;
+    transition:all linear 0.15s;
+}
+
+.tab-links a:hover {
+    background:#a7cce5;
+    text-decoration:none;
+}
+
+/*li.active a, li.active a:hover {*/
+/*    background:#fff;*/
+/*    color:#4c4c4c;*/
+/*}*/
+
+/*!*----- Content of Tabs -----*!*/
+.tab-content {
+    padding:15px;
+    border-radius:3px;
+    box-shadow:-1px 1px 1px rgba(0,0,0,0.15);
+    background:#fff;
+}
+
+.tab-content input {
+
+    margin: 7px;
+    padding: 2px;
+    width: 250px;
+}
+
+.tab-content label {
+
+    margin-right: 15%;
+}
+
+
+.tab {
+    display:none;
+    margin:auto;
+    text-align:center;
+
+}
+
+.tab.active {
+    display:block;
+
+}
+#delAcc {
+    color: white;
+    border-color: red;
+    background-color: red;
+}
+
+#uName  {
+
+    font-size: 22px;
+    font-weight: bold;
+}
+
+#hiddenForm {
+
+text-align: center;
+
+}
 
 
 
