@@ -105,12 +105,21 @@ DatabaseAccess {
         jdbc.update(q, parameters);
     }
 
-    public void updateUserEmail(String email, String newEmail) {
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String q = "UPDATE SEC_USER SET email = :newEmail WHERE email = :email";
-        parameters.addValue("newEmail", newEmail);
-        parameters.addValue("email", email);
-        jdbc.update(q, parameters);
+    public boolean updateUserEmail(String email, String newEmail) {
+
+        try {
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            String q = "UPDATE SEC_USER SET email = :newEmail WHERE email = :email";
+            parameters.addValue("newEmail", newEmail);
+            parameters.addValue("email", email);
+            int isUpdated = jdbc.update(q, parameters);
+            if (isUpdated==1) {
+                return true;
+            }
+        }catch (Exception e){
+            System.out.println("Error Updating email "+ e.getMessage());
+        }
+        return false;
     }
 
 
