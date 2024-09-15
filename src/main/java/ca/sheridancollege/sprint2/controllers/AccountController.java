@@ -29,7 +29,12 @@ public class AccountController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("username", auth.getName());
         if (da.findUserAccount(auth.getName()) != null) {
-            model.addAttribute("userExists", true);
+            model.addAttribute("infoUpdated", false);
+            return "/myAccount";
+        }
+        else{
+            boolean updated = da.updateUserInfo(auth.getName(),firstName,lastName,phone,province,city,postalCode,secondaryEmail);
+            model.addAttribute("infoUpdated", updated);
         }
         return "/myAccount";
     }
