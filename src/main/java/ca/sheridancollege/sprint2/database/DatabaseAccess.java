@@ -123,20 +123,29 @@ DatabaseAccess {
     }
 
 
-    public void updateUserInfo(String email, String firstName, String lastName, long phone, String province, String city, String postalCode, String secondaryEmail) {
+    public boolean updateUserInfo(String email, String firstName, String lastName, long phone, String province, String city, String postalCode, String secondaryEmail) {
+        try{
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            String q = "UPDATE SEC_USER SET firstName = :firstName, lastName = :lastName , phone = :phone , province = :province, city = :city,postalCode = :postalCode,secondaryEmail= :secondaryEmail  WHERE email = :email ";
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String q = "UPDATE SEC_USER SET firstName = :firstName, lastName = :lastName , phone = :phone , province = :province, city = :city,postalCode = :postalCode,secondaryEmail= :secondaryEmail  WHERE email = :email ";
-
-        parameters.addValue("email", email); // using email to identify the user
-        parameters.addValue("firstName", firstName);
-        parameters.addValue("lastName", lastName);
-        parameters.addValue("phone", phone);
-        parameters.addValue("province", province);
-        parameters.addValue("city", city);
-        parameters.addValue("postalCode", postalCode);
-        parameters.addValue("secondaryEmail", secondaryEmail);
-        jdbc.update(q, parameters);
+            parameters.addValue("email", email); // using email to identify the user
+            parameters.addValue("firstName", firstName);
+            parameters.addValue("lastName", lastName);
+            parameters.addValue("phone", phone);
+            parameters.addValue("province", province);
+            parameters.addValue("city", city);
+            parameters.addValue("postalCode", postalCode);
+            parameters.addValue("secondaryEmail", secondaryEmail);
+            int isUpdated = jdbc.update(q, parameters);
+            if (isUpdated==1){
+                return true;
+            }
+        }
+        catch(Exception e){
+            System.out.println("Error updating user info: " + e.getMessage());
+            return false;
+        }
+        return false;
     }
 
 
