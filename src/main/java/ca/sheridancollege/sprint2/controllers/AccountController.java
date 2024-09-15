@@ -28,7 +28,7 @@ public class AccountController {
             Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("username", auth.getName());
-        if (da.findUserAccount(auth.getName()) != null) {
+        if (da.findUserAccount(auth.getName()) == null) {
             model.addAttribute("infoUpdated", false);
             return "/myAccount";
         }

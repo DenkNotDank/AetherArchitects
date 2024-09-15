@@ -37,7 +37,7 @@
   <div class="tab-content">
     <div id="tab1" class="tab active">
       <p class="errorNotice" id="signupError"></p>
-<!--      <p th:if="${!infoUpdated}" class="errorNotice">Error: Account changes failed to save.</p>-->
+      <p th:if="${infoUpdated == false}" class="errorNotice">Error: Account changes failed to save.</p>
       <p th:if="${infoUpdated}" class="successNotice">Account has been updated successfully</p>
       <!--Account Details-->
       <form action="#" th:action="@{/changeUserInfo}" method="post">
