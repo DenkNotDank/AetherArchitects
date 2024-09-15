@@ -25,7 +25,7 @@ public class AccountController {
             @RequestParam(name = "province") String province,
             @RequestParam(name = "city") String city,
             @RequestParam(name = "postalCode", required = false, defaultValue = "") String postalCode,
-                                 Model model){
+            Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("username", auth.getName());
         if (da.findUserAccount(auth.getName()) != null) {
@@ -34,5 +34,31 @@ public class AccountController {
         return "/myAccount";
     }
 
+    @PostMapping("/changeEmail")
+    public String changeEmail(
+            @RequestParam("newEmail") String newEmail,
+            Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentEmail = auth.getName();
+
+        if (newEmail.equals(currentEmail)) {
+            model.addAttribute("error", "New email is same as the old email");
+            return "/myAccount";
+        }
+        Boolean emailUpdated = da.updateUserEmail(currentEmail, newEmail);
+        if (emailUpdated) {
+            model.addAttribute("Message", "Your email has been changed successfully.");
+        } else {
+            model.addAttribute("error", "There was a problem updating your email.");
+        }
+
+        return "/myAccount";
+
+    }
+
 
 }
+
+
+
+
