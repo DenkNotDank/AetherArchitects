@@ -69,21 +69,21 @@
 
     <div id="tab2" class="tab">
       <!--Security-->
-      <h6>Email</h6><a id ="uName" th:text="${username}"></a><br><button>Change Email</button><br><br>
+      <h6>Email</h6><a id ="uName" th:text="${username}"></a><br>
       <form id="emailForm" action="#" th:action="@{/changeEmail}" method="post">
-        <label for="newEmail" style="display:none">New Email</label>
-        <input type="email" id="newEmail" name="newEmail" required style="display: none;"><Br>
-        <input type="submit" id="emailSubmit" value="Change Email" style="display: none;">
+        <label for="newEmail">New Email</label>
+        <input type="email" id="newEmail" name="newEmail" required><Br>
+        <input type="submit" id="emailSubmit" value="Change Email">
       </form>
 
       <h6>Password</h6>
       <form id="hiddenForm" action="#" th:action="@{/changePassword}" method="post">
-        <label id="lb1" for="newPassword" style="display: none;">New Password</label>
-        <input type="password" id="newPassword" name ="newPassword" required style="display: none;"><Br>
-        <label id="lb2" for="confirmPassword" style="display: none;">Confirm Password</label>
-        <input type="password" id="confirmPassword" name ="confirmPassword" required style="display: none;"><Br>
+        <label id="lb1" for="newPassword">New Password</label>
+        <input type="password" id="newPassword" name ="newPassword" required><Br>
+        <label id="lb2" for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name ="confirmPassword" required ><Br>
         <input
-        type="submit" id="pwSubmit" name="pwSubmit" value="Change Password" required style="display: none;">
+        type="submit" id="pwSubmit" name="pwSubmit" value="Change Password" required >
       </form>
 <button id="myButton">Change Password</button>
       <br><br><br><br><br><br><br><br><br>
