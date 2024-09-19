@@ -40,6 +40,8 @@
       <p th:if="${infoUpdated == false}" class="errorNotice">Error: Account changes failed to save.</p>
       <p th:if="${infoUpdated}" class="successNotice">Account has been updated successfully</p>
       <!--Account Details-->
+      <p th:if="${error}" class="errorNotice" th:text="${error}"></p>
+      <p th:if="${message}" class="successNotice" th:text="${message}"></p>
       <form action="#" th:action="@{/changeUserInfo}" method="post">
         <div class="form-group">
         <label for="fName">First Name</label>
