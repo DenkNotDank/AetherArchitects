@@ -39,33 +39,53 @@
         <p id="editError" class="errorNotice"></p>
         <!--Account Details-->
         <form action="#" th:action="@{/changeUserInfo}" method="post" name="form">
-          <label for="fName">First Name</label>
-          <input type="text" id="fName" name="firstName" th:value="${user != null ? user.firstName : ''}"
-            class="verify-changes" placeholder="Enter your first name" required><br>
 
-          <label for="lName">Last Name</label>
-          <input type="text" id="lName" name="lastName" th:value="${user != null ? user.lastName : ''}"
-            class="verify-changes" placeholder="Enter your last name" required><br>
+          <div class="requiredInput">
+            <label for="fName">First Name</label>
+            <input type="text" id="fName" name="firstName" th:value="${user != null ? user.firstName : ''}"
+              class="verify-changes" placeholder="Enter your first name" required>
+          </div><br>
 
-          <label for="phone">Phone Number</label>
-          <input type="text" id="phone" name="phone" th:value="${user != null ? user.phone : ''}" class="verify-changes"
-            placeholder="Enter your phone number" required><br>
 
-          <label for="secEmail">Secondary Email</label>
-          <input type="email" id="secEmail" name="secondaryEmail" th:value="${user != null ? user.secondaryEmail : ''}"
-            placeholder="Enter your secondary email (optional)"><br>
+          <div class="requiredInput">
+            <label for="lName">Last Name</label>
+            <input type="text" id="lName" name="lastName" th:value="${user != null ? user.lastName : ''}"
+              class="verify-changes" placeholder="Enter your last name" required>
+          </div><br>
 
-          <label for="province">Province</label>
-          <input type="text" id="province" name="province" th:value="${user != null ? user.province : ''}"
-            class="verify-changes" placeholder="Enter your province" required><br>
 
-          <label for="city">City</label>
-          <input type="text" id="city" name="city" th:value="${user != null ? user.city : ''}" class="verify-changes"
-            placeholder="Enter your city" required><br>
+          <div class="requiredInput">
+            <label for="phone">Phone Number</label>
+            <input type="text" id="phone" name="phone" th:value="${user != null ? user.phone : ''}" class="verify-changes"
+              placeholder="Enter your phone number" required>
+          </div><br>
 
-          <label for="postal">Postal Code</label>
-          <input type="text" id="postal" name="postalCode" th:value="${user != null ? user.postalCode : ''}"
-            placeholder="Enter your postal code"><br>
+
+
+          <div>
+            <label for="secEmail">Secondary Email</label>
+            <input type="email" id="secEmail" name="secondaryEmail" th:value="${user != null ? user.secondaryEmail : ''}"
+              placeholder="Enter your secondary email (optional)">
+          </div><br>
+
+
+          <div class="requiredInput">
+            <label for="province">Province</label>
+            <input type="text" id="province" name="province" th:value="${user != null ? user.province : ''}"
+              class="verify-changes" placeholder="Enter your province" required>
+          </div><br>
+
+          <div class="requiredInput">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" th:value="${user != null ? user.city : ''}" class="verify-changes"
+              placeholder="Enter your city" required>
+          </div><br>
+
+
+          <div>
+            <label for="postal">Postal Code</label>
+            <input type="text" id="postal" name="postalCode" th:value="${user != null ? user.postalCode : ''}" placeholder="Enter your postal code">
+          </div><br>
 
           <input id="saveChangesButton" class="btn btn-outline-warning" type="submit" value="Save Changes" disabled>
         </form>
