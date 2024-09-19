@@ -1,14 +1,11 @@
 package ca.sheridancollege.sprint2.controllers;
 
-import ca.sheridancollege.sprint2.beans.User;
 import ca.sheridancollege.sprint2.database.DatabaseAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @Controller
 public class HomeController {
@@ -26,47 +23,6 @@ public class HomeController {
     @GetMapping("/login")
     public String getLoginPage() {
         return "login";
-    }
-
-    @GetMapping("/myAccount")
-    public String getMyAccountPage(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            String email = auth.getName();
-            User user = da.findUserAccount(email);
-            System.out.println("Fetched user: " + user);
-            if (user != null) {
-                model.addAttribute("user", user);
-            } else {
-                model.addAttribute("error", "User not found.");
-            }
-        } else {
-            model.addAttribute("error", "Authentication failed.");
-        }
-        return "myAccount";
-    }
-
-    @PostMapping("/changePassword")
-    public String changePassword(@RequestParam(name = "newPassword") String newPassword,
-            @RequestParam(name = "confirmPassword") String confirmPassword) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (newPassword.equals(da.findUserPassword(auth.getName()))) {
-            return "/error/changingPassword";
-        } else {
-            if (newPassword.equals(confirmPassword)) {
-                da.updateUserLogin(newPassword, auth.getName());
-                return "login";
-            } else {
-                return "/error/changingPassword";
-            }
-        }
-
-    }
-
-    @GetMapping("/accessDenied")
-    public String goError() {
-        return "/error/accessDenied";
     }
 
     @PostMapping("/register")
