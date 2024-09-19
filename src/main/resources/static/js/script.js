@@ -71,11 +71,12 @@ function verifyChanges() {
     var phone = document.forms['form']['phone'].value;
     var province = document.forms['form']['province'].value;
     var city = document.forms['form']['city'].value;
+    var postal = document.forms['form']['postal'].value;
 
     let valid = true; // Flag to check if everything is valid
 
     // Ensure required fields are filled
-    if (firstName === "" || lastName === "" || phone === "" || province === "" || city === "") {
+    if (firstName === "" || lastName === "" || phone === "" || province === "" || city === "" || postal === "") {
         document.getElementById("editError").innerHTML += "Please fill in all required fields." + "<br/>";
         valid = false;
     }
