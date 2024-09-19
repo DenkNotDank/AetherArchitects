@@ -120,6 +120,20 @@ const validatePhone = (phone) => {
     );
 };
 
+function confirmDeletion() {
+    // First confirmation
+    var firstConfirmation = confirm("Are you sure you want to delete your account?");
+    if (firstConfirmation) {
+        // Second confirmation
+        var secondConfirmation = confirm("This action is irreversible. Do you really want to proceed?");
+        if (secondConfirmation) {
+            // Third confirmation
+            var thirdConfirmation = confirm("Please confirm one last time. Are you absolutely certain?");
+            return thirdConfirmation;  // Only if third confirmation is confirmed, proceed with form submission
+        }
+    }
+    return false;  // If any of the confirmations are cancelled, stop form submission
+}
 
 function alertError(){
     window.alert("Error saving page content. Please contact an administrator.");
