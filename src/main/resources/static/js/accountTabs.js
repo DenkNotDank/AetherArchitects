@@ -49,10 +49,8 @@ window.onload = function() {
 
             if (hasError) {
                 e.preventDefault(); //preventing the form submission if there is an error
-            } else {
-                document.getElementById("newPassword").value = '';
-                document.getElementById("confirmPassword").value = '';
             }
+
         };
     }
 };
