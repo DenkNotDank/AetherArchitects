@@ -1,4 +1,3 @@
-
 body {
     margin: 0;
     animation: fadeInAnimation ease 3s;
@@ -14,10 +13,8 @@ body {
     }
 }
 
-
-
 input[type='number'] {
-    -moz-appearance:textfield;
+    -moz-appearance: textfield;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -38,68 +35,69 @@ input::-webkit-inner-spin-button {
     display: block;
 }
 
-.fixedContainer{
+.fixedContainer {
     width: 950px;
     max-width: 100%;
     margin: 0 auto;
 }
-#leftNav{
+
+#leftNav {
     width: 30%;
     padding: 0;
     float: left;
 }
 
-.fixedPadding{
+.fixedPadding {
     padding: 20px;
 }
 
-.warning{
+.warning {
     padding: 10px;
     background-color: #ffc;
 }
 
-.smallestText{
+.smallestText {
     font-size: 0.8em;
 }
 
-.requiredText{
+.requiredText {
     color: #c00;
     font-weight: bold;
 }
 
-.requiredInput label::after{
+.requiredInput label::after {
     content: " *";
     color: #c00;
 }
 
-.successNotice{
+.successNotice {
     background-color: lightgreen;
     font-weight: bold;
 }
 
-.errorNotice{
+.errorNotice {
     background-color: darksalmon;
     font-weight: bold;
 }
 
-input{
+input {
     width: 100%;
 }
 
-.bodyNav{
+.bodyNav {
     width: 70%;
     float: right;
     padding: 0;
 }
 
-.thirdsDiv{
+.thirdsDiv {
     width: 28%;
     display: inline-block;
     padding: 2%;
     vertical-align: top;
 }
 
-.halvesDiv{
+.halvesDiv {
     width: 45%;
     min-width: 180px;
     display: inline-block;
@@ -107,40 +105,44 @@ input{
     padding: 2%;
 }
 
-article{
+article {
     display: block;
 }
-form{
+
+form {
     margin: 0;
     padding: 0;
 }
-h3{
+
+h3 {
     font-size: 1.1em;
 }
-h2{
+
+h2 {
     font-size: 1.6em;
 }
-fieldset{
+
+fieldset {
     padding: 10px;
     margin: 10px 0;
     border: 3px solid #ddd;
 }
 
-fieldset legend{
+fieldset legend {
     font-weight: bold;
     font-size: 1.2em;
     padding: 0 10px;
     white-space: nowrap;
 }
 
-.mainContent{
+.mainContent {
     margin: 0 auto;
     width: 960px;
     height: 900px;
     background-color: #bde6f2;
 }
 
-.loginNotice{
+.loginNotice {
     background-color: #cde1ff69;
     margin-left: 45%;
     width: 36vw;
@@ -151,95 +153,117 @@ fieldset legend{
 
 /*----- Tabs -----*/
 .tabs {
-    width:100%;
-    display:inline-block;
+    width: 100%;
+    display: inline-block;
 }
 
 /*----- Tab Links -----*/
 /* Clearfix */
 .tab-links:after {
-    display:block;
-    clear:both;
-    content:'';
+    display: block;
+    clear: both;
+    content: '';
 }
 
 .tab-links li {
-    margin:0px 5px;
-    float:left;
-    list-style:none;
+    margin: 0px 5px;
+    float: left;
+    list-style: none;
 }
 
 .tab-links a {
-    padding:9px 15px;
-    display:inline-block;
-    border-radius:3px 3px 0px 0px;
-    background:#7FB5DA;
-    font-size:16px;
-    font-weight:600;
-    color:#4c4c4c;
-    transition:all linear 0.15s;
+    padding: 9px 15px;
+    display: inline-block;
+    border-radius: 3px 3px 0px 0px;
+    background: #7FB5DA;
+    font-size: 16px;
+    font-weight: 600;
+    color: #4c4c4c;
+    transition: all linear 0.15s;
 }
 
 .tab-links a:hover {
-    background:#a7cce5;
-    text-decoration:none;
+    background: #a7cce5;
+    text-decoration: none;
 }
 
-/*li.active a, li.active a:hover {*/
-/*    background:#fff;*/
-/*    color:#4c4c4c;*/
-/*}*/
-
-/*!*----- Content of Tabs -----*!*/
+/*----- Content of Tabs -----*/
 .tab-content {
-    padding:15px;
-    border-radius:3px;
-    box-shadow:-1px 1px 1px rgba(0,0,0,0.15);
-    background:#fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: #fff;
+    box-shadow: -1px 1px 1px rgba(0, 0, 0, 0.15);
+    margin-top: -1px;
 }
 
 .tab-content input {
-
     margin: 7px;
     padding: 2px;
     width: 250px;
 }
 
 .tab-content label {
-
     margin-right: 15%;
 }
 
-
 .tab {
-    display:none;
-    margin:auto;
-    text-align:center;
-
+    display: none;
+    margin: auto;
+    text-align: center;
 }
 
 .tab.active {
-    display:block;
-
+    display: block;
 }
+
 #delAcc {
+    background-color: #dc3545;
     color: white;
-    border-color: red;
-    background-color: red;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
-#uName  {
+#delAcc:hover {
+    background-color: #c82333;
+}
 
+#uName {
     font-size: 22px;
     font-weight: bold;
 }
 
 #hiddenForm {
-
-text-align: center;
-
+    text-align: center;
 }
 
+/*--Form Styles--*/
+/*.form-group {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    margin-bottom: 15px;*/
+/*}*/
 
+/*.form-group label {*/
+/*    font-weight: bold;*/
+/*    margin-right: 10px;*/
+/*    width: 150px;*/
+/*    text-align: right;*/
+/*}*/
 
+/*.form-group input[type="text"],*/
+/*.form-group input[type="number"],*/
+/*.form-group input[type="email"] {*/
+/*    flex: 1;*/
+/*    padding: 8px 10px;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 4px;*/
+/*    font-size: 16px;*/
+/*    max-width: 400px;*/
+/*    box-sizing: border-box; }*/
 
