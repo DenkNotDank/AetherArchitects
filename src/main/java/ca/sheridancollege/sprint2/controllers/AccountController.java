@@ -60,7 +60,7 @@ public class AccountController {
         } else {
             boolean updated = da.updateUserInfo(auth.getName(), firstName, lastName, phone, province, city, postalCode,
                     secondaryEmail);
-            redirectAttrs.addFlashAttribute("infoUpdated",updated);
+            redirectAttrs.addFlashAttribute("infoUpdated", updated);
         }
         return "redirect:/myAccount";
     }
@@ -100,5 +100,27 @@ public class AccountController {
                 return "/error/changingPassword";
             }
         }
+    }
+
+    @PostMapping("/deleteAccount")
+    public String deleteAccount(RedirectAttributes redirectAttrs) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        try {
+            da.deleteUser(email);
+            redirectAttrs.addFlashAttribute("accountDeleted", true);
+            SecurityContextHolder.clearContext(); // Clear the user session
+        } catch (Exception e) {
+            // Print the error to the console
+            System.out.println("Error deleting account for user: " + email);
+            System.out.println(e.getMessage());
+
+            redirectAttrs.addFlashAttribute("accountDeleted", false);
+            // Add an error message attribute for display
+            redirectAttrs.addFlashAttribute("error",
+                    "There was a problem deleting your account. Please try again later.");
+        }
+        return "redirect:/";
     }
 }

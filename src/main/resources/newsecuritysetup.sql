@@ -52,5 +52,3 @@ insert into sec_role(roleName) values ('ROLE_ADMIN');
 insert into sec_role(roleName) values ('ROLE_USER');
 insert into user_role(userId, roleId) values (1,1);//Default Admin
 insert into user_role(userId, roleId) values (2,2);//Default User
-
-

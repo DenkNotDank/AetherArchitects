@@ -198,10 +198,25 @@ DatabaseAccess {
 
     public void deleteUser(String email) {
         try {
+            // First, get the user ID
+            User user = findUserAccount(email);
+            if (user == null) {
+                throw new RuntimeException("User not found.");
+            }
+            long userId = user.getUserId(); // Ensures User class has getUserId method
+    
+            // Delete related roles
             MapSqlParameterSource parameters = new MapSqlParameterSource();
-            String query = "DELETE FROM SEC_USER WHERE email = :email";
+            String deleteRolesQuery = "DELETE FROM USER_ROLE WHERE userId = :userId";
+            parameters.addValue("userId", userId);
+            jdbc.update(deleteRolesQuery, parameters);
+    
+            // Delete the user
+            String deleteUserQuery = "DELETE FROM SEC_USER WHERE email = :email";
+            parameters = new MapSqlParameterSource();
             parameters.addValue("email", email);
-            jdbc.update(query, parameters);
+            jdbc.update(deleteUserQuery, parameters);
+    
             System.out.println("User with email " + email + " deleted successfully.");
         } catch (Exception e) {
             System.out.println("Error deleting user: " + e.getMessage());
