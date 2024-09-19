@@ -47,7 +47,8 @@ public class HomeController {
         String email = auth.getName();
         User user = da.findUserAccount(email);
         if (user == null) {
-            return "/error/changingPassword";
+            model.addAttribute("error", "User not found.");
+            return "login";
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if (encoder.matches(newPassword, user.getEncryptedPassword())) {
@@ -60,7 +61,7 @@ public class HomeController {
             return "login";  // Redirect to login after password change
         } else {
             model.addAttribute("error", "Passwords do not match.");
-            return "/error/changingPassword";
+            return "/myAccount";
         }
     }
 
