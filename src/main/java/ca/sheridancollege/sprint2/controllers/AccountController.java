@@ -87,7 +87,7 @@ public class AccountController {
 
     @PostMapping("/changePassword")
     public String changePassword(@RequestParam(name = "newPassword") String newPassword,
-            @RequestParam(name = "confirmPassword") String confirmPassword) {
+                                 @RequestParam(name = "confirmPassword") String confirmPassword) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (newPassword.equals(da.findUserPassword(auth.getName()))) {
