@@ -56,7 +56,7 @@ public class HomeController {
         }
         if (newPassword.equals(confirmPassword)) {
             da.updateUserLogin(newPassword, email);
-            model.addAttribute("message", "Password changed successfully.");
+            model.addAttribute("message", "Password has been changed successfully!");
             return "login";  // Redirect to login after password change
         } else {
             model.addAttribute("error", "Passwords do not match.");
