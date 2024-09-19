@@ -88,14 +88,14 @@
 
       <div id="tab2" class="tab">
         <!--Security-->
-        <h6>Email</h6><a id="uName" th:text="${username}"></a><br>
+        <h3>Email: <a id="uName" th:text="${username}"></a></h3><br>
         <form id="emailForm" action="#" th:action="@{/changeEmail}" method="post">
           <label for="newEmail">New Email</label>
           <input type="email" id="newEmail" name="newEmail" required><Br>
           <input type="submit" id="emailSubmit" value="Change Email">
         </form>
-
-        <h6>Password</h6>
+        <br><br><br>
+        <h3>Password</h3>
         <form id="hiddenForm" action="#" th:action="@{/changePassword}" method="post">
           <label id="lb1" for="newPassword">New Password</label>
           <input type="password" id="newPassword" name="newPassword" required><Br>
@@ -103,7 +103,6 @@
           <input type="password" id="confirmPassword" name="confirmPassword" required><Br>
           <input type="submit" id="pwSubmit" name="pwSubmit" value="Change Password" required>
         </form>
-        <button id="myButton">Change Password</button>
         <br><br>
 
         <form action="#" th:action="@{/deleteAccount}" method="post" onsubmit="return confirmDeletion();">
