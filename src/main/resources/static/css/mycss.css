@@ -243,27 +243,27 @@ fieldset legend {
 }
 
 /*--Form Styles--*/
-.form-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
+/*.form-group {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    margin-bottom: 15px;*/
+/*}*/
 
-.form-group label {
-    font-weight: bold;
-    margin-right: 10px;
-    width: 150px;
-    text-align: right;
-}
+/*.form-group label {*/
+/*    font-weight: bold;*/
+/*    margin-right: 10px;*/
+/*    width: 150px;*/
+/*    text-align: right;*/
+/*}*/
 
-.form-group input[type="text"],
-.form-group input[type="number"],
-.form-group input[type="email"] {
-    flex: 1;
-    padding: 8px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    max-width: 400px;
-    box-sizing: border-box; }
+/*.form-group input[type="text"],*/
+/*.form-group input[type="number"],*/
+/*.form-group input[type="email"] {*/
+/*    flex: 1;*/
+/*    padding: 8px 10px;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 4px;*/
+/*    font-size: 16px;*/
+/*    max-width: 400px;*/
+/*    box-sizing: border-box; }*/
 
