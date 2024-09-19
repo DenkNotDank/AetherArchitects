@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AccountController {
@@ -25,7 +26,8 @@ public class AccountController {
             @RequestParam(name = "province") String province,
             @RequestParam(name = "city") String city,
             @RequestParam(name = "postalCode", required = false, defaultValue = "") String postalCode,
-            Model model) {
+            Model model,
+            RedirectAttributes redirectAttrs) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("username", auth.getName());
         if (da.findUserAccount(auth.getName()) == null) {
@@ -34,9 +36,9 @@ public class AccountController {
         } else {
             boolean updated = da.updateUserInfo(auth.getName(), firstName, lastName, phone, province, city, postalCode,
                     secondaryEmail);
-            model.addAttribute("infoUpdated", updated);
+            redirectAttrs.addFlashAttribute("infoUpdated",updated);
         }
-        return "/myAccount";
+        return "redirect:/myAccount";
     }
 
     @PostMapping("/changeEmail")
