@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
@@ -13,89 +12,88 @@
   <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.css}">
   <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-grid.css}">
   <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-reboot.css}">
-  <link rel="stylesheet" href="../static/css/mycss.css"
-        media="all" th:href="@{/css/mycss.css}"/>
+  <link rel="stylesheet" href="../static/css/mycss.css" media="all" th:href="@{/css/mycss.css}" />
 
 </head>
+
 <body>
-<div class="container-fluid" style="background-color:#ffffff;color:#fff;height:300px;">
-  <p align="center">
-    <img src="/images/VOICE%20logo%202023-transparent.png"
-         alt="" title="" border="0" width="714" height="268"><br>
-  </p>
+  <div class="container-fluid" style="background-color:#ffffff;color:#fff;height:300px;">
+    <p align="center">
+      <img src="/images/VOICE%20logo%202023-transparent.png" alt="" title="" border="0" width="714" height="268"><br>
+    </p>
 
-</div>
+  </div>
 
 
-<div class="tabs">
-  <ul class="tab-links">
-    <li class="active"><a href="#tab1">Account Details</a></li>
-    <li><a href="#tab2">Security</a></li>
+  <div class="tabs">
+    <ul class="tab-links">
+      <li class="active"><a href="#tab1">Account Details</a></li>
+      <li><a href="#tab2">Security</a></li>
 
-  </ul>
+    </ul>
 
-  <div class="tab-content">
-    <div id="tab1" class="tab active">
-      <p class="errorNotice" id="signupError"></p>
-      <p th:if="${infoUpdated == false}" class="errorNotice">Error: Account changes failed to save.</p>
-      <p th:if="${infoUpdated}" class="successNotice">Account has been updated successfully</p>
-      <!--Account Details-->
-      <form action="#" th:action="@{/changeUserInfo}" method="post">
-        <label for="fName">First Name</label>
-        <input type="text" id="fName" name ="firstName"><Br>
+    <div class="tab-content">
+      <div id="tab1" class="tab active">
+        <p class="errorNotice" id="signupError"></p>
+        <p th:if="${infoUpdated == false}" class="errorNotice">Error: Account changes failed to save.</p>
+        <p th:if="${infoUpdated}" class="successNotice">Account has been updated successfully</p>
+        <!--Account Details-->
+        <form action="#" th:action="@{/changeUserInfo}" method="post">
+          <label for="fName">First Name</label>
+          <input type="text" id="fName" name="firstName" th:value="${user != null ? user.firstName : ''}"><br>
 
-        <label for="lName">Last Name</label>
-        <input type="text" id="lName" name ="lastName"><Br>
+          <label for="lName">Last Name</label>
+          <input type="text" id="lName" name="lastName" th:value="${user != null ? user.lastName : ''}"><br>
 
-        <label for="phone">Phone Number</label>
-        <input type="number" maxlength="10" id="phone" name ="phone"><br>
+          <label for="phone">Phone Number</label>
+          <input type="number" id="phone" name="phone" th:value="${user != null ? user.phone : ''}"><br>
 
-        <label for="secEmail">Secondary Email</label>
-        <input type="email" id="secEmail" name ="secondaryEmail"><Br>
+          <label for="secEmail">Secondary Email</label>
+          <input type="email" id="secEmail" name="secondaryEmail"
+            th:value="${user != null ? user.secondaryEmail : ''}"><br>
 
-        <label for="province">Province</label>
-        <input type="text" id="province" name ="province"><Br>
+          <label for="province">Province</label>
+          <input type="text" id="province" name="province" th:value="${user != null ? user.province : ''}"><br>
 
-        <label for="city">City</label>
-        <input type="text" id="city" name ="city"><Br>
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" th:value="${user != null ? user.city : ''}"><br>
 
-        <label for="postal">Postal Code</label>
-        <input type="text" id="postal" name ="postalCode"><Br>
+          <label for="postal">Postal Code</label>
+          <input type="text" id="postal" name="postalCode" th:value="${user != null ? user.postalCode : ''}"><br>
 
-        <input id="updateInfoButton" class="btn btn-outline-warning" type="submit" value="Update">
-      </form>
+          <input id="updateInfoButton" class="btn btn-outline-warning" type="submit" value="Update">
+        </form>
+      </div>
 
-    </div>
+      <div id="tab2" class="tab">
+        <!--Security-->
+        <h6>Email</h6><a id="uName" th:text="${username}"></a><br>
+        <form id="emailForm" action="#" th:action="@{/changeEmail}" method="post">
+          <label for="newEmail">New Email</label>
+          <input type="email" id="newEmail" name="newEmail" required><Br>
+          <input type="submit" id="emailSubmit" value="Change Email">
+        </form>
 
-    <div id="tab2" class="tab">
-      <!--Security-->
-      <h6>Email</h6><a id ="uName" th:text="${username}"></a><br>
-      <form id="emailForm" action="#" th:action="@{/changeEmail}" method="post">
-        <label for="newEmail">New Email</label>
-        <input type="email" id="newEmail" name="newEmail" required><Br>
-        <input type="submit" id="emailSubmit" value="Change Email">
-      </form>
-
-      <h6>Password</h6>
-      <form id="hiddenForm" action="#" th:action="@{/changePassword}" method="post">
-        <label id="lb1" for="newPassword">New Password</label>
-        <input type="password" id="newPassword" name ="newPassword" required><Br>
-        <label id="lb2" for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" name ="confirmPassword" required ><Br>
-        <input
-        type="submit" id="pwSubmit" name="pwSubmit" value="Change Password" required >
-      </form>
-<button id="myButton">Change Password</button>
-      <br><br><br><br><br><br><br><br><br>
+        <h6>Password</h6>
+        <form id="hiddenForm" action="#" th:action="@{/changePassword}" method="post">
+          <label id="lb1" for="newPassword">New Password</label>
+          <input type="password" id="newPassword" name="newPassword" required><Br>
+          <label id="lb2" for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required><Br>
+          <input type="submit" id="pwSubmit" name="pwSubmit" value="Change Password" required>
+        </form>
+        <button id="myButton">Change Password</button>
+        <br><br><br><br><br><br><br><br><br>
 
         <button id="delAcc">DELETE ACCOUNT</button>
 
-    </div>
+      </div>
 
+    </div>
   </div>
-</div>
 
 
 
 </body>
+
 </html>

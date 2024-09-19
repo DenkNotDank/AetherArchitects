@@ -31,9 +31,9 @@ public class AccountController {
         if (da.findUserAccount(auth.getName()) == null) {
             model.addAttribute("infoUpdated", false);
             return "/myAccount";
-        }
-        else{
-            boolean updated = da.updateUserInfo(auth.getName(),firstName,lastName,phone,province,city,postalCode,secondaryEmail);
+        } else {
+            boolean updated = da.updateUserInfo(auth.getName(), firstName, lastName, phone, province, city, postalCode,
+                    secondaryEmail);
             model.addAttribute("infoUpdated", updated);
         }
         return "/myAccount";
@@ -61,9 +61,4 @@ public class AccountController {
 
     }
 
-
 }
-
-
-
-
