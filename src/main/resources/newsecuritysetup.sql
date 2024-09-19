@@ -41,14 +41,14 @@ alter table USER_ROLE
     add constraint USER_ROLE_FK2 foreign key (roleId)
         references SEC_ROLE(roleId);
 
+insert into sec_role(roleName) values ('ROLE_ADMIN');
+insert into sec_role(roleName) values ('ROLE_USER');
+
 insert into SEC_USER (email,firstName, lastName, phone, province,city,encryptedPassword, accountEnabled)
 values ('admin@email.com','Default','Admin' ,'4161231234','Ontario','Toronto',  '$2a$10$DnNxZ0MNTMgs/m7QUWZu0u1jULd2Ltsl/tlUzONoUG7mxSZ..lvN2',1);
 -- password is 3xT6E4;x`AKj
+insert into user_role(userId, roleId) values (1,1);
 
 insert into SEC_USER (email,firstName, lastName, phone, province,city,encryptedPassword, accountEnabled)
 values ('user@email.com','Default','User' ,'4161231234','Ontario','Toronto',  '$2a$10$DnNxZ0MNTMgs/m7QUWZu0u1jULd2Ltsl/tlUzONoUG7mxSZ..lvN2',1);
-
-insert into sec_role(roleName) values ('ROLE_ADMIN');
-insert into sec_role(roleName) values ('ROLE_USER');
-insert into user_role(userId, roleId) values (1,1);//Default Admin
-insert into user_role(userId, roleId) values (2,2);//Default User
+insert into user_role(userId, roleId) values (2,2);

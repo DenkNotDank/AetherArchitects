@@ -52,7 +52,7 @@ function verify(){
         document.getElementById("registerButton").disabled = true
     }
 
-} 
+}
 
 window.addEventListener('load', () => {
     var elements = document.getElementsByClassName('verify-changes');
@@ -135,3 +135,19 @@ $(document).ready(function(){
             .stop(true, true).delay(100).fadeOut(200);
     });
 });
+
+function confirmDelete() {
+    var firstConfirm = window.confirm('Are you sure you want to delete this account?');
+
+    if (firstConfirm) {
+        var secondConfirm = window.confirm('This action cannot be undone. Are you absolutely sure?');
+
+        if (secondConfirm) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
