@@ -66,30 +66,31 @@ function verifyChanges() {
     document.getElementById("saveChangesButton").disabled = false;
     document.getElementById("editError").innerHTML = "";
 
-    var email = document.forms['form']['email'].value;
     var firstName = document.forms['form']['firstName'].value;
     var lastName = document.forms['form']['lastName'].value;
     var phone = document.forms['form']['phone'].value;
     var province = document.forms['form']['province'].value;
     var city = document.forms['form']['city'].value;
+    var postal = document.forms['form']['postal'].value;
+
+    let valid = true; // Flag to check if everything is valid
 
     // Ensure required fields are filled
-    if (firstName == "" || lastName == "" || phone == "" || province == "" || city == "") {
+    if (firstName === "" || lastName === "" || phone === "" || province === "" || city === "" || postal === "") {
         document.getElementById("editError").innerHTML += "Please fill in all required fields." + "<br/>";
-        document.getElementById("saveChangesButton").disabled = true;
-    }
-
-    // Validate email format
-    if (!validateEmail(email)) {
-        document.getElementById("editError").innerHTML += "Invalid email format." + "<br/>";
-        document.getElementById("saveChangesButton").disabled = true;
+        valid = false;
     }
 
     // Validate phone number format (assuming a 10-digit number)
     if (!validatePhone(phone)) {
-        document.getElementById("editError").innerHTML += "Invalid phone number format." + "<br/>";
-        document.getElementById("saveChangesButton").disabled = true;
+        document.getElementById("editError").innerHTML += "Phone number must be exactly 10 digits." + "<br/>";
+        valid = false;
     }
+
+    // Disable button if invalid
+    document.getElementById("saveChangesButton").disabled = !valid;
+
+    return valid; // Return true if all is valid, false otherwise
 }
 
 function passwordStrength(password){
@@ -115,11 +116,24 @@ const validateEmail = (email) => {
 };
 
 const validatePhone = (phone) => {
-    return phone.match(
-        /^\d{10}$/  // Matches exactly 10 digits
-    );
+    // Ensure phone matches exactly 10 digits
+    return /^\d{10}$/.test(phone);
 };
 
+function confirmDeletion() {
+    // First confirmation
+    var firstConfirmation = confirm("Are you sure you want to delete your account?");
+    if (firstConfirmation) {
+        // Second confirmation
+        var secondConfirmation = confirm("This action is irreversible. Do you really want to proceed?");
+        if (secondConfirmation) {
+            // Third confirmation
+            var thirdConfirmation = confirm("Please confirm one last time. Are you absolutely certain?");
+            return thirdConfirmation;  // Only if third confirmation is confirmed, proceed with form submission
+        }
+    }
+    return false;  // If any of the confirmations are cancelled, stop form submission
+}
 
 function alertError(){
     window.alert("Error saving page content. Please contact an administrator.");
