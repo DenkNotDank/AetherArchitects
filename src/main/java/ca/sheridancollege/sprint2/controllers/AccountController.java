@@ -23,31 +23,21 @@ public class AccountController {
         return "/error/accessDenied";
     }
 
-//    @GetMapping("/myAccount")
-//    public String getMyAccountPage(Model model) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null) {
-//            String email = auth.getName();
-//            User user = da.findUserAccount(email);
-//            System.out.println("Fetched user: " + user);
-//            if (user != null) {
-//                model.addAttribute("user", user);
-//            } else {
-//                model.addAttribute("error", "User not found.");
-//            }
-//        } else {
-//            model.addAttribute("error", "Authentication failed.");
-//        }
-//        return "myAccount";
-//    }
-
     @GetMapping("/myAccount")
-    public String getMyAccountPage(Model model){
+    public String getMyAccountPage(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null){
-            System.out.println("User is " + auth.getName());
+        if (auth != null) {
+            String email = auth.getName();
+            User user = da.findUserAccount(email);
+            System.out.println("Fetched user: " + user);
+            if (user != null) {
+                model.addAttribute("user", user);
+            } else {
+                model.addAttribute("error", "User not found.");
+            }
+        } else {
+            model.addAttribute("error", "Authentication failed.");
         }
-        model.addAttribute("username", auth.getName());
         return "myAccount";
     }
 
