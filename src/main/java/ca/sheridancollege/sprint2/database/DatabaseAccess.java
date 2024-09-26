@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -75,7 +73,7 @@ DatabaseAccess {
     }
 
     public void createNewUser(String email, String firstName, String lastName, long phone, String secondaryEmail,
-                              String province, String city, String postalCode, String password) {
+            String province, String city, String postalCode, String password) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         String q = "Insert into SEC_USER (email, firstName, lastName, phone, secondaryEmail, province," +
                 "city,postalCode ,encryptedPassword, accountEnabled)"
@@ -113,18 +111,18 @@ DatabaseAccess {
             parameters.addValue("newEmail", newEmail);
             parameters.addValue("email", email);
             int isUpdated = jdbc.update(q, parameters);
-            if (isUpdated==1) {
+            if (isUpdated == 1) {
                 return true;
             }
-        }catch (Exception e){
-            System.out.println("Error Updating email "+ e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error Updating email " + e.getMessage());
         }
         return false;
     }
 
-
-    public boolean updateUserInfo(String email, String firstName, String lastName, long phone, String province, String city, String postalCode, String secondaryEmail) {
-        try{
+    public boolean updateUserInfo(String email, String firstName, String lastName, long phone, String province,
+            String city, String postalCode, String secondaryEmail) {
+        try {
             MapSqlParameterSource parameters = new MapSqlParameterSource();
             String q = "UPDATE SEC_USER SET firstName = :firstName, lastName = :lastName , phone = :phone , province = :province, city = :city,postalCode = :postalCode,secondaryEmail= :secondaryEmail  WHERE email = :email ";
 
@@ -137,17 +135,15 @@ DatabaseAccess {
             parameters.addValue("postalCode", postalCode);
             parameters.addValue("secondaryEmail", secondaryEmail);
             int isUpdated = jdbc.update(q, parameters);
-            if (isUpdated==1){
+            if (isUpdated == 1) {
                 return true;
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.out.println("Error updating user info: " + e.getMessage());
             return false;
         }
         return false;
     }
-
 
     public void addRole(long userId, long roleId) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -202,82 +198,100 @@ DatabaseAccess {
 
     public void deleteUser(String email) {
         try {
+            // First, get the user ID
+            User user = findUserAccount(email);
+            if (user == null) {
+                throw new RuntimeException("User not found.");
+            }
+            long userId = user.getUserId(); // Ensures User class has getUserId method
+
+            // Delete related roles
             MapSqlParameterSource parameters = new MapSqlParameterSource();
-            String query = "DELETE FROM SEC_USER WHERE email = :email";
+            String deleteRolesQuery = "DELETE FROM USER_ROLE WHERE userId = :userId";
+            parameters.addValue("userId", userId);
+            jdbc.update(deleteRolesQuery, parameters);
+
+            // Delete the user
+            String deleteUserQuery = "DELETE FROM SEC_USER WHERE email = :email";
+            parameters = new MapSqlParameterSource();
             parameters.addValue("email", email);
-            jdbc.update(query, parameters);
+            jdbc.update(deleteUserQuery, parameters);
+
             System.out.println("User with email " + email + " deleted successfully.");
         } catch (Exception e) {
             System.out.println("Error deleting user: " + e.getMessage());
             e.printStackTrace();
         }
     }
-
-    public User getInfo(String email) {
-        return findUserAccount(email);
-    }
-
-    public void saveInfo(User user) {
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String query = "UPDATE SEC_USER SET firstName = :firstName, lastName = :lastName, phone = :phone, " +
-                "secondaryEmail = :secondaryEmail, province = :province, city = :city, postalCode = :postalCode " +
-                "WHERE email = :email";
-
-        parameters.addValue("email", user.getEmail());
-        parameters.addValue("firstName", user.getFirstName());
-        parameters.addValue("lastName", user.getLastName());
-        parameters.addValue("phone", user.getPhone());
-        parameters.addValue("secondaryEmail", user.getSecondaryEmail());
-        parameters.addValue("province", user.getProvince());
-        parameters.addValue("city", user.getCity());
-        parameters.addValue("postalCode", user.getPostalCode());
-
-        jdbc.update(query, parameters);
-    }
 }
-    /*
-    public void updateUserInfo(String email, String firstName, String lastName, Long phone, String secondaryEmail,
-            String province, String city, String postalCode) {
-        try {
-            // Retrieve the users info
-            User user = getInfo(email);
 
-            if (user == null) {
-                throw new RuntimeException("User with the email " + email + " not found");
-            }
+// public User getInfo(String email) {
+// return findUserAccount(email);
+// }
 
-            // Only update the filled fields
-            if (firstName != null) {
-                user.setFirstName(firstName);
-            }
-            if (lastName != null) {
-                user.setLastName(lastName);
-            }
-            if (phone != null) {
-                user.setPhone(phone);
-            }
-            if (secondaryEmail != null) {
-                user.setSecondaryEmail(secondaryEmail);
-            }
-            if (province != null) {
-                user.setProvince(province);
-            }
-            if (city != null) {
-                user.setCity(city);
-            }
-            if (postalCode != null) {
-                user.setPostalCode(postalCode);
-            }
+// public void saveInfo(User user) {
+// MapSqlParameterSource parameters = new MapSqlParameterSource();
+// String query = "UPDATE SEC_USER SET firstName = :firstName, lastName =
+// :lastName, phone = :phone, " +
+// "secondaryEmail = :secondaryEmail, province = :province, city = :city,
+// postalCode = :postalCode " +
+// "WHERE email = :email";
 
-            // Save the user's updated information
-            saveInfo(user);
+// parameters.addValue("email", user.getEmail());
+// parameters.addValue("firstName", user.getFirstName());
+// parameters.addValue("lastName", user.getLastName());
+// parameters.addValue("phone", user.getPhone());
+// parameters.addValue("secondaryEmail", user.getSecondaryEmail());
+// parameters.addValue("province", user.getProvince());
+// parameters.addValue("city", user.getCity());
+// parameters.addValue("postalCode", user.getPostalCode());
 
-            System.out.println("User's Information was updated successfully.");
+// jdbc.update(query, parameters);
+// }
 
-        } catch (Exception e) {
-            System.out.println("Error updating user info: " + e.getMessage());
-            e.printStackTrace();
-            throw new RuntimeException("Failed to update user information.");
-        }
-    }
-} */
+// public void updateUserInfo(String email, String firstName, String lastName,
+// Long phone, String secondaryEmail,
+// String province, String city, String postalCode) {
+// try {
+// // Retrieve the users info
+// User user = getInfo(email);
+
+// if (user == null) {
+// throw new RuntimeException("User with the email " + email + " not found");
+// }
+
+// // Only update the filled fields
+// if (firstName != null) {
+// user.setFirstName(firstName);
+// }
+// if (lastName != null) {
+// user.setLastName(lastName);
+// }
+// if (phone != null) {
+// user.setPhone(phone);
+// }
+// if (secondaryEmail != null) {
+// user.setSecondaryEmail(secondaryEmail);
+// }
+// if (province != null) {
+// user.setProvince(province);
+// }
+// if (city != null) {
+// user.setCity(city);
+// }
+// if (postalCode != null) {
+// user.setPostalCode(postalCode);
+// }
+
+// // Save the user's updated information
+// saveInfo(user);
+
+// System.out.println("User's Information was updated successfully.");
+
+// } catch (Exception e) {
+// System.out.println("Error updating user info: " + e.getMessage());
+// e.printStackTrace();
+// throw new RuntimeException("Failed to update user information.");
+// }
+// }
+// }

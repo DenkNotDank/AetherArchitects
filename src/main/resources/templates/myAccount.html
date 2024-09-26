@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
+  <title>My Account</title>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
   <script src="../js/accountTabs.js"></script>
   <script th:src="@{/js/bootstrap/bootstrap.js}"></script>
@@ -13,105 +12,107 @@
   <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.css}">
   <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-grid.css}">
   <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-reboot.css}">
-  <link rel="stylesheet" href="../static/css/mycss.css"
-        media="all" th:href="@{/css/mycss.css}"/>
+  <link rel="stylesheet" href="../static/css/mycss.css" media="all" th:href="@{/css/mycss.css}" />
 
 </head>
+
 <body>
-<div class="container-fluid" style="background-color:#ffffff;color:#fff;height:300px;">
-  <p align="center">
-    <img src="/images/VOICE%20logo%202023-transparent.png"
-         alt="" title="" border="0" width="714" height="268"><br>
-  </p>
-
-</div>
-
-
-<div class="tabs">
-  <ul class="tab-links">
-    <li class="active"><a href="#tab1">Account Details</a></li>
-    <li><a href="#tab2">Security</a></li>
-
-  </ul>
-
-  <div class="tab-content">
-    <div id="tab1" class="tab active">
-      <p class="errorNotice" id="signupError"></p>
-      <p th:if="${infoUpdated == false}" class="errorNotice">Error: Account changes failed to save.</p>
-      <p th:if="${infoUpdated}" class="successNotice">Account has been updated successfully</p>
-      <!--Account Details-->
-      <p th:if="${error}" class="errorNotice" th:text="${error}"></p>
-      <p th:if="${message}" class="successNotice" th:text="${message}"></p>
-      <form action="#" th:action="@{/changeUserInfo}" method="post">
-        <div class="form-group">
-        <label for="fName">First Name</label>
-        <input type="text" id="fName" name ="firstName"><Br>
-        </div>
-
-        <div class="form-group">
-        <label for="lName">Last Name</label>
-        <input type="text" id="lName" name ="lastName"><Br>
-        </div>
-
-        <div class="form-group">
-        <label for="phone">Phone Number</label>
-        <input type="number" maxlength="10" id="phone" name ="phone"><br>
-        </div>
-
-        <div class="form-group">
-        <label for="secEmail">Secondary Email</label>
-        <input type="email" id="secEmail" name ="secondaryEmail"><Br>
-        </div>
-
-        <div class="form-group">
-        <label for="province">Province</label>
-        <input type="text" id="province" name ="province"><Br>
-        </div>
-
-        <div class="form-group">
-        <label for="city">City</label>
-        <input type="text" id="city" name ="city"><Br>
-        </div>
-
-        <div class="form-group">
-        <label for="postal">Postal Code</label>
-        <input type="text" id="postal" name ="postalCode"><Br>
-        </div>
-
-        <input id="updateInfoButton" class="btn btn-outline-warning" type="submit" value="Update">
-      </form>
-
-    </div>
-
-    <div id="tab2" class="tab">
-      <!--Security-->
-      <h6>Email</h6><a id ="uName" th:text="${username}"></a><br>
-      <form id="emailForm" action="#" th:action="@{/changeEmail}" method="post">
-        <label for="newEmail">New Email</label>
-        <input type="email" id="newEmail" name="newEmail" required><Br>
-        <input type="submit" id="emailSubmit" value="Change Email">
-      </form>
-
-      <h6>Password</h6>
-      <form id="hiddenForm" action="#" th:action="@{/changePassword}" method="post">
-        <label id="lb1" for="newPassword">New Password</label>
-        <input type="password" id="newPassword" name ="newPassword" required><Br>
-        <span id="newPasswordError" class="errorNotice"></span>
-        <label id="lb2" for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" name ="confirmPassword" required ><Br>
-        <span id="confirmPasswordError" class="errorNotice"></span>
-        <input type="submit" id="pwSubmit" name="pwSubmit" value="Change Password" required >
-      </form>
-      <br><br><br><br><br><br><br>
-
-        <button id="delAcc">DELETE ACCOUNT</button>
-
-    </div>
+  <div class="container-fluid" style="background-color:#ffffff;color:#fff;height:300px;">
+    <p align="center">
+      <img src="/images/VOICE%20logo%202023-transparent.png" alt="" title="" border="0" width="714" height="268"><br>
+    </p>
 
   </div>
-</div>
 
 
+  <div class="tabs">
+    <ul class="tab-links">
+      <li class="active"><a href="#tab1">Account Details</a></li>
+      <li><a href="#tab2">Security</a></li>
 
+    </ul>
+
+    <div class="tab-content">
+      <div id="tab1" class="tab active">
+        <p th:if="${infoUpdated == false}" class="errorNotice">Error: Account changes failed to save.</p>
+        <p th:if="${infoUpdated}" class="successNotice">Account has been updated successfully</p>
+        <p id="editError" class="errorNotice"></p>
+        <!--Account Details-->
+        <form action="#" th:action="@{/changeUserInfo}" method="post" name="form">
+
+          <div class="requiredInput">
+            <label for="fName">First Name</label>
+            <input type="text" id="fName" name="firstName" th:value="${user != null ? user.firstName : ''}"
+              class="verify-changes" placeholder="Enter your first name" required>
+          </div><br>
+
+          <div class="requiredInput">
+            <label for="lName">Last Name</label>
+            <input type="text" id="lName" name="lastName" th:value="${user != null ? user.lastName : ''}"
+              class="verify-changes" placeholder="Enter your last name" required>
+          </div><br>
+
+          <div class="requiredInput">
+            <label for="phone">Phone Number</label>
+            <input type="text" id="phone" name="phone" th:value="${user != null ? user.phone : ''}"
+              class="verify-changes" placeholder="Enter your phone number" required>
+          </div><br>
+
+          <div>
+            <label for="secEmail">Secondary Email</label>
+            <input type="email" id="secEmail" name="secondaryEmail"
+              th:value="${user != null ? user.secondaryEmail : ''}" placeholder="Enter your secondary email (optional)">
+          </div><br>
+
+          <div class="requiredInput">
+            <label for="province">Province</label>
+            <input type="text" id="province" name="province" th:value="${user != null ? user.province : ''}"
+              class="verify-changes" placeholder="Enter your province" required>
+          </div><br>
+
+          <div class="requiredInput">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" th:value="${user != null ? user.city : ''}" class="verify-changes"
+              placeholder="Enter your city" required>
+          </div><br>
+
+          <div>
+            <label for="postal">Postal Code</label>
+            <input type="text" id="postal" name="postalCode" th:value="${user != null ? user.postalCode : ''}"
+              placeholder="Enter your postal code">
+          </div><br>
+
+          <input id="saveChangesButton" class="btn btn-outline-warning" type="submit" value="Save Changes" disabled>
+        </form>
+      </div>
+
+      <div id="tab2" class="tab">
+        <!--Security-->
+        <h3>Email: <a id="uName" th:text="${username}"></a></h3><br>
+        <form id="emailForm" action="#" th:action="@{/changeEmail}" method="post">
+          <label for="newEmail">New Email</label>
+          <input type="email" id="newEmail" name="newEmail" required><Br>
+          <input type="submit" id="emailSubmit" value="Change Email">
+        </form>
+        <br><br><br>
+        <h3>Password</h3>
+        <form id="hiddenForm" action="#" th:action="@{/changePassword}" method="post">
+          <label id="lb1" for="newPassword">New Password</label>
+          <input type="password" id="newPassword" name="newPassword" required><Br>
+          <label id="lb2" for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" required><Br>
+          <input type="submit" id="pwSubmit" name="pwSubmit" value="Change Password" required>
+        </form>
+        <br><br>
+
+        <form action="#" th:action="@{/deleteAccount}" method="post" onsubmit="return confirmDeletion();">
+          <button type="submit" id="delAcc" class="btn btn-danger">DELETE ACCOUNT</button>
+        </form>
+
+      </div>
+
+    </div>
+  </div>
 </body>
+
 </html>
