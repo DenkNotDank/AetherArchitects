@@ -27,13 +27,13 @@
 
   <div class="tabs">
     <ul class="tab-links">
-      <li class="active"><a href="#tab1">Account Details</a></li>
-      <li><a href="#tab2">Security</a></li>
+      <li th:classappend="${isTab1Active} ? active"><a href="#tab1">Account Details</a></li>
+      <li th:classappend="${isTab2Active} ? active"><a href="#tab2">Security</a></li>
 
     </ul>
 
     <div class="tab-content">
-      <div id="tab1" class="tab active">
+      <div id="tab1" class="tab" th:classappend="${isTab1Active} ? active">
 
         <p th:if="${infoUpdated == false}" class="errorNotice">Error: Account changes failed to save.</p>
         <p id="editSuccess" th:if="${infoUpdated}" class="successNotice">Account has been updated successfully</p>
@@ -87,12 +87,17 @@
         </form>
       </div>
 
-      <div id="tab2" class="tab">
+      <div id="tab2" class="tab" th:classappend="${isTab2Active} ? active">
         <!--Security-->
-        <h3>Email: <a id="uName" th:text="${username}"></a></h3><br>
+
         <form id="emailForm" action="#" th:action="@{/changeEmail}" method="post">
-          <label for="newEmail">New Email</label>
-          <input type="email" id="newEmail" name="newEmail" required><Br>
+          <label for="currentEmail">Current Email</label>
+          <input id="currentEmail" th:value="${user.email}" disabled><br>
+
+          <div class="requiredInput">
+            <label for="newEmail">New Email</label>
+            <input type="email" id="newEmail" name="newEmail" placeholder="Enter new email" required>
+          </div><br>
           <input type="submit" id="emailSubmit" value="Change Email">
         </form>
         <br><br><br>
