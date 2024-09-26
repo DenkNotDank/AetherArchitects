@@ -66,6 +66,14 @@ function verifyChanges() {
     document.getElementById("saveChangesButton").disabled = false;
     document.getElementById("editError").innerHTML = "";
 
+    console.log(document.getElementById("editSuccess"));
+
+    if(document.getElementById("editSuccess")!= null){
+        document.getElementById("editSuccess").style.display = 'none'
+    }
+
+
+
     var firstName = document.forms['form']['firstName'].value;
     var lastName = document.forms['form']['lastName'].value;
     var phone = document.forms['form']['phone'].value;

@@ -36,8 +36,8 @@
       <div id="tab1" class="tab active">
 
         <p th:if="${infoUpdated == false}" class="errorNotice">Error: Account changes failed to save.</p>
-        <p th:if="${infoUpdated}" class="successNotice">Account has been updated successfully</p>
-
+        <p id="editSuccess" th:if="${infoUpdated}" class="successNotice">Account has been updated successfully</p>
+        <p id="editError" class="errorNotice"></p>
         <!--Account Details-->
         <form action="#" th:action="@{/changeUserInfo}" method="post" name="form">
 
