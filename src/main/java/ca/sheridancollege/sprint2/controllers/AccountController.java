@@ -135,4 +135,21 @@ public class AccountController {
         }
         return "redirect:/";
     }
+
+    @PostMapping("/selectMembership")
+    public String selectMembership(@RequestParam("membershipType") String MembershipType, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        User user = da.findUserAccount(email);
+
+        if (user == null) {
+            model.addAttribute("error", "There was a problem finding your account.");
+            return "/myAccount";
+        }
+
+
+
+
+    }
 }
