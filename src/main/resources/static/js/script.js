@@ -1,3 +1,4 @@
+/**************** Login Page ****************/
 window.addEventListener(
     'load',
     () => {
@@ -52,8 +53,10 @@ function verify(){
         document.getElementById("registerButton").disabled = true
     }
 
-} 
+}
 
+
+/**************** Account Information Change ****************/
 window.addEventListener('load', () => {
     var elements = document.getElementsByClassName('verify-changes');
     for (var i = 0; i < elements.length; i++) {
@@ -73,8 +76,6 @@ function verifyAccountChanges() {
     if(document.getElementById("editSuccess")!= null){
         document.getElementById("editSuccess").style.display = 'none'
     }
-
-
 
     var firstName = document.forms['form']['firstName'].value;
     var lastName = document.forms['form']['lastName'].value;
@@ -102,6 +103,41 @@ function verifyAccountChanges() {
     return valid; // Return true if all is valid, false otherwise
 }
 
+
+/****************  Email Change ****************/
+window.addEventListener('load', () => {
+    document.getElementById("newEmail").addEventListener('input', verifyEmailChange);
+});
+
+function verifyEmailChange() {
+    var currentEmail = document.getElementById("currentEmail").value;
+    var newEmail = document.getElementById("newEmail").value;
+
+    // Clears any previous error message
+    document.getElementById("emailError").innerHTML = "";
+
+    // Disables the submit button
+    document.getElementById("emailSubmit").disabled = false;
+
+    // Clears message if form is empty
+    if (newEmail === "") {
+        document.getElementById("emailError").innerHTML = "";
+        document.getElementById("emailSubmit").disabled = true;
+        return;
+    }
+
+    // Checks if new email matches current one
+    else if (newEmail === currentEmail) {
+        document.getElementById("emailError").innerHTML = "You cannot change to the same email.";
+        document.getElementById("emailSubmit").disabled = true;
+    } else if (!validateEmail(newEmail)) {
+        document.getElementById("emailError").innerHTML = "Invalid email format.";
+        document.getElementById("emailSubmit").disabled = true;
+    }
+}
+
+/**************** Validation Constraints ****************/
+//Validates password constraits
 function passwordStrength(password){
     let isValid =false;
     let validationRegex = [
@@ -118,17 +154,21 @@ function passwordStrength(password){
     return isValid
 }
 
+//Validates email constraints
 const validateEmail = (email) => {
     return email.match(
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
 };
 
+//Validates phone constraints
 const validatePhone = (phone) => {
     // Ensure phone matches exactly 10 digits
     return /^\d{10}$/.test(phone);
 };
 
+/**************** Error Handling ****************/
+//Confirm for Account Deletion (3-Step Verification)
 function confirmDeletion() {
     // First confirmation
     var firstConfirmation = confirm("Are you sure you want to delete your account?");
@@ -144,11 +184,12 @@ function confirmDeletion() {
     return false;  // If any of the confirmations are cancelled, stop form submission
 }
 
+//Alert for saving page changes
 function alertError(){
     window.alert("Error saving page content. Please contact an administrator.");
 }
 
-
+//Animation
 $(document).ready(function(){
     $('.dropdown').hover(function(){
         $(this).find('.dropdown-menu')

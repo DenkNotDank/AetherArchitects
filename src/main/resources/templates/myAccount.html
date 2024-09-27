@@ -185,10 +185,11 @@
         <p id="secChangeError" class="errorNotice"></p>
         <h3>Email</h3>
         <form id="emailForm" action="#" th:action="@{/changeEmail}" method="post">
+          <p id="emailError" class="errorNotice"></p>
           <label for="currentEmail" class="changeAccInfoLbl">Current Email:</label>
           <input id="currentEmail" th:value="${user.email}" disabled><br>
           <label for="newEmail" class="changeAccInfoLbl">New Email:</label>
-          <input type="email" id="newEmail" name="newEmail" required><Br>
+          <input type="email" id="newEmail" name="newEmail" required><Br><Br>
           <input type="submit" id="emailSubmit" value="Change Email">
         </form>
         <br><br><br>
@@ -197,7 +198,7 @@
           <label class="changeAccInfoLbl" id="lb1" for="newPassword">New Password</label>
           <input type="password" id="newPassword" name="newPassword" required><Br>
           <label class="changeAccInfoLbl" id="lb2" for="confirmPassword">Confirm Password</label>
-          <input type="password" id="confirmPassword" name="confirmPassword" required><Br>
+          <input type="password" id="confirmPassword" name="confirmPassword" required><Br><Br>
           <input type="submit" id="pwSubmit" name="pwSubmit" value="Change Password" required>
         </form>
         <br><br>
