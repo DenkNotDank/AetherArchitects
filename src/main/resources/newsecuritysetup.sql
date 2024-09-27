@@ -29,6 +29,15 @@ create table USER_ROLE(
                           userId BIGINT NOT NULL,
                           roleId BIGINT NOT NULL
 );
+-- creating the membership table
+create table userMemberships(
+                                userID BIGINT NOT NULL,
+                                membershipID INT NOT NULL,
+                                paid BOOLEAN DEFAULT FALSE,
+                                paidDate DATE DEFAULT NULL,
+                                PRIMARY KEY (userID,membershipID),
+                                FOREIGN KEY (userID) REFERENCES SEC_USER(userId)
+);
 
 alter table USER_ROLE
     add constraint USER_ROLE_UK unique (userId, roleId);
@@ -52,3 +61,6 @@ insert into user_role(userId, roleId) values (1,1);
 insert into SEC_USER (email,firstName, lastName, phone, province,city,encryptedPassword, accountEnabled)
 values ('user@email.com','Default','User' ,'4161231234','Ontario','Toronto',  '$2a$10$DnNxZ0MNTMgs/m7QUWZu0u1jULd2Ltsl/tlUzONoUG7mxSZ..lvN2',1);
 insert into user_role(userId, roleId) values (2,2);
+
+INSERT INTO userMemberships (userID, membershipID, paid, paidDate)
+VALUES (1, 1, FALSE, NULL)

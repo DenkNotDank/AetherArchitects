@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,8 @@ public class AccountController {
         } else {
             model.addAttribute("error", "Authentication failed.");
         }
+        model.addAttribute("isTab1Active", true);
+        model.addAttribute("isTab2Active", false);
         return "myAccount";
     }
 
@@ -68,37 +71,46 @@ public class AccountController {
     @PostMapping("/changeEmail")
     public String changeEmail(
             @RequestParam("newEmail") String newEmail,
-            Model model) {
+            Model model, RedirectAttributes redirectAttrs) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentEmail = auth.getName();
-
+        redirectAttrs.addFlashAttribute("isTab1Active", false);
+        redirectAttrs.addFlashAttribute("isTab2Active", true);
         if (newEmail.equals(currentEmail)) {
-            model.addAttribute("error", "New email is same as the old email");
-            return "/myAccount";
+            redirectAttrs.addFlashAttribute("error", "New email is same as the old email");
+            return "redirect:/myAccount";
         }
         Boolean emailUpdated = da.updateUserEmail(currentEmail, newEmail);
         if (emailUpdated) {
-            model.addAttribute("Message", "Your email has been changed successfully.");
+            redirectAttrs.addFlashAttribute("Message", "Your email has been changed successfully.");
         } else {
-            model.addAttribute("error", "There was a problem updating your email.");
+            redirectAttrs.addFlashAttribute("error", "There was a problem updating your email.");
         }
-        return "/myAccount";
+        return "redirect:/myAccount";
     }
 
     @PostMapping("/changePassword")
     public String changePassword(@RequestParam(name = "newPassword") String newPassword,
-                                 @RequestParam(name = "confirmPassword") String confirmPassword) {
+                                 @RequestParam(name = "confirmPassword") String confirmPassword, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (newPassword.equals(da.findUserPassword(auth.getName()))) {
-            return "/error/changingPassword";
+        String email = auth.getName();
+        User user = da.findUserAccount(email);
+        if (user == null) {
+            model.addAttribute("error", "User not found.");
+            return "login";
+        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (encoder.matches(newPassword, user.getEncryptedPassword())) {
+            model.addAttribute("error", "New password cannot be the same as the current password.");
+            return "/myAccount";  // Show error on the account page
+        }
+        if (newPassword.equals(confirmPassword)) {
+            da.updateUserLogin(newPassword, email);
+            model.addAttribute("message", "Password has been changed successfully!");
+            return "login";  // Redirect to login after password change
         } else {
-            if (newPassword.equals(confirmPassword)) {
-                da.updateUserLogin(newPassword, auth.getName());
-                return "login";
-            } else {
-                return "/error/changingPassword";
-            }
+            model.addAttribute("error", "Passwords do not match.");
+            return "/myAccount";
         }
     }
 
@@ -122,5 +134,19 @@ public class AccountController {
                     "There was a problem deleting your account. Please try again later.");
         }
         return "redirect:/";
+    }
+
+    @PostMapping("/selectMembership")
+    public String selectMembership(@RequestParam("membershipType") String MembershipType, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        User user = da.findUserAccount(email);
+
+        if (user == null) {
+            model.addAttribute("error", "There was a problem finding your account.");
+            return "/myAccount";
+        }
+        return "redirect:/myAccount";
     }
 }
