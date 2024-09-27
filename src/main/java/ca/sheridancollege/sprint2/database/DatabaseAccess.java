@@ -8,7 +8,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -222,6 +224,23 @@ DatabaseAccess {
             System.out.println("Error deleting user: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public void updateUserMembership(int userID, int membershipID, boolean paid, Date paidDate){
+        String query = "INSERT INTO userMemberships(userID, membershipID, paid, paidDate) " +
+                "VALUES (:userID, :membershipID, :paid, :paidDate) " +
+                "ON DUPLICATE KEY UPDATE " +
+                "paid  = VALUES(paid), " +
+                "paidDate  = VALUES(paidDate)";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("userID", userID);
+        parameters.addValue("membershipID", membershipID);
+        parameters.addValue("paid", paid);
+        parameters.addValue("paidDate", paidDate);
+
+        jdbc.update(query, parameters);
+
     }
 }
 
