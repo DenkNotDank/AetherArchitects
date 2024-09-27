@@ -74,8 +74,6 @@ public class AccountController {
             Model model, RedirectAttributes redirectAttrs) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentEmail = auth.getName();
-        redirectAttrs.addFlashAttribute("isTab1Active", false);
-        redirectAttrs.addFlashAttribute("isTab2Active", true);
         if (newEmail.equals(currentEmail)) {
             redirectAttrs.addFlashAttribute("error", "New email is same as the old email");
             return "redirect:/myAccount";
