@@ -1,6 +1,5 @@
 package ca.sheridancollege.sprint2.beans;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class Content {
     private long contentId;
     private String contentBody;
-
 }
