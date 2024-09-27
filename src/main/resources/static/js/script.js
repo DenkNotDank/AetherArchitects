@@ -59,20 +59,9 @@ window.addEventListener('load', () => {
     for (var i = 0; i < elements.length; i++) {
         elements.item(i).addEventListener('change', verifyAccountChanges);
     }
-
-    document.getElementById("newEmail").addEventListener('change', verifyEmailChanges)
 });
 
-function verifyEmailChanges(){
 
-    var current = document.getElementById("currentEmail").innerHTML;
-    var newEmail = document.getElementById("newEmail").innerHTML;
-
-    if(current === newEmail){
-        document.getElementById("secChangeError").innerHTML += "New email must be different from current one." + "<br/>";
-    }
-
-}
 
 
 function verifyAccountChanges() {
