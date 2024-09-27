@@ -39,6 +39,8 @@ public class AccountController {
         } else {
             model.addAttribute("error", "Authentication failed.");
         }
+        model.addAttribute("isTab1Active", true);
+        model.addAttribute("isTab2Active", false);
         return "myAccount";
     }
 
@@ -69,21 +71,22 @@ public class AccountController {
     @PostMapping("/changeEmail")
     public String changeEmail(
             @RequestParam("newEmail") String newEmail,
-            Model model) {
+            Model model, RedirectAttributes redirectAttrs) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentEmail = auth.getName();
-
+        redirectAttrs.addFlashAttribute("isTab1Active", false);
+        redirectAttrs.addFlashAttribute("isTab2Active", true);
         if (newEmail.equals(currentEmail)) {
-            model.addAttribute("error", "New email is same as the old email");
-            return "/myAccount";
+            redirectAttrs.addFlashAttribute("error", "New email is same as the old email");
+            return "redirect:/myAccount";
         }
         Boolean emailUpdated = da.updateUserEmail(currentEmail, newEmail);
         if (emailUpdated) {
-            model.addAttribute("Message", "Your email has been changed successfully.");
+            redirectAttrs.addFlashAttribute("Message", "Your email has been changed successfully.");
         } else {
-            model.addAttribute("error", "There was a problem updating your email.");
+            redirectAttrs.addFlashAttribute("error", "There was a problem updating your email.");
         }
-        return "/myAccount";
+        return "redirect:/myAccount";
     }
 
     @PostMapping("/changePassword")
@@ -144,9 +147,6 @@ public class AccountController {
             model.addAttribute("error", "There was a problem finding your account.");
             return "/myAccount";
         }
-
-
-
-
+        return "redirect:/myAccount";
     }
 }
