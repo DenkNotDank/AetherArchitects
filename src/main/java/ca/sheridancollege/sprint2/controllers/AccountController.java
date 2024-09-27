@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,31 +24,21 @@ public class AccountController {
         return "/error/accessDenied";
     }
 
-//    @GetMapping("/myAccount")
-//    public String getMyAccountPage(Model model) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null) {
-//            String email = auth.getName();
-//            User user = da.findUserAccount(email);
-//            System.out.println("Fetched user: " + user);
-//            if (user != null) {
-//                model.addAttribute("user", user);
-//            } else {
-//                model.addAttribute("error", "User not found.");
-//            }
-//        } else {
-//            model.addAttribute("error", "Authentication failed.");
-//        }
-//        return "myAccount";
-//    }
-
     @GetMapping("/myAccount")
-    public String getMyAccountPage(Model model){
+    public String getMyAccountPage(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null){
-            System.out.println("User is " + auth.getName());
+        if (auth != null) {
+            String email = auth.getName();
+            User user = da.findUserAccount(email);
+            System.out.println("Fetched user: " + user);
+            if (user != null) {
+                model.addAttribute("user", user);
+            } else {
+                model.addAttribute("error", "User not found.");
+            }
+        } else {
+            model.addAttribute("error", "Authentication failed.");
         }
-        model.addAttribute("username", auth.getName());
         return "myAccount";
     }
 
@@ -97,18 +88,26 @@ public class AccountController {
 
     @PostMapping("/changePassword")
     public String changePassword(@RequestParam(name = "newPassword") String newPassword,
-                                 @RequestParam(name = "confirmPassword") String confirmPassword) {
+                                 @RequestParam(name = "confirmPassword") String confirmPassword, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (newPassword.equals(da.findUserPassword(auth.getName()))) {
-            return "/error/changingPassword";
+        String email = auth.getName();
+        User user = da.findUserAccount(email);
+        if (user == null) {
+            model.addAttribute("error", "User not found.");
+            return "login";
+        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (encoder.matches(newPassword, user.getEncryptedPassword())) {
+            model.addAttribute("error", "New password cannot be the same as the current password.");
+            return "/myAccount";  // Show error on the account page
+        }
+        if (newPassword.equals(confirmPassword)) {
+            da.updateUserLogin(newPassword, email);
+            model.addAttribute("message", "Password has been changed successfully!");
+            return "login";  // Redirect to login after password change
         } else {
-            if (newPassword.equals(confirmPassword)) {
-                da.updateUserLogin(newPassword, auth.getName());
-                return "login";
-            } else {
-                return "/error/changingPassword";
-            }
+            model.addAttribute("error", "Passwords do not match.");
+            return "/myAccount";
         }
     }
 
