@@ -147,9 +147,6 @@ public class AccountController {
             model.addAttribute("error", "There was a problem finding your account.");
             return "/myAccount";
         }
-
-
-
-
+        return "redirect:/myAccount";
     }
 }

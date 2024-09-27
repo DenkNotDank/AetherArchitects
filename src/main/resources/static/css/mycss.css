@@ -197,11 +197,38 @@ fieldset legend {
     margin-top: -1px;
 }
 
-#tab1 input,
+#tab1 input{
+    margin: 7px;
+    padding: 2px;
+    width: 20vw;
+}
+
 #tab2 input {
     margin: 7px;
     padding: 2px;
-    width: 250px;
+    width: 20vw;
+}
+
+.tab1 {
+    display: none;
+    margin: auto;
+    text-align: center;
+}
+
+.tab2 {
+    display: none;
+    margin: auto;
+    text-align: center;
+}
+
+.tab3 {
+    display: none;
+    /*margin: auto;*/
+}
+
+.changeAccInfoLbl{
+    width: 8vw;
+    text-align: left;
 }
 
 #tab3 input {
@@ -212,12 +239,6 @@ fieldset legend {
 
 .tab-content label {
     margin-right: 15%;
-}
-
-.tab {
-    display: none;
-    margin: auto;
-    text-align: left;
 }
 
 .tab.active {

@@ -126,7 +126,7 @@
     </ul>
 
     <div class="tab-content">
-      <div id="tab1" class="tab active">
+      <div id="tab1" class="tab tab1 active">
 
         <p th:if="${infoUpdated == false}" class="errorNotice">Error: Account changes failed to save.</p>
         <p id="editSuccess" th:if="${infoUpdated}" class="successNotice">Account has been updated successfully</p>
@@ -135,43 +135,43 @@
         <form action="#" th:action="@{/changeUserInfo}" method="post" name="form">
 
           <div class="requiredInput">
-            <label for="fName">First Name</label>
+            <label class="changeAccInfoLbl" for="fName">First Name</label>
             <input type="text" id="fName" name="firstName" th:value="${user != null ? user.firstName : ''}"
               class="verify-changes" placeholder="Enter your first name" required>
           </div><br>
 
           <div class="requiredInput">
-            <label for="lName">Last Name</label>
+            <label class="changeAccInfoLbl" for="lName">Last Name</label>
             <input type="text" id="lName" name="lastName" th:value="${user != null ? user.lastName : ''}"
               class="verify-changes" placeholder="Enter your last name" required>
           </div><br>
 
           <div class="requiredInput">
-            <label for="phone">Phone Number</label>
+            <label class="changeAccInfoLbl" for="phone">Phone Number</label>
             <input type="text" id="phone" name="phone" th:value="${user != null ? user.phone : ''}"
               class="verify-changes" placeholder="Enter your phone number" required>
           </div><br>
 
           <div>
-            <label for="secEmail">Secondary Email</label>
+            <label class="changeAccInfoLbl" for="secEmail">Secondary Email</label>
             <input type="email" id="secEmail" name="secondaryEmail"
               th:value="${user != null ? user.secondaryEmail : ''}" placeholder="Enter your secondary email (optional)">
           </div><br>
 
           <div class="requiredInput">
-            <label for="province">Province</label>
+            <label class="changeAccInfoLbl" for="province">Province</label>
             <input type="text" id="province" name="province" th:value="${user != null ? user.province : ''}"
               class="verify-changes" placeholder="Enter your province" required>
           </div><br>
 
           <div class="requiredInput">
-            <label for="city">City</label>
+            <label class="changeAccInfoLbl" for="city">City</label>
             <input type="text" id="city" name="city" th:value="${user != null ? user.city : ''}" class="verify-changes"
               placeholder="Enter your city" required>
           </div><br>
 
           <div>
-            <label for="postal">Postal Code</label>
+            <label class="changeAccInfoLbl" for="postal">Postal Code</label>
             <input type="text" id="postal" name="postalCode" th:value="${user != null ? user.postalCode : ''}"
               placeholder="Enter your postal code">
           </div><br>
@@ -180,20 +180,22 @@
         </form>
       </div>
 
-      <div id="tab2" class="tab">
+      <div id="tab2" class="tab tab2">
         <!--Security-->
-        <h3>Email: <a id="uName" th:text="${username}"></a></h3><br>
+
         <form id="emailForm" action="#" th:action="@{/changeEmail}" method="post">
-          <label for="newEmail">New Email</label>
+          <label for="currentEmail" class="changeAccInfoLbl">Current Email:</label>
+          <input id="currentEmail" th:value="${user.email}" disabled><br>
+          <label for="newEmail" class="changeAccInfoLbl">New Email:</label>
           <input type="email" id="newEmail" name="newEmail" required><Br>
           <input type="submit" id="emailSubmit" value="Change Email">
         </form>
         <br><br><br>
         <h3>Password</h3>
         <form id="hiddenForm" action="#" th:action="@{/changePassword}" method="post">
-          <label id="lb1" for="newPassword">New Password</label>
+          <label class="changeAccInfoLbl" id="lb1" for="newPassword">New Password</label>
           <input type="password" id="newPassword" name="newPassword" required><Br>
-          <label id="lb2" for="confirmPassword">Confirm Password</label>
+          <label class="changeAccInfoLbl" id="lb2" for="confirmPassword">Confirm Password</label>
           <input type="password" id="confirmPassword" name="confirmPassword" required><Br>
           <input type="submit" id="pwSubmit" name="pwSubmit" value="Change Password" required>
         </form>
@@ -206,7 +208,7 @@
       </div>
 
 
-      <div id="tab3" class="tab">
+      <div id="tab3" class="tab tab3">
           <form th:action="@{/selectMembership}" method="post" class="membership-options">
 
             <div class="membership-option">
