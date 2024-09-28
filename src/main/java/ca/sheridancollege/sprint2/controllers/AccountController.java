@@ -4,6 +4,7 @@ import ca.sheridancollege.sprint2.beans.User;
 import ca.sheridancollege.sprint2.database.DatabaseAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -74,13 +75,14 @@ public class AccountController {
             Model model, RedirectAttributes redirectAttrs) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentEmail = auth.getName();
-        if (newEmail.equals(currentEmail)) {
-            redirectAttrs.addFlashAttribute("error", "New email is same as the old email");
-            return "redirect:/myAccount";
-        }
         Boolean emailUpdated = da.updateUserEmail(currentEmail, newEmail);
         if (emailUpdated) {
             redirectAttrs.addFlashAttribute("Message", "Your email has been changed successfully.");
+
+            //Set user to new email
+            Authentication newAuth = new UsernamePasswordAuthenticationToken(newEmail, auth.getCredentials(), auth.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(newAuth);
+
         } else {
             redirectAttrs.addFlashAttribute("error", "There was a problem updating your email.");
         }
