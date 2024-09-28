@@ -198,7 +198,7 @@ DatabaseAccess {
         return null;
     }
 
-    public void deleteUser(String email) {
+    public boolean deleteUser(String email) {
         try {
             // First, get the user ID
             User user = findUserAccount(email);
@@ -207,23 +207,35 @@ DatabaseAccess {
             }
             long userId = user.getUserId(); // Ensures User class has getUserId method
 
+            System.out.println(email);
             // Delete related roles
             MapSqlParameterSource parameters = new MapSqlParameterSource();
             String deleteRolesQuery = "DELETE FROM USER_ROLE WHERE userId = :userId";
             parameters.addValue("userId", userId);
-            jdbc.update(deleteRolesQuery, parameters);
+            int rolesDeleted = jdbc.update(deleteRolesQuery, parameters);
+
+            //Delete the related memebrship info
+            parameters = new MapSqlParameterSource();
+            String deleteMembershipsQuery = "DELETE FROM USERMEMBERSHIPS WHERE userId = :userId";
+            parameters.addValue("userId", userId);
+            int membershipsDeleted = jdbc.update(deleteMembershipsQuery, parameters);
+
 
             // Delete the user
             String deleteUserQuery = "DELETE FROM SEC_USER WHERE email = :email";
             parameters = new MapSqlParameterSource();
             parameters.addValue("email", email);
-            jdbc.update(deleteUserQuery, parameters);
+            int usersDeleted = jdbc.update(deleteUserQuery, parameters);
 
-            System.out.println("User with email " + email + " deleted successfully.");
+            if(rolesDeleted > 0 && membershipsDeleted > 0 && usersDeleted > 0){
+                System.out.println("User with email " + email + " deleted successfully.");
+                return true;
+            }
         } catch (Exception e) {
             System.out.println("Error deleting user: " + e.getMessage());
             e.printStackTrace();
         }
+        return false;
     }
 
     public void updateUserMembership(int userID, int membershipID, boolean paid, Date paidDate){

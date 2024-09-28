@@ -118,9 +118,11 @@ public class AccountController {
         String email = auth.getName();
 
         try {
-            da.deleteUser(email);
-            redirectAttrs.addFlashAttribute("accountDeleted", true);
-            SecurityContextHolder.clearContext(); // Clear the user session
+            boolean deleted = da.deleteUser(email);
+            if(deleted){
+                redirectAttrs.addFlashAttribute("accountDeleted", true);
+                SecurityContextHolder.clearContext();// Clear the user session
+            }
         } catch (Exception e) {
             // Print the error to the console
             System.out.println("Error deleting account for user: " + email);
