@@ -133,6 +133,44 @@ function verifyEmailChange() {
     }
 }
 
+/****************  Password Change ****************/
+window.addEventListener('load', () => {
+    document.getElementById("newPassword").addEventListener('input', verifyPasswordChange);
+    document.getElementById("confirmPassword").addEventListener('input', verifyPasswordChange);
+});
+
+function verifyPasswordChange() {
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const passwordError = document.getElementById("passwordError");
+    document.getElementById("pwSubmit").disabled = false; // Enable the submit button by default
+    passwordError.innerHTML = ""; // Clear previous error messages
+
+    // Validate password strength
+    if (!passwordStrength(newPassword)) {
+        passwordError.innerHTML += "Password must contain:" + "<br/>" +
+            "<nb></nb> Minimum 8 Characters" + "<br/>" +
+            "<nb></nb> A number (0-9) <br/>" +
+            "<nb></nb> A lowercase letter (a-z) <br/>" +
+            "<nb></nb> An uppercase letter (A-Z) <br/>" +
+            "<nb></nb> A special character <br/>";
+        document.getElementById("pwSubmit").disabled = true; // Disable the submit button
+    }
+
+    // Clears message if form is empty
+    if (newPassword === "") {
+        document.getElementById("passwordError").innerHTML = "";
+        document.getElementById("pwSubmit").disabled = true;
+        return;
+    }
+
+    // Validate if passwords match
+    if (newPassword !== confirmPassword) {
+        passwordError.innerHTML += "Passwords do not match.";
+        document.getElementById("pwSubmit").disabled = true; // Disable the submit button
+    }
+}
+
 /**************** Validation Constraints ****************/
 //Validates password constraits
 function passwordStrength(password){
