@@ -18,4 +18,10 @@ public class AdminController {
     public String getAdminHome(){
         return "secure/admin/adminHome";
     }
+
+
+    @GetMapping("/admin/dashboard/emails")
+    public String getAdminEmails(){
+    return "secure/admin/Emails";
 }
+    }
