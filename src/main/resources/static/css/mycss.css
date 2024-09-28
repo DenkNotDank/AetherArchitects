@@ -151,6 +151,15 @@ fieldset legend {
     padding: 0.5em;
 }
 
+.loginNoticeEmail {
+    background-color: #cde1ff69;
+    margin-left: 45%;
+    width: 36vw;
+    font-size: 1.1em;
+    height: 12vh;
+    padding: 0.5em;
+}
+
 /*----- Tabs -----*/
 .tabs {
     width: 100%;
@@ -329,5 +338,68 @@ fieldset legend {
 }
 
 .membership-options input[type=radio]{
-    dispaly : block;
+    display : block;
 }
+
+/*Admin Dashboard sidebar*/
+
+.admnSideBar {
+    height: 100%;
+    width: 17%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    /*background-color: #111;*/
+    background:#333;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    margin-top:120px;
+
+}
+
+.admnSideBar a {
+    padding: 16px 8px 16px 32px;
+    text-decoration: none;
+    font-size: 28px;
+    color: rgb(255 255 255 / 50%);
+    display: block;
+    transition: 0.3s
+}
+
+.admnSideBar a:hover, .offcanvas a:focus{
+        color: #d1d1d1;
+}
+
+.admnSideBar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.emailOutput {
+
+
+    margin: auto;
+    height: 150px;
+    width: 400px;
+    border: 2px solid black;
+    margin-top: 100px;
+}
+
+.emailOutput textarea {
+
+    height: 100%;
+    width: 100%;
+
+    text-align: center;
+
+}
+
+.form-check-label{
+    margin-left: 54%
+}
+

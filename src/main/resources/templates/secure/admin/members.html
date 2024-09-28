@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>Members</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script th:src="@{/js/bootstrap/bootstrap.js}"></script>
+  <script th:src="@{/js/bootstrap/bootstrap.bundle.js}"></script>
+  <script th:src="@{/js/script.js}"></script>
+  <script src="https://cdn.tiny.cloud/1/f9zv4s8hx9uxaf7vho9e7m1ozym4y8wpwxc5dpjjaql0d3p4/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script th:src="@{/js/tinymceConfig.js}"></script>
+  <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.css}">
+  <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-grid.css}">
+  <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap-reboot.css}">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="../static/css/mycss.css"
+        media="all" th:href="@{/css/mycss.css}"/>
+</head>
+<body>
+<div class="container-fluid" style="background-color:#ffffff;color:#fff;height:300px;">
+  <p align="center">
+    <img src="/images/VOICE%20logo%202023-transparent.png"
+         alt="" title="" border="0" width="714" height="268"><br>
+  </p>
+</div>
+
+
+<div class="loginNotice" sec:authorize="isAuthenticated()">
+  <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+    Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span><a href="/" sec:authentication="name"></a>
+    <a href="#" th:href="@{/}"><button>Public pages</button></a>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+</body>
+</html>
