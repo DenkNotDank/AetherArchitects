@@ -399,7 +399,33 @@ fieldset legend {
 
 }
 
+
+
 .form-check-label{
-    margin-left: 54%
+    margin-left: 52%
 }
 
+.emailOutput h3{
+    margin-left: 45%;
+}
+
+.filter-submit{
+    width:80px;
+    margin-left:46%;
+}
+
+.membersip-tier{
+    float: left;
+}
+
+.payment-status{
+    float: left;
+}
+
+.account-role{
+    float: left;
+}
+
+.suspended{
+    float: left;
+}
