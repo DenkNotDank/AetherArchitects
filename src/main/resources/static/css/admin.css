@@ -7,10 +7,15 @@
     position:relative;
 }
 
+.adminPageHeaderDiv{
+
+}
+
 .adminImageholder{
     text-align: center;
     padding-bottom: 5vh;
 }
+
 
 /*Admin Dashboard sidebar*/
 
