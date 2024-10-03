@@ -217,7 +217,7 @@ DatabaseAccess {
 
             //Delete the related memebrship info
             parameters = new MapSqlParameterSource();
-            String deleteMembershipsQuery = "DELETE FROM USERMEMBERSHIPS WHERE userId = :userId";
+            String deleteMembershipsQuery = "DELETE FROM USER_MEMBERSHIPS WHERE userId = :userId";
             parameters.addValue("userId", userId);
             int membershipsDeleted = jdbc.update(deleteMembershipsQuery, parameters);
 
@@ -239,20 +239,34 @@ DatabaseAccess {
         return false;
     }
 
-    public void updateUserMembership(int userID, int membershipID, boolean paid, Date paidDate){
-        String query = "INSERT INTO userMemberships(userID, membershipID, paid, paidDate) " +
-                "VALUES (:userID, :membershipID, :paid, :paidDate) " +
-                "ON DUPLICATE KEY UPDATE " +
-                "paid  = VALUES(paid), " +
-                "paidDate  = VALUES(paidDate)";
+    public void updateUserMembership(long userID, int membershipID, boolean paid, Date paidDate){
+        System.out.println("Updating user membership " + userID + " MembershipId " + membershipID);
+        try {
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            parameters.addValue("userID", userID);
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("userID", userID);
-        parameters.addValue("membershipID", membershipID);
-        parameters.addValue("paid", paid);
-        parameters.addValue("paidDate", paidDate);
+            String checkQuery = "SELECT COUNT(*) FROM user_memberships WHERE userID = :userID";
+            int count = jdbc.queryForObject(checkQuery, parameters, Integer.class);
 
-        jdbc.update(query, parameters);
+            if (count > 0) {
+                String updateQuery = "UPDATE user_memberships SET membershipID = :membershipID, paid = :paid, paidDate = :paidDate WHERE userID = :userID";
+                parameters.addValue("membershipID", membershipID);
+                parameters.addValue("paid", paid);
+                parameters.addValue("paidDate", paidDate);
+                jdbc.update(updateQuery, parameters);
+                System.out.println("User membership updated successfully for userID: " + userID);
+            } else {
+                String insertQuery = "INSERT INTO user_memberships(userID, membershipID, paid, paidDate) VALUES (:userID, :membershipID, :paid, :paidDate)";
+                parameters.addValue("membershipID", membershipID);
+                parameters.addValue("paid", paid);
+                parameters.addValue("paidDate", paidDate);
+                jdbc.update(insertQuery, parameters);
+                System.out.println("User membership inserted successfully for userID: " + userID);
+            }
+        } catch (Exception e) {
+            System.out.println("Error updating user membership: " + e.getMessage());
+            e.printStackTrace();
+        }
 
     }
 
