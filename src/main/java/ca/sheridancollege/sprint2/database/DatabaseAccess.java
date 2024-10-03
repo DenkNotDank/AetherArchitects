@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -254,75 +255,30 @@ DatabaseAccess {
         jdbc.update(query, parameters);
 
     }
+
+    public List<Member> getAllMembersInfo(){
+
+        String query = "SELECT SEC_USER.userId, SEC_USER.email, SEC_USER.firstName, " +
+                "SEC_USER.lastName, SEC_USER.phone,SEC_USER.secondaryEmail, SEC_USER.province, " +
+                "SEC_USER.city, SEC_USER.postalCode, SEC_USER.accountEnabled, " +
+                "USER_MEMBERSHIPS.membershipID, USER_MEMBERSHIPS.paid, USER_MEMBERSHIPS.paidDate " +
+                "FROM SEC_USER INNER JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID;";
+        ArrayList<Member> members = (ArrayList<Member>) jdbc.query(query,
+                new BeanPropertyRowMapper<Member>(Member.class));
+        if (members.size() > 0) {
+            for(Member m:members) {
+                try{
+                    System.out.println(m.toString());
+                }
+                catch (Exception e){
+
+                }
+            }
+            return members;
+        }
+        return null;
+    }
+
+
 }
 
-// public User getInfo(String email) {
-// return findUserAccount(email);
-// }
-
-// public void saveInfo(User user) {
-// MapSqlParameterSource parameters = new MapSqlParameterSource();
-// String query = "UPDATE SEC_USER SET firstName = :firstName, lastName =
-// :lastName, phone = :phone, " +
-// "secondaryEmail = :secondaryEmail, province = :province, city = :city,
-// postalCode = :postalCode " +
-// "WHERE email = :email";
-
-// parameters.addValue("email", user.getEmail());
-// parameters.addValue("firstName", user.getFirstName());
-// parameters.addValue("lastName", user.getLastName());
-// parameters.addValue("phone", user.getPhone());
-// parameters.addValue("secondaryEmail", user.getSecondaryEmail());
-// parameters.addValue("province", user.getProvince());
-// parameters.addValue("city", user.getCity());
-// parameters.addValue("postalCode", user.getPostalCode());
-
-// jdbc.update(query, parameters);
-// }
-
-// public void updateUserInfo(String email, String firstName, String lastName,
-// Long phone, String secondaryEmail,
-// String province, String city, String postalCode) {
-// try {
-// // Retrieve the users info
-// User user = getInfo(email);
-
-// if (user == null) {
-// throw new RuntimeException("User with the email " + email + " not found");
-// }
-
-// // Only update the filled fields
-// if (firstName != null) {
-// user.setFirstName(firstName);
-// }
-// if (lastName != null) {
-// user.setLastName(lastName);
-// }
-// if (phone != null) {
-// user.setPhone(phone);
-// }
-// if (secondaryEmail != null) {
-// user.setSecondaryEmail(secondaryEmail);
-// }
-// if (province != null) {
-// user.setProvince(province);
-// }
-// if (city != null) {
-// user.setCity(city);
-// }
-// if (postalCode != null) {
-// user.setPostalCode(postalCode);
-// }
-
-// // Save the user's updated information
-// saveInfo(user);
-
-// System.out.println("User's Information was updated successfully.");
-
-// } catch (Exception e) {
-// System.out.println("Error updating user info: " + e.getMessage());
-// e.printStackTrace();
-// throw new RuntimeException("Failed to update user information.");
-// }
-// }
-// }
