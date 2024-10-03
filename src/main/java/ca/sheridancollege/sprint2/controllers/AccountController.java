@@ -38,6 +38,8 @@ public class AccountController {
             System.out.println("Fetched user: " + user);
             if (user != null) {
                 model.addAttribute("user", user);
+                String membershipType = da.getUserMembership(user.getUserId());
+                model.addAttribute("membershipType", membershipType);
             } else {
                 model.addAttribute("error", "User not found.");
                 model.addAttribute("user", new User());

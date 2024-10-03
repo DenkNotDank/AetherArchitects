@@ -270,6 +270,10 @@ DatabaseAccess {
 
     }
 
+
+
+
+
     public List<Member> getAllMembersInfo(){
 
         String query = "SELECT SEC_USER.userId, SEC_USER.email, SEC_USER.firstName, " +
@@ -291,6 +295,32 @@ DatabaseAccess {
             return members;
         }
         return null;
+    }
+
+    //method to retrieve the membershipID
+    public String getUserMembership(long userID){
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("userID", userID);
+
+        String q = "SELECT membershipID FROM user_memberships WHERE userID = :userID";
+        try {
+            Integer count = jdbc.queryForObject(q, parameters, Integer.class);
+            if (count != null) {
+                if (count.equals(1)) {
+                    return "Alumni";
+                } else if (count.equals(2)) {
+                    return "General";
+                } else if (count.equals(3)) {
+                    return "Professional";
+                } else {
+                    return "None";
+                }
+
+            }
+            return "None";
+        }catch (Exception e){
+            return "None";
+        }
     }
 
 
