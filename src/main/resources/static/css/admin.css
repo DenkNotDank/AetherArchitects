@@ -5,6 +5,8 @@
     padding-left: 5vw;
     padding-top: 5vh;
     position:relative;
+    float: right;
+    width: 83vw;
 }
 
 .adminPageHeaderDiv{
@@ -31,6 +33,7 @@
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 5vh;
+    float: left;
 }
 
 .adminSideBar a {
@@ -52,4 +55,15 @@
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
+}
+
+.adminLoginNotice{
+    background-color: #cde1ff69;
+    display:inline-block;
+    font-size: 1.1em;
+    height: 9vh;
+    padding-top: 0.9em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-bottom: 0.5em;
 }

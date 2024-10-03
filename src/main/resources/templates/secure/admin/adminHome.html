@@ -46,10 +46,10 @@
         <div class="adminPageHeaderDiv">
             <h1 class="adminPageHeader">Admin Dashboard</h1>
         </div>
-        <div class="loginNotice" sec:authorize="isAuthenticated()">
+        <div class="adminLoginNotice" sec:authorize="isAuthenticated()">
             <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
                 Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span><a href="/" sec:authentication="name"></a>
-                <a href="#" th:href="@{/}"><button>Public pages</button></a>
+                <a href="#" th:href="@{/}"><button>Return to Public</button></a>
             </div>
         </div>
     </div>
