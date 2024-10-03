@@ -119,10 +119,9 @@
 
   <div class="tabs">
     <ul class="tab-links">
-      <li th:class="${isTab1Active ? 'active' : ''}"><a href="#tab1">Account Details</a></li>
-      <li th:class="${isTab2Active ? 'active' : ''}"><a href="#tab2">Security</a></li>
-      <li><a href="#tab3">Membership</a> </li>
-
+      <li th:class="${isTab1Active != null and isTab1Active ? 'active' : ''}"><a href="#tab1">Account Details</a></li>
+      <li th:class="${isTab2Active != null and isTab2Active ? 'active' : ''}"><a href="#tab2">Security</a></li>
+      <li th:class="${isTab3Active != null and isTab1Active ? 'active' : ''}"><a href="#tab3">Membership</a></li>
     </ul>
 
     <div class="tab-content">
