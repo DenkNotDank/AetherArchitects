@@ -217,7 +217,7 @@ DatabaseAccess {
 
             //Delete the related memebrship info
             parameters = new MapSqlParameterSource();
-            String deleteMembershipsQuery = "DELETE FROM USERMEMBERSHIPS WHERE userId = :userId";
+            String deleteMembershipsQuery = "DELETE FROM USER_MEMBERSHIPS WHERE userId = :userId";
             parameters.addValue("userId", userId);
             int membershipsDeleted = jdbc.update(deleteMembershipsQuery, parameters);
 
