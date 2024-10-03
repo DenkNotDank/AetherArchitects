@@ -119,12 +119,19 @@
 
   <div class="tabs">
     <ul class="tab-links">
-      <li th:class="${isTab1Active ? 'active' : ''}"><a href="#tab1">Account Details</a></li>
-      <li th:class="${isTab2Active ? 'active' : ''}"><a href="#tab2">Security</a></li>
-      <li><a href="#tab3">Membership</a> </li>
-
+      <li th:class="${isTab1Active != null and isTab1Active ? 'active' : ''}"><a href="#tab1">Account Details</a></li>
+      <li th:class="${isTab2Active != null and isTab2Active ? 'active' : ''}"><a href="#tab2">Security</a></li>
+      <li th:class="${isTab3Active != null and isTab1Active ? 'active' : ''}"><a href="#tab3">Membership</a></li>
     </ul>
-
+    <div th:if="${Message}" class="successNotice">
+      <p th:text="${Message}"></p>
+    </div>
+    <div th:if="${message}" class="successNotice">
+      <p th:text="${message}"></p>
+    </div>
+    <div th:if="${error}" class="errorNotice">
+      <p th:text="${error}"></p>
+    </div>
     <div class="tab-content">
       <div id="tab1" class="tab tab1 active">
         <!--Account Details-->
@@ -183,12 +190,6 @@
         <!--Security-->
         <h3>Email</h3>
         <form id="emailForm" action="#" th:action="@{/changeEmail}" method="post">
-          <div th:if="${Message}" class="successNotice">
-            <p th:text="${Message}"></p>
-          </div>
-          <div th:if="${error}" class="errorNotice">
-            <p th:text="${error}"></p>
-          </div>
           <p id="emailError" class="errorNotice"></p>
           <label for="currentEmail" class="changeAccInfoLbl">Current Email:</label>
           <input id="currentEmail" th:value="${user.email}" disabled><br>

@@ -45,7 +45,8 @@ alter table USER_ROLE
 insert into sec_role(roleName) values ('ROLE_ADMIN');
 insert into sec_role(roleName) values ('ROLE_USER');
 
-create table USER_MEMBERSHIPS(userID BIGINT NOT NULL PRIMARY KEY,
+create table USER_MEMBERSHIPS(
+        userID BIGINT NOT NULL PRIMARY KEY,
         membershipID INT NOT NULL,
         paid BOOLEAN DEFAULT FALSE,
         paidDate DATE DEFAULT NULL
@@ -58,6 +59,7 @@ alter table USER_MEMBERSHIPS
 
 
 -- password is 3xT6E4;x`AKj
+
 
 
 
@@ -266,5 +268,7 @@ insert into user_role (userId, roleId) values (99, 2);
 insert into user_role (userId, roleId) values (100, 2);
 insert into user_role (userId, roleId) values (101, 2);
 insert into user_role (userId, roleId) values (102, 2);
+
+
 
 INSERT INTO USER_MEMBERSHIPS(userID, membershipID, paid, paidDate) VALUES (1, 1, FALSE, NULL);
