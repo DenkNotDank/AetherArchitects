@@ -146,14 +146,14 @@ public class AccountController {
     }
 
     @PostMapping("/selectMembership")
-    public String selectMembership(@RequestParam("membershipType") String MembershipType, Model model) {
+    public String selectMembership(@RequestParam("membershipType") String MembershipType, Model model,RedirectAttributes redirectAttrs) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
         User user = da.findUserAccount(email); // retrieve the user object
 
         if (user == null) {
-            model.addAttribute("error", "There was a problem finding your account.");
+            redirectAttrs.addFlashAttribute("error", "There was a problem finding your account.");
             return "redirect:/myAccount";
         }
         long userId = user.getUserId();
@@ -170,14 +170,15 @@ public class AccountController {
        } else if (MembershipType.toLowerCase().equals("professional")) {
            membershipId = 3;
        }else {
-           model.addAttribute("error", "Invalid Membership Type");
+           redirectAttrs.addFlashAttribute("error", "Invalid Membership Type");
        }
+
        try {
            da.updateUserMembership(userId,membershipId,paid,paidDate);
-           model.addAttribute("message", "Membership has been updated successfully.");
+           redirectAttrs.addFlashAttribute("message", "Membership has been updated successfully.");
        }
        catch (Exception e) {
-           model.addAttribute("error", "There was a problem updating your account.");
+           redirectAttrs.addFlashAttribute("error", "There was a problem updating your account.");
            return "redirect:/myAccount";
        }
         return "redirect:/myAccount";
