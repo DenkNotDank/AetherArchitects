@@ -20,8 +20,15 @@ public class AdminController {
     }
 
 
-    @GetMapping("/admin/dashboard/emails")
+    @GetMapping("/admin/emails")
     public String getAdminEmails(){
     return "secure/admin/Emails";
 }
+
+
+    @GetMapping("/admin/members")
+    public String getMembersPage(){
+        return "/secure/admin/members";
     }
+
+}
