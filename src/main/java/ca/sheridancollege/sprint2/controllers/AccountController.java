@@ -4,6 +4,7 @@ import ca.sheridancollege.sprint2.beans.User;
 import ca.sheridancollege.sprint2.database.DatabaseAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Date;
+
+import static java.lang.Integer.parseInt;
 
 @Controller
 public class AccountController {
@@ -33,14 +38,19 @@ public class AccountController {
             System.out.println("Fetched user: " + user);
             if (user != null) {
                 model.addAttribute("user", user);
+                String membershipType = da.getUserMembership(user.getUserId());
+                model.addAttribute("membershipType", membershipType);
             } else {
                 model.addAttribute("error", "User not found.");
+                model.addAttribute("user", new User());
             }
         } else {
             model.addAttribute("error", "Authentication failed.");
+            model.addAttribute("user", new User());
         }
         model.addAttribute("isTab1Active", true);
         model.addAttribute("isTab2Active", false);
+        model.addAttribute("isTab3Active", false);
         return "myAccount";
     }
 
@@ -59,7 +69,7 @@ public class AccountController {
         model.addAttribute("username", auth.getName());
         if (da.findUserAccount(auth.getName()) == null) {
             model.addAttribute("infoUpdated", false);
-            return "/myAccount";
+            return "redirect:/myAccount";
         } else {
             boolean updated = da.updateUserInfo(auth.getName(), firstName, lastName, phone, province, city, postalCode,
                     secondaryEmail);
@@ -74,15 +84,14 @@ public class AccountController {
             Model model, RedirectAttributes redirectAttrs) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String currentEmail = auth.getName();
-        redirectAttrs.addFlashAttribute("isTab1Active", false);
-        redirectAttrs.addFlashAttribute("isTab2Active", true);
-        if (newEmail.equals(currentEmail)) {
-            redirectAttrs.addFlashAttribute("error", "New email is same as the old email");
-            return "redirect:/myAccount";
-        }
         Boolean emailUpdated = da.updateUserEmail(currentEmail, newEmail);
         if (emailUpdated) {
             redirectAttrs.addFlashAttribute("Message", "Your email has been changed successfully.");
+
+            //Set user to new email
+            Authentication newAuth = new UsernamePasswordAuthenticationToken(newEmail, auth.getCredentials(), auth.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(newAuth);
+
         } else {
             redirectAttrs.addFlashAttribute("error", "There was a problem updating your email.");
         }
@@ -102,7 +111,7 @@ public class AccountController {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if (encoder.matches(newPassword, user.getEncryptedPassword())) {
             model.addAttribute("error", "New password cannot be the same as the current password.");
-            return "/myAccount";  // Show error on the account page
+            return "redirect:/myAccount";  // Show error on the account page
         }
         if (newPassword.equals(confirmPassword)) {
             da.updateUserLogin(newPassword, email);
@@ -110,7 +119,7 @@ public class AccountController {
             return "login";  // Redirect to login after password change
         } else {
             model.addAttribute("error", "Passwords do not match.");
-            return "/myAccount";
+            return "redirect:/myAccount";
         }
     }
 
@@ -120,9 +129,11 @@ public class AccountController {
         String email = auth.getName();
 
         try {
-            da.deleteUser(email);
-            redirectAttrs.addFlashAttribute("accountDeleted", true);
-            SecurityContextHolder.clearContext(); // Clear the user session
+            boolean deleted = da.deleteUser(email);
+            if(deleted){
+                redirectAttrs.addFlashAttribute("accountDeleted", true);
+                SecurityContextHolder.clearContext();// Clear the user session
+            }
         } catch (Exception e) {
             // Print the error to the console
             System.out.println("Error deleting account for user: " + email);
@@ -137,16 +148,42 @@ public class AccountController {
     }
 
     @PostMapping("/selectMembership")
-    public String selectMembership(@RequestParam("membershipType") String MembershipType, Model model) {
+    public String selectMembership(@RequestParam("membershipType") String MembershipType, Model model,RedirectAttributes redirectAttrs) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
-        User user = da.findUserAccount(email);
+        User user = da.findUserAccount(email); // retrieve the user object
 
         if (user == null) {
-            model.addAttribute("error", "There was a problem finding your account.");
-            return "/myAccount";
+            redirectAttrs.addFlashAttribute("error", "There was a problem finding your account.");
+            return "redirect:/myAccount";
         }
+        long userId = user.getUserId();
+
+        int membershipId = 0;
+        Boolean paid = false;
+        Date paidDate = null;
+
+
+       if(MembershipType.toLowerCase().equals("alumni")){
+           membershipId = 1;
+       } else if (MembershipType.equals("general")){
+           membershipId = 2;
+       } else if (MembershipType.toLowerCase().equals("professional")) {
+           membershipId = 3;
+       }else {
+           redirectAttrs.addFlashAttribute("error", "Invalid Membership Type");
+       }
+
+       try {
+           da.updateUserMembership(userId,membershipId,paid,paidDate);
+           redirectAttrs.addFlashAttribute("message", "Membership has been updated successfully.");
+       }
+       catch (Exception e) {
+           redirectAttrs.addFlashAttribute("error", "There was a problem updating your account.");
+           return "redirect:/myAccount";
+       }
         return "redirect:/myAccount";
     }
+
 }

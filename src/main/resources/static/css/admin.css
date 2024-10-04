@@ -1,0 +1,69 @@
+.adminMainBody{
+    box-sizing: border-box;
+    margin: 0;
+    overflow: hidden;
+    padding-left: 5vw;
+    padding-top: 5vh;
+    position:relative;
+    float: right;
+    width: 83vw;
+}
+
+.adminPageHeaderDiv{
+
+}
+
+.adminImageholder{
+    text-align: center;
+    padding-bottom: 5vh;
+}
+
+
+/*Admin Dashboard sidebar*/
+
+.adminSideBar {
+    height: 100%;
+    width: 17%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    /*background-color: #111;*/
+    background:#333;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 5vh;
+    float: left;
+}
+
+.adminSideBar a {
+    padding: 16px 8px 16px 32px;
+    text-decoration: none;
+    font-size: 1.5em;
+    color: rgb(255 255 255 / 50%);
+    display: block;
+    transition: 0.3s
+}
+
+.adminSideBar a:hover, .offcanvas a:focus{
+    color: #d1d1d1;
+}
+
+.adminSideBar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.adminLoginNotice{
+    background-color: #cde1ff69;
+    display:inline-block;
+    font-size: 1.1em;
+    height: 9vh;
+    padding-top: 0.9em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-bottom: 0.5em;
+}

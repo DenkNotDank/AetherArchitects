@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -198,7 +199,7 @@ DatabaseAccess {
         return null;
     }
 
-    public void deleteUser(String email) {
+    public boolean deleteUser(String email) {
         try {
             // First, get the user ID
             User user = findUserAccount(email);
@@ -207,110 +208,121 @@ DatabaseAccess {
             }
             long userId = user.getUserId(); // Ensures User class has getUserId method
 
+            System.out.println(email);
             // Delete related roles
             MapSqlParameterSource parameters = new MapSqlParameterSource();
             String deleteRolesQuery = "DELETE FROM USER_ROLE WHERE userId = :userId";
             parameters.addValue("userId", userId);
-            jdbc.update(deleteRolesQuery, parameters);
+            int rolesDeleted = jdbc.update(deleteRolesQuery, parameters);
+
+            //Delete the related memebrship info
+            parameters = new MapSqlParameterSource();
+            String deleteMembershipsQuery = "DELETE FROM USER_MEMBERSHIPS WHERE userId = :userId";
+            parameters.addValue("userId", userId);
+            int membershipsDeleted = jdbc.update(deleteMembershipsQuery, parameters);
+
 
             // Delete the user
             String deleteUserQuery = "DELETE FROM SEC_USER WHERE email = :email";
             parameters = new MapSqlParameterSource();
             parameters.addValue("email", email);
-            jdbc.update(deleteUserQuery, parameters);
+            int usersDeleted = jdbc.update(deleteUserQuery, parameters);
 
-            System.out.println("User with email " + email + " deleted successfully.");
+            if(rolesDeleted > 0 && membershipsDeleted > 0 && usersDeleted > 0){
+                System.out.println("User with email " + email + " deleted successfully.");
+                return true;
+            }
         } catch (Exception e) {
             System.out.println("Error deleting user: " + e.getMessage());
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void updateUserMembership(int userID, int membershipID, boolean paid, Date paidDate){
-        String query = "INSERT INTO userMemberships(userID, membershipID, paid, paidDate) " +
-                "VALUES (:userID, :membershipID, :paid, :paidDate) " +
-                "ON DUPLICATE KEY UPDATE " +
-                "paid  = VALUES(paid), " +
-                "paidDate  = VALUES(paidDate)";
+    public void updateUserMembership(long userID, int membershipID, boolean paid, Date paidDate){
+        System.out.println("Updating user membership " + userID + " MembershipId " + membershipID);
+        try {
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            parameters.addValue("userID", userID);
 
+            String checkQuery = "SELECT COUNT(*) FROM user_memberships WHERE userID = :userID";
+            int count = jdbc.queryForObject(checkQuery, parameters, Integer.class);
+
+            if (count > 0) {
+                String updateQuery = "UPDATE user_memberships SET membershipID = :membershipID, paid = :paid, paidDate = :paidDate WHERE userID = :userID";
+                parameters.addValue("membershipID", membershipID);
+                parameters.addValue("paid", paid);
+                parameters.addValue("paidDate", paidDate);
+                jdbc.update(updateQuery, parameters);
+                System.out.println("User membership updated successfully for userID: " + userID);
+            } else {
+                String insertQuery = "INSERT INTO user_memberships(userID, membershipID, paid, paidDate) VALUES (:userID, :membershipID, :paid, :paidDate)";
+                parameters.addValue("membershipID", membershipID);
+                parameters.addValue("paid", paid);
+                parameters.addValue("paidDate", paidDate);
+                jdbc.update(insertQuery, parameters);
+                System.out.println("User membership inserted successfully for userID: " + userID);
+            }
+        } catch (Exception e) {
+            System.out.println("Error updating user membership: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+
+
+    public List<Member> getAllMembersInfo(){
+
+        String query = "SELECT SEC_USER.userId, SEC_USER.email, SEC_USER.firstName, " +
+                "SEC_USER.lastName, SEC_USER.phone,SEC_USER.secondaryEmail, SEC_USER.province, " +
+                "SEC_USER.city, SEC_USER.postalCode, SEC_USER.accountEnabled, " +
+                "USER_MEMBERSHIPS.membershipID, USER_MEMBERSHIPS.paid, USER_MEMBERSHIPS.paidDate " +
+                "FROM SEC_USER INNER JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID;";
+        ArrayList<Member> members = (ArrayList<Member>) jdbc.query(query,
+                new BeanPropertyRowMapper<Member>(Member.class));
+        if (members.size() > 0) {
+            for(Member m:members) {
+                try{
+                    System.out.println(m.toString());
+                }
+                catch (Exception e){
+
+                }
+            }
+            return members;
+        }
+        return null;
+    }
+
+    //method to retrieve the membershipID
+    public String getUserMembership(long userID){
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("userID", userID);
-        parameters.addValue("membershipID", membershipID);
-        parameters.addValue("paid", paid);
-        parameters.addValue("paidDate", paidDate);
 
-        jdbc.update(query, parameters);
+        String q = "SELECT membershipID FROM user_memberships WHERE userID = :userID";
+        try {
+            Integer count = jdbc.queryForObject(q, parameters, Integer.class);
+            if (count != null) {
+                if (count.equals(1)) {
+                    return "Alumni";
+                } else if (count.equals(2)) {
+                    return "General";
+                } else if (count.equals(3)) {
+                    return "Professional";
+                } else {
+                    return "None";
+                }
 
+            }
+            return "None";
+        }catch (Exception e){
+            return "None";
+        }
     }
+
+
 }
 
-// public User getInfo(String email) {
-// return findUserAccount(email);
-// }
-
-// public void saveInfo(User user) {
-// MapSqlParameterSource parameters = new MapSqlParameterSource();
-// String query = "UPDATE SEC_USER SET firstName = :firstName, lastName =
-// :lastName, phone = :phone, " +
-// "secondaryEmail = :secondaryEmail, province = :province, city = :city,
-// postalCode = :postalCode " +
-// "WHERE email = :email";
-
-// parameters.addValue("email", user.getEmail());
-// parameters.addValue("firstName", user.getFirstName());
-// parameters.addValue("lastName", user.getLastName());
-// parameters.addValue("phone", user.getPhone());
-// parameters.addValue("secondaryEmail", user.getSecondaryEmail());
-// parameters.addValue("province", user.getProvince());
-// parameters.addValue("city", user.getCity());
-// parameters.addValue("postalCode", user.getPostalCode());
-
-// jdbc.update(query, parameters);
-// }
-
-// public void updateUserInfo(String email, String firstName, String lastName,
-// Long phone, String secondaryEmail,
-// String province, String city, String postalCode) {
-// try {
-// // Retrieve the users info
-// User user = getInfo(email);
-
-// if (user == null) {
-// throw new RuntimeException("User with the email " + email + " not found");
-// }
-
-// // Only update the filled fields
-// if (firstName != null) {
-// user.setFirstName(firstName);
-// }
-// if (lastName != null) {
-// user.setLastName(lastName);
-// }
-// if (phone != null) {
-// user.setPhone(phone);
-// }
-// if (secondaryEmail != null) {
-// user.setSecondaryEmail(secondaryEmail);
-// }
-// if (province != null) {
-// user.setProvince(province);
-// }
-// if (city != null) {
-// user.setCity(city);
-// }
-// if (postalCode != null) {
-// user.setPostalCode(postalCode);
-// }
-
-// // Save the user's updated information
-// saveInfo(user);
-
-// System.out.println("User's Information was updated successfully.");
-
-// } catch (Exception e) {
-// System.out.println("Error updating user info: " + e.getMessage());
-// e.printStackTrace();
-// throw new RuntimeException("Failed to update user information.");
-// }
-// }
-// }

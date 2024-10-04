@@ -32,7 +32,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!--        Links-->
+    <!-- Links -->
     <ul class="navbar-nav" id="collapsibleNavbar">
       <!-- Home -->
       <li class="nav-item active">
@@ -119,19 +119,25 @@
 
   <div class="tabs">
     <ul class="tab-links">
-      <li class="active"><a href="#tab1">Account Details</a></li>
-      <li><a href="#tab2">Security</a></li>
-      <li><a href="#tab3">Membership</a> </li>
-
+      <li th:class="${isTab1Active != null and isTab1Active ? 'active' : ''}"><a href="#tab1">Account Details</a></li>
+      <li th:class="${isTab2Active != null and isTab2Active ? 'active' : ''}"><a href="#tab2">Security</a></li>
+      <li th:class="${isTab3Active != null and isTab1Active ? 'active' : ''}"><a href="#tab3">Membership</a></li>
     </ul>
-
+    <div th:if="${Message}" class="successNotice">
+      <p th:text="${Message}"></p>
+    </div>
+    <div th:if="${message}" class="successNotice">
+      <p th:text="${message}"></p>
+    </div>
+    <div th:if="${error}" class="errorNotice">
+      <p th:text="${error}"></p>
+    </div>
     <div class="tab-content">
       <div id="tab1" class="tab tab1 active">
-
+        <!--Account Details-->
         <p th:if="${infoUpdated == false}" class="errorNotice">Error: Account changes failed to save.</p>
         <p id="editSuccess" th:if="${infoUpdated}" class="successNotice">Account has been updated successfully</p>
         <p id="editError" class="errorNotice"></p>
-        <!--Account Details-->
         <form action="#" th:action="@{/changeUserInfo}" method="post" name="form">
 
           <div class="requiredInput">
@@ -182,21 +188,24 @@
 
       <div id="tab2" class="tab tab2">
         <!--Security-->
-
+        <h3>Email</h3>
         <form id="emailForm" action="#" th:action="@{/changeEmail}" method="post">
+          <p id="emailError" class="errorNotice"></p>
           <label for="currentEmail" class="changeAccInfoLbl">Current Email:</label>
           <input id="currentEmail" th:value="${user.email}" disabled><br>
           <label for="newEmail" class="changeAccInfoLbl">New Email:</label>
-          <input type="email" id="newEmail" name="newEmail" required><Br>
+          <input type="email" id="newEmail" name="newEmail" required><Br><Br>
           <input type="submit" id="emailSubmit" value="Change Email">
         </form>
         <br><br><br>
+
         <h3>Password</h3>
         <form id="hiddenForm" action="#" th:action="@{/changePassword}" method="post">
           <label class="changeAccInfoLbl" id="lb1" for="newPassword">New Password</label>
           <input type="password" id="newPassword" name="newPassword" required><Br>
           <label class="changeAccInfoLbl" id="lb2" for="confirmPassword">Confirm Password</label>
-          <input type="password" id="confirmPassword" name="confirmPassword" required><Br>
+          <input type="password" id="confirmPassword" name="confirmPassword" required><Br><Br>
+          <div id="passwordError" style="color:red;"></div>
           <input type="submit" id="pwSubmit" name="pwSubmit" value="Change Password" required>
         </form>
         <br><br>
@@ -204,53 +213,60 @@
         <form action="#" th:action="@{/deleteAccount}" method="post" onsubmit="return confirmDeletion();">
           <button type="submit" id="delAcc" class="btn btn-danger">DELETE ACCOUNT</button>
         </form>
-
       </div>
-
 
       <div id="tab3" class="tab tab3">
-          <form th:action="@{/selectMembership}" method="post" class="membership-options">
-
-            <div class="membership-option">
-              <input type="radio" name="membershipType" value="alumni" required>
-              <div class="membership-details">
-                <h2>Alumni - Free</h2>
-                <div class="membership-description">
-                  <p>Subscription period: Unlimited</p>
-                  <p>This is for members/alumni that are over the age of 19 and would like to stay in touch with VOICE. No voting rights as a member of the AGM.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="membership-option">
-              <input type="radio" name="membershipType" value="general" required>
-              <div class="membership-details">
-                <h2>General Membership</h2>
-                <div class="membership-description">
-                  <p>Subscription period: 1 year</p>
-                  <p>No automatically recurring payments. Membership will include full voting rights. Includes two adults and any minor dependents in the same household.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="membership-option">
-              <input type="radio" name="membershipType" value="professional" required>
-              <div class="membership-details">
-                <h2>Professional</h2>
-                <div class="membership-description">
-                  <p>Subscription period: Unlimited</p>
-                  <p>Updated on events, no voting rights as a member of the AGM.</p>
-                </div>
-              </div>
-            </div>
-
-            <div style="text-align: center;">
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-          </form>
+        <div class="card">
+          <div class="card-body">
+          <h3>
+            Your Current Membership : <span th:text="${membershipType}"></span>
+          </h3>
+          </div>
         </div>
+        <!--Membership-->
+        <form th:action="@{/selectMembership}" method="post" class="membership-options">
+          <div class="membership-option">
+            <input type="radio" name="membershipType" value="alumni" required>
+            <div class="membership-details">
+              <h2>Alumni - Free</h2>
+              <div class="membership-description">
+                <p>Subscription period: Unlimited</p>
+                <p>This is for members/alumni that are over the age of 19 and would like to stay in touch with VOICE. No
+                  voting rights as a member of the AGM.</p>
+              </div>
+            </div>
+          </div>
 
+          <div class="membership-option">
+            <input type="radio" name="membershipType" value="general" required>
+            <div class="membership-details">
+              <h2>General Membership</h2>
+              <div class="membership-description">
+                <p>Subscription period: 1 year</p>
+                <p>No automatically recurring payments. Membership will include full voting rights. Includes two adults
+                  and any minor dependents in the same household.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="membership-option">
+            <input type="radio" name="membershipType" value="professional" required>
+            <div class="membership-details">
+              <h2>Professional</h2>
+              <div class="membership-description">
+                <p>Subscription period: Unlimited</p>
+                <p>Updated on events, no voting rights as a member of the AGM.</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
       </div>
+
+    </div>
   </div>
 </body>
 
