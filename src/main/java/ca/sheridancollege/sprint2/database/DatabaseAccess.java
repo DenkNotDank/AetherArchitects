@@ -280,7 +280,7 @@ DatabaseAccess {
                 "SEC_USER.lastName, SEC_USER.phone,SEC_USER.secondaryEmail, SEC_USER.province, " +
                 "SEC_USER.city, SEC_USER.postalCode, SEC_USER.accountEnabled, " +
                 "USER_MEMBERSHIPS.membershipID, USER_MEMBERSHIPS.paid, USER_MEMBERSHIPS.paidDate " +
-                "FROM SEC_USER INNER JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID;";
+                "FROM SEC_USER LEFT JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID;";
         ArrayList<Member> members = (ArrayList<Member>) jdbc.query(query,
                 new BeanPropertyRowMapper<Member>(Member.class));
         if (members.size() > 0) {
