@@ -81,7 +81,7 @@ input::-webkit-inner-spin-button {
 }
 
 input {
-    width: 100%;
+    /*width: 100%;*/
 }
 
 .bodyNav {
@@ -402,7 +402,16 @@ fieldset legend {
 
 
 .form-check-label{
-    margin-left: 52%
+    margin-left: 20px
+}
+
+.form-check-input{
+    margin-left: 50%;
+    padding-left: 20px;
+}
+
+.form-check{
+    margin-left: 25%    ;
 }
 
 .emailOutput h3{
@@ -411,21 +420,25 @@ fieldset legend {
 
 .filter-submit{
     width:80px;
-    margin-left:46%;
+
 }
 
 .membersip-tier{
     float: left;
+    padding-right: 20px;
 }
 
 .payment-status{
     float: left;
+    padding-right: 20px;
 }
 
 .account-role{
     float: left;
+    padding-right: 20px;
 }
 
 .suspended{
     float: left;
+    padding-right: 20px;
 }
