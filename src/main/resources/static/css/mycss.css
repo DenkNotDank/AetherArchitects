@@ -82,7 +82,7 @@ input::-webkit-inner-spin-button {
     font-weight: bold;
 }
 
-input {
+.loginInput {
     width: 100%;
 }
 
