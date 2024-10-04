@@ -76,3 +76,9 @@
 .membersPageSort{
     height: 10vh;
 }
+
+.membersTable{
+    display: block;
+    overflow-x:auto;
+    white-space: nowrap;
+}
