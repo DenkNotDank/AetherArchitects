@@ -66,4 +66,14 @@
     padding-left: 0.5em;
     padding-right: 0.5em;
     padding-bottom: 0.5em;
+    margin-bottom: 3vh;
+}
+
+.membersPageBody{
+    height: 75vh;
+    width: 76vw;
+}
+
+.membersPageSort{
+    height: 10vh;
 }
