@@ -20,22 +20,43 @@
 
     <link rel="stylesheet" href="../static/css/mycss.css"
           media="all" th:href="@{/css/mycss.css}"/>
+    <link rel="stylesheet" href="../static/css/admin.css"
+          media="all" th:href="@{/css/admin.css}"/>
 </head>
 <body>
-<div class="container-fluid" style="background-color:#ffffff;color:#fff;height:300px;">
-    <p align="center">
-        <img src="/images/VOICE%20logo%202023-transparent.png"
-             alt="" title="" border="0" width="714" height="268"><br>
-    </p>
-</div>
 
 
-<div class="loginNotice" sec:authorize="isAuthenticated()">
-    <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-        Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span><a href="/" sec:authentication="name"></a>
-        <a href="#" th:href="@{/}"><button>Public pages</button></a>
+<div>
+
+    <div id="adminSideBar" class ="adminSideBar">
+        <div class="adminImageholder">
+            <img id="adminNavbarImage" src="/images/VOICE%20logo%202023-transparent.png"
+                 width="178" height="67">
+        </div>
+
+            <ul style='list-style:none'>
+                <li ><a href="/admin/dashboard">Dashboard</a></li>
+                <li ><a href="/admin/members">Members</a></li>
+                <li><a href="/admin/emails">Emails</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
     </div>
+
+    <div class="adminMainBody">
+        <div class="adminPageHeaderDiv">
+            <h1 class="adminPageHeader">Admin Dashboard</h1>
+        </div>
+        <div class="adminLoginNotice" sec:authorize="isAuthenticated()">
+            <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span><a href="/" sec:authentication="name"></a>
+                <a href="#" th:href="@{/}"><button>Return to Public</button></a>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+
 
 
 

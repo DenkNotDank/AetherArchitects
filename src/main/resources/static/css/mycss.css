@@ -71,16 +71,18 @@ input::-webkit-inner-spin-button {
 }
 
 .successNotice {
+    text-align: center;
     background-color: lightgreen;
     font-weight: bold;
 }
 
 .errorNotice {
+    text-align: center;
     background-color: darksalmon;
     font-weight: bold;
 }
 
-input {
+.loginInput {
     width: 100%;
 }
 
@@ -151,6 +153,15 @@ fieldset legend {
     padding: 0.5em;
 }
 
+.loginNoticeEmail {
+    background-color: #cde1ff69;
+    margin-left: 45%;
+    width: 36vw;
+    font-size: 1.1em;
+    height: 12vh;
+    padding: 0.5em;
+}
+
 /*----- Tabs -----*/
 .tabs {
     width: 100%;
@@ -197,20 +208,48 @@ fieldset legend {
     margin-top: -1px;
 }
 
-.tab-content input {
+#tab1 input{
     margin: 7px;
     padding: 2px;
-    width: 250px;
+    width: 20vw;
+}
+
+#tab2 input {
+    margin: 7px;
+    padding: 2px;
+    width: 20vw;
+}
+
+.tab1 {
+    display: none;
+    margin: auto;
+    text-align: center;
+}
+
+.tab2 {
+    display: none;
+    margin: auto;
+    text-align: center;
+}
+
+.tab3 {
+    display: none;
+    /*margin: auto;*/
+}
+
+.changeAccInfoLbl{
+    width: 8vw;
+    text-align: left;
+}
+
+#tab3 input {
+    margin: 0;
+    padding: 0;
+    width: auto;
 }
 
 .tab-content label {
     margin-right: 15%;
-}
-
-.tab {
-    display: none;
-    margin: auto;
-    text-align: center;
 }
 
 .tab.active {
@@ -266,4 +305,65 @@ fieldset legend {
 /*    font-size: 16px;*/
 /*    max-width: 400px;*/
 /*    box-sizing: border-box; }*/
+
+
+
+/*Membership tab  */
+.membership-options{
+    background-color: lightgray;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.membership-option{
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 2px solid white;
+    border-radius: 5px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+
+}
+
+
+.membership-options label {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.membership-description{
+    font-size: 13px;
+    margin-left: 20px;
+    color: darkgray;
+}
+
+.membership-options input[type=radio]{
+    display : block;
+}
+
+
+.emailOutput {
+
+
+    margin: auto;
+    height: 150px;
+    width: 400px;
+    border: 2px solid black;
+    margin-top: 100px;
+}
+
+.emailOutput textarea {
+
+    height: 100%;
+    width: 100%;
+
+    text-align: center;
+
+}
+
+.form-check-label{
+    margin-left: 54%
+}
 
