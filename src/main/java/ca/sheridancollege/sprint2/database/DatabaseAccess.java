@@ -94,16 +94,22 @@ DatabaseAccess {
         jdbc.update(q, parameters);
     }
 
-    public void updateUserLogin(String password, String email) {
+    public boolean updateUserLogin(String password, String email) {
+        try {
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            String q = "UPDATE SEC_USER "
+                    + " SET (encryptedPassword) = :password"
+                    + " where email = :email";
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String q = "UPDATE SEC_USER "
-                + " SET (encryptedPassword) = :password"
-                + " where email = :email";
-
-        parameters.addValue("password", passworEncoder().encode(password));
-        parameters.addValue("email", email);
-        jdbc.update(q, parameters);
+            parameters.addValue("password", passworEncoder().encode(password));
+            parameters.addValue("email", email);
+            jdbc.update(q, parameters);
+            return true;
+        }
+        catch(Exception e){
+            System.out.println("An issue has occurred in updating the user login");
+            return false;
+        }
     }
 
     public boolean updateUserEmail(String email, String newEmail) {
@@ -275,7 +281,6 @@ DatabaseAccess {
 
 
     public List<Member> getAllMembersInfo(){
-
         String query = "SELECT SEC_USER.userId, SEC_USER.email, SEC_USER.firstName, " +
                 "SEC_USER.lastName, SEC_USER.phone,SEC_USER.secondaryEmail, SEC_USER.province, " +
                 "SEC_USER.city, SEC_USER.postalCode, SEC_USER.accountEnabled, " +
