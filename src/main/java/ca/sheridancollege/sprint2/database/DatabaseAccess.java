@@ -284,14 +284,6 @@ DatabaseAccess {
         ArrayList<Member> members = (ArrayList<Member>) jdbc.query(query,
                 new BeanPropertyRowMapper<Member>(Member.class));
         if (members.size() > 0) {
-            for(Member m:members) {
-                try{
-                    System.out.println(m.toString());
-                }
-                catch (Exception e){
-
-                }
-            }
             return members;
         }
         return null;

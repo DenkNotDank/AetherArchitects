@@ -68,8 +68,9 @@
       <div class="card-body" th:if="${#lists.isEmpty(members)}">
         <h2>Error: No users found</h2>
       </div>
-      <div class="card-body" th:if="${not#lists.isEmpty(members)}">
-        <table id="membersTable" class="table table-striped table-bordered membersTable" style="width:100%">
+
+        <div class="card-body membersTable" th:if="${not#lists.isEmpty(members)}">
+        <table id="membersTable" class="table table-striped table-bordered" style="width:100%">
           <thead>
           <tr>
             <th>First Name</th>
@@ -121,7 +122,6 @@
           </tfoot>
         </table>
       </div>
-
 
     </div>
   </div>
