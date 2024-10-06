@@ -59,8 +59,9 @@
 
 <div class="form-check">
 
-<div class = "membersip-tier">
+
   <form action="#" th:action="@{/filter}" method="post" name="form">
+    <div class = "membersip-tier">
   <input class="form-check-input" type="checkbox" name="free" id="free">
   <label class="form-check-label" for="free">
     Free
@@ -104,6 +105,12 @@
     Not Suspended
   </label><br>
         </div><br>
+    <div class="suspended">
+      <input class="form-check-input" type="checkbox" name="secondary" id="secondary">
+      <label class="form-check-label" for="secondary">
+        Secondary Email
+      </label><br>
+    </div><br>
   <input class="filter-submit" type="submit" value="Filter Emails " id="filter">
   </form>
 

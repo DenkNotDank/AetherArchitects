@@ -44,9 +44,11 @@ public class AdminController {
             @RequestParam(defaultValue = "false",name = "user") boolean user,
             @RequestParam(defaultValue = "false",name = "suspended") boolean suspended,
             @RequestParam(defaultValue = "false",name = "notSuspended") boolean notSuspended,
+            @RequestParam(defaultValue = "false",name = "secondary") boolean secondary,
             Model model){
 
-       List<Member> emails = da.getFilteredList(free, basic, premium, paid, unpaid, admin, user, suspended, notSuspended);
+       List<Member> emails = da.getFilteredList(free, basic, premium, paid, unpaid,
+               admin, user, suspended, notSuspended, secondary);
 
         String csvEmails;
        if(emails.isEmpty()){
@@ -56,10 +58,20 @@ public class AdminController {
            return "/secure/admin/emails";
        }
         System.out.println(emails.size());
+
        List<String> filteredEmails = new ArrayList<>();
-        for (Member email : emails) {
-            filteredEmails.add(email.getEmail());
+        if(secondary){
+            for (Member secondaryEmail : emails) {
+                filteredEmails.add(secondaryEmail.getSecondaryEmail());
+            }
         }
+        else{
+            for (Member email : emails) {
+                filteredEmails.add(email.getEmail());
+            }
+        }
+
+
         csvEmails = String.join(",", filteredEmails);
 
         model.addAttribute("filteredEmails", csvEmails);

@@ -326,9 +326,10 @@ DatabaseAccess {
 
     public List<Member> getFilteredList(boolean free, boolean basic, boolean premium,
                                     boolean paid, boolean unpaid, boolean admin,
-                                    boolean user, boolean suspended, boolean notSuspended) {
+                                    boolean user, boolean suspended, boolean notSuspended
+    , boolean secondary) {
 
-        String q = "SELECT email FROM SEC_USER u " +
+        String q = "SELECT email, secondaryEmail FROM SEC_USER u " +
                 "INNER JOIN USER_ROLE r " +
                 "ON u.userId = r.userId " +
                 "LEFT JOIN USER_MEMBERSHIPS m " +
@@ -441,6 +442,17 @@ DatabaseAccess {
                 and = true;
             }
         }
+
+       if(secondary){
+           if(!where){
+               q+="WHERE ";
+               where = true;
+           }
+           if(and){
+               q+="AND ";
+           }
+           q += "secondaryEmail IS NOT NULL";
+       }
 
 
         ArrayList<Member> emails = (ArrayList<Member>) jdbc.query(q,
