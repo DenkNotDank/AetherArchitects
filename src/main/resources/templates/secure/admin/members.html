@@ -52,16 +52,18 @@
           <a href="#" th:href="@{/}"><button>Return to Public</button></a>
         </div>
       </div>
+      <div class="membersPageBody">
+        <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
+        <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+      </div>
 
       <div class="card membersPageBody">
         <div class="card membersPageSort">
           <br>
           <div style="margin-left: 10px; margin-bottom: 10px;">
-            <input type="submit" id="memberPasswordSubmit" class="btn btn-primary btn-lg" value="Change Password"
-              disabled data-toggle="collapse" data-target="#passwordResetForm">
             <!-- Flash Messages -->
-            <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
-            <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+            <input type="submit" id="memberPasswordSubmit" class="btn btn-primary btn-sm" value="Change Password"
+                   disabled data-toggle="collapse" data-target="#passwordResetForm">
           </div>
         </div>
 
