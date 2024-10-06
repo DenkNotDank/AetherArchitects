@@ -292,9 +292,9 @@ DatabaseAccess {
     //method to retrieve the membershipID
     public String getUserMembership(long userID){
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("userID", userID);
 
         String q = "SELECT membershipID FROM user_memberships WHERE userID = :userID";
+        parameters.addValue("userID", userID);
         try {
             Integer count = jdbc.queryForObject(q, parameters, Integer.class);
             if (count != null) {
@@ -314,6 +314,21 @@ DatabaseAccess {
             return "None";
         }
     }
+
+    public List<String> getAllEmails(){
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String q = "(SELECT email FROM SEC_USER) UNION (SELECT secondaryEmail FROM SEC_USER WHERE secondaryEmail IS NOT NULL)";
+        try{
+            List<String> allEmails = (List<String>) jdbc.query(q, parameters,
+                    new BeanPropertyRowMapper<String>(String.class));
+            return allEmails;
+        }
+        catch(Exception e){
+            System.out.println("There was an error in retrieving all the user emails.");
+        }
+        return null;
+    }
+
 
 
 }
