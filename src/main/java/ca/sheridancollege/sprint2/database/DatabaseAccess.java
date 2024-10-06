@@ -3,6 +3,7 @@ package ca.sheridancollege.sprint2.database;
 import ca.sheridancollege.sprint2.beans.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -322,6 +323,133 @@ DatabaseAccess {
             return "None";
         }
     }
+
+    public List<Member> getFilteredList(boolean free, boolean basic, boolean premium,
+                                    boolean paid, boolean unpaid, boolean admin,
+                                    boolean user, boolean suspended, boolean notSuspended) {
+
+        String q = "SELECT email FROM SEC_USER u " +
+                "INNER JOIN USER_ROLE r " +
+                "ON u.userId = r.userId " +
+                "LEFT JOIN USER_MEMBERSHIPS m " +
+                "ON m.userId = r.userId ";
+
+        boolean where = false;
+        boolean and = false;
+
+
+
+        if (free || basic || premium || paid || unpaid) {
+            q += "WHERE ";
+            where =true;
+            //System.out.println("where is " + where + " in f b p p u");
+            if (free) {
+                //System.out.println("free is true");
+                //Include basic members
+                q += "membershipId = 1 ";
+                and = true;
+            }
+            if (basic) {
+                //System.out.println("basic is true");
+                //Include basic members
+                if(and){
+                    q+="AND ";
+                }
+                q += "membershipId = 2 ";
+                and = true;
+            }
+            if (premium) {
+                //System.out.println("premium is true");
+                //Include premium members
+                if(and){
+                    q+="AND ";
+                }
+                q += "membershipId = 3 ";
+                and = true;
+            }
+            if (paid) {
+                //System.out.println("paid is true");
+                //Include paid members
+                if(and){
+                    q+="AND ";
+                }
+                q += "paid = TRUE ";
+                and = true;
+            }
+            if (unpaid) {
+                //System.out.println("unpaid is true");
+                //Include unpaid members
+                if(and){
+                    q+="AND ";
+                }
+                q += "paid = FALSE ";
+                and = true;
+            }
+        }
+
+        if (admin || user) {
+            if(!where){
+                q+="WHERE ";
+                where = true;
+            }
+            //System.out.println("where is " + where + " in a u");
+
+        if (admin) {
+            //System.out.println("admin is true");
+            //Include admins
+            if(and){
+                q+="AND ";
+            }
+            q += "roleId = 1 ";
+            and = true;
+        }
+        if (user) {
+            //System.out.println("user is true");
+            //Include users
+            if(and){
+                q+="AND ";
+            }
+            q += "roleId = 2 ";
+            and = true;
+        }
+    }
+
+       if(suspended || notSuspended) {
+
+           if(!where){
+               q+="WHERE ";
+               where = true;
+           }
+           //System.out.println("where is " + where + " in s n");
+
+            if (suspended) {
+                //System.out.println("suspended is true");
+                //Include suspended accounts
+                if(and){
+                    q+="AND ";
+                }
+                q += "accountEnabled = FALSE ";
+                and = true;
+            }
+            if (notSuspended) {
+                //System.out.println("notSuspended is true");
+                //Include non suspended members
+                if(and){
+                    q+="AND ";
+                }
+                q += "accountEnabled = TRUE ";
+                and = true;
+            }
+        }
+
+
+        ArrayList<Member> emails = (ArrayList<Member>) jdbc.query(q,
+                new BeanPropertyRowMapper<Member>(Member.class));
+
+        return emails;
+
+    }
+
 
 
 }
