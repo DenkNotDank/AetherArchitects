@@ -15,7 +15,7 @@ public class AdminController {
 
     @Autowired
     @Lazy
-    DatabaseAccess da;
+    public DatabaseAccess da;
 
     @GetMapping("/admin/dashboard")
     public String getAdminHome(){

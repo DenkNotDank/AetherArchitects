@@ -16,9 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class
-
-DatabaseAccess {
+public class DatabaseAccess {
     @Autowired
     public NamedParameterJdbcTemplate jdbc;
 
@@ -221,12 +219,11 @@ DatabaseAccess {
             parameters.addValue("userId", userId);
             int rolesDeleted = jdbc.update(deleteRolesQuery, parameters);
 
-            //Delete the related memebrship info
+            // Delete the related memebrship info
             parameters = new MapSqlParameterSource();
             String deleteMembershipsQuery = "DELETE FROM USER_MEMBERSHIPS WHERE userId = :userId";
             parameters.addValue("userId", userId);
             int membershipsDeleted = jdbc.update(deleteMembershipsQuery, parameters);
-
 
             // Delete the user
             String deleteUserQuery = "DELETE FROM SEC_USER WHERE email = :email";
@@ -234,7 +231,7 @@ DatabaseAccess {
             parameters.addValue("email", email);
             int usersDeleted = jdbc.update(deleteUserQuery, parameters);
 
-            if(rolesDeleted > 0 && membershipsDeleted > 0 && usersDeleted > 0){
+            if (rolesDeleted > 0 && membershipsDeleted > 0 && usersDeleted > 0) {
                 System.out.println("User with email " + email + " deleted successfully.");
                 return true;
             }
@@ -245,7 +242,7 @@ DatabaseAccess {
         return false;
     }
 
-    public void updateUserMembership(long userID, int membershipID, boolean paid, Date paidDate){
+    public void updateUserMembership(long userID, int membershipID, boolean paid, Date paidDate) {
         System.out.println("Updating user membership " + userID + " MembershipId " + membershipID);
         try {
             MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -277,10 +274,7 @@ DatabaseAccess {
     }
 
 
-
-
-
-    public List<Member> getAllMembersInfo(){
+    public List<Member> getAllMembersInfo() {
         String query = "SELECT SEC_USER.userId, SEC_USER.email, SEC_USER.firstName, " +
                 "SEC_USER.lastName, SEC_USER.phone,SEC_USER.secondaryEmail, SEC_USER.province, " +
                 "SEC_USER.city, SEC_USER.postalCode, SEC_USER.accountEnabled, " +
@@ -294,8 +288,8 @@ DatabaseAccess {
         return null;
     }
 
-    //method to retrieve the membershipID
-    public String getUserMembership(long userID){
+    // method to retrieve the membershipID
+    public String getUserMembership(long userID) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
 
         String q = "SELECT membershipID FROM user_memberships WHERE userID = :userID";
@@ -315,10 +309,11 @@ DatabaseAccess {
 
             }
             return "None";
-        }catch (Exception e){
+        } catch (Exception e) {
             return "None";
         }
     }
+
 
     public List<String> getAllEmails(){
         MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -334,7 +329,4 @@ DatabaseAccess {
         return null;
     }
 
-
-
 }
-
