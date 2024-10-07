@@ -22,7 +22,7 @@ public class AccountController {
 
     @Autowired
     @Lazy
-    private DatabaseAccess da;
+    public DatabaseAccess da;
 
     @GetMapping("/accessDenied")
     public String goError() {
