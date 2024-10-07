@@ -19,8 +19,9 @@ public class Member {
     private String province;
     private String city;
     private String postalCode;
-    private long membershipID;
-    private boolean paid;
+    private int accountEnabled;
+    private String membershipID;
+    private String paid;
     private String paidDate;
 
 }

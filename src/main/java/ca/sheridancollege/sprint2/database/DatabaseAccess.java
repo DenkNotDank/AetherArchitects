@@ -17,9 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class
-
-DatabaseAccess {
+public class DatabaseAccess {
     @Autowired
     public NamedParameterJdbcTemplate jdbc;
 
@@ -95,16 +93,22 @@ DatabaseAccess {
         jdbc.update(q, parameters);
     }
 
-    public void updateUserLogin(String password, String email) {
+    public boolean updateUserLogin(String password, String email) {
+        try {
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            String q = "UPDATE SEC_USER "
+                    + " SET (encryptedPassword) = :password"
+                    + " where email = :email";
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String q = "UPDATE SEC_USER "
-                + " SET (encryptedPassword) = :password"
-                + " where email = :email";
-
-        parameters.addValue("password", passworEncoder().encode(password));
-        parameters.addValue("email", email);
-        jdbc.update(q, parameters);
+            parameters.addValue("password", passworEncoder().encode(password));
+            parameters.addValue("email", email);
+            jdbc.update(q, parameters);
+            return true;
+        }
+        catch(Exception e){
+            System.out.println("An issue has occurred in updating the user login");
+            return false;
+        }
     }
 
     public boolean updateUserEmail(String email, String newEmail) {
@@ -216,12 +220,11 @@ DatabaseAccess {
             parameters.addValue("userId", userId);
             int rolesDeleted = jdbc.update(deleteRolesQuery, parameters);
 
-            //Delete the related memebrship info
+            // Delete the related memebrship info
             parameters = new MapSqlParameterSource();
             String deleteMembershipsQuery = "DELETE FROM USER_MEMBERSHIPS WHERE userId = :userId";
             parameters.addValue("userId", userId);
             int membershipsDeleted = jdbc.update(deleteMembershipsQuery, parameters);
-
 
             // Delete the user
             String deleteUserQuery = "DELETE FROM SEC_USER WHERE email = :email";
@@ -229,7 +232,7 @@ DatabaseAccess {
             parameters.addValue("email", email);
             int usersDeleted = jdbc.update(deleteUserQuery, parameters);
 
-            if(rolesDeleted > 0 && membershipsDeleted > 0 && usersDeleted > 0){
+            if (rolesDeleted > 0 && membershipsDeleted > 0 && usersDeleted > 0) {
                 System.out.println("User with email " + email + " deleted successfully.");
                 return true;
             }
@@ -240,7 +243,7 @@ DatabaseAccess {
         return false;
     }
 
-    public void updateUserMembership(long userID, int membershipID, boolean paid, Date paidDate){
+    public void updateUserMembership(long userID, int membershipID, boolean paid, Date paidDate) {
         System.out.println("Updating user membership " + userID + " MembershipId " + membershipID);
         try {
             MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -272,38 +275,26 @@ DatabaseAccess {
     }
 
 
-
-
-
-    public List<Member> getAllMembersInfo(){
-
+    public List<Member> getAllMembersInfo() {
         String query = "SELECT SEC_USER.userId, SEC_USER.email, SEC_USER.firstName, " +
                 "SEC_USER.lastName, SEC_USER.phone,SEC_USER.secondaryEmail, SEC_USER.province, " +
                 "SEC_USER.city, SEC_USER.postalCode, SEC_USER.accountEnabled, " +
                 "USER_MEMBERSHIPS.membershipID, USER_MEMBERSHIPS.paid, USER_MEMBERSHIPS.paidDate " +
-                "FROM SEC_USER INNER JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID;";
+                "FROM SEC_USER LEFT JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID;";
         ArrayList<Member> members = (ArrayList<Member>) jdbc.query(query,
                 new BeanPropertyRowMapper<Member>(Member.class));
         if (members.size() > 0) {
-            for(Member m:members) {
-                try{
-                    System.out.println(m.toString());
-                }
-                catch (Exception e){
-
-                }
-            }
             return members;
         }
         return null;
     }
 
-    //method to retrieve the membershipID
-    public String getUserMembership(long userID){
+    // method to retrieve the membershipID
+    public String getUserMembership(long userID) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("userID", userID);
 
         String q = "SELECT membershipID FROM user_memberships WHERE userID = :userID";
+        parameters.addValue("userID", userID);
         try {
             Integer count = jdbc.queryForObject(q, parameters, Integer.class);
             if (count != null) {
@@ -319,7 +310,7 @@ DatabaseAccess {
 
             }
             return "None";
-        }catch (Exception e){
+        } catch (Exception e) {
             return "None";
         }
     }
@@ -464,5 +455,18 @@ DatabaseAccess {
 
 
 
-}
+    public List<String> getAllEmails(){
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String q = "(SELECT email FROM SEC_USER) UNION (SELECT secondaryEmail FROM SEC_USER WHERE secondaryEmail IS NOT NULL)";
+        try{
+            List<String> allEmails = (List<String>) jdbc.query(q, parameters,
+                    new BeanPropertyRowMapper<String>(String.class));
+            return allEmails;
+        }
+        catch(Exception e){
+            System.out.println("There was an error in retrieving all the user emails.");
+        }
+        return null;
+    }
 
+}
