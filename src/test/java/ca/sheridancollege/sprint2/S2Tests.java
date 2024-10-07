@@ -504,7 +504,7 @@ class S2Tests {
 
         // Call method
         String view = accountController.selectMembership(
-                membershipType, model, redirectAttrs);
+                membershipType, redirectAttrs);
 
         // Verify
         assertEquals("redirect:/myAccount", view);
@@ -532,7 +532,7 @@ class S2Tests {
 
         // Call method
         String view = accountController.selectMembership(
-                membershipType, model, redirectAttrs);
+                membershipType, redirectAttrs);
 
         // Verify
         assertEquals("redirect:/myAccount", view);
@@ -563,7 +563,7 @@ class S2Tests {
 
         // Call method
         String view = accountController.selectMembership(
-                membershipType, model, redirectAttrs);
+                membershipType, redirectAttrs);
 
         // Verify
         assertEquals("redirect:/myAccount", view);
@@ -590,7 +590,7 @@ class S2Tests {
         RedirectAttributes redirectAttrs = mock(RedirectAttributes.class);
 
         // Call method
-        String view = accountController.selectMembership(membershipType, model, redirectAttrs);
+        String view = accountController.selectMembership(membershipType, redirectAttrs);
 
         // Verify
         assertEquals("redirect:/myAccount", view);
