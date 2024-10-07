@@ -148,10 +148,16 @@ public class AccountController {
         }
     
         // Encode the password and update in the database
-        da.updateUserLogin(newPassword, email);
-    
-        redirectAttrs.addFlashAttribute("successMessage", "Password changed successfully for user: " + email);
-        return "redirect:/admin/members";
+        boolean updated = da.updateUserLogin(newPassword, email);
+        if(updated){
+            redirectAttrs.addFlashAttribute("successMessage", "Password changed successfully for user: " + email);
+            return "redirect:/admin/members";
+        }
+        else{
+            redirectAttrs.addFlashAttribute("errorMessage", "System error: User password not updated");
+            return "redirect:/admin/members";
+        }
+
     }
 
     @PostMapping("/deleteAccount")
@@ -179,7 +185,7 @@ public class AccountController {
     }
 
     @PostMapping("/selectMembership")
-    public String selectMembership(@RequestParam("membershipType") String MembershipType, Model model,
+    public String selectMembership(@RequestParam("membershipType") String MembershipType,
             RedirectAttributes redirectAttrs) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
