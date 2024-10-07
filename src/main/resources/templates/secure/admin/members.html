@@ -22,9 +22,66 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+<!-- 
+  <link rel="stylesheet" href="../static/css/mycss.css"
+        media="all" th:href="@{/css/mycss.css}"/>
+  <link rel="stylesheet" href="../static/css/admin.css"
+        media="all" th:href="@{/css/admin.css}"/>
+</head>
+<body>
+
+
+<div>
+
+  <div id="adminSideBar" class ="adminSideBar">
+    <div class="adminImageholder">
+      <img id="adminNavbarImage" src="/images/VOICE%20logo%202023-transparent.png"
+           width="178" height="67">
+    </div>
+
+    <ul style='list-style:none'>
+      <li ><a href="/admin/dashboard">Dashboard</a></li>
+      <li ><a href="/admin/members">Members</a></li>
+      <li><a href="/admin/emails">Emails</a></li>
+      <li><a href="#">Settings</a></li>
+    </ul>
+  </div>
+
+  <div class="adminMainBody">
+    <div class="adminPageHeaderDiv">
+      <h1 class="adminPageHeader">Member Accounts</h1>
+    </div>
+    <div class="adminLoginNotice" sec:authorize="isAuthenticated()">
+      <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+        Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span><a href="/" sec:authentication="name"></a>
+        <a href="#" th:href="@{/}"><button>Return to Public</button></a>
+      </div>
+    </div>
+
+    <div class="card membersPageBody">
+      <div class="card-header membersPageSort">
+        This is where the sort options for the members list will be.
+        There should also be a button to pull up the reset member password form.
+        (You can use bootstrap collapse https://getbootstrap.com/docs/4.3/components/collapse/)
+      </div>
+
+      <div class="card-body">
+        This is where the list of members will be displayed
+      </div>
+
+
+    </div>
+  </div>
+
+</div>
+
+
+
   <link rel="stylesheet" href="../static/css/mycss.css" media="all" th:href="@{/css/mycss.css}" />
   <link rel="stylesheet" href="../static/css/admin.css" media="all" th:href="@{/css/admin.css}" />
-</head>
+</head> -->
+
 
 <body>
   <div>
@@ -86,6 +143,7 @@
             </form>
           </div>
         </div>
+
 
         <div class="card-body" th:if="${#lists.isEmpty(members)}">
           <h2>Error: No users found</h2>
