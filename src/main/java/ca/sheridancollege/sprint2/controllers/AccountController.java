@@ -202,14 +202,15 @@ public class AccountController {
         Boolean paid = false;
         Date paidDate = null;
 
-        if (MembershipType.toLowerCase().equals("alumni")) {
+        if (MembershipType.equalsIgnoreCase("alumni")) {
             membershipId = 1;
         } else if (MembershipType.equals("general")) {
             membershipId = 2;
-        } else if (MembershipType.toLowerCase().equals("professional")) {
+        } else if (MembershipType.equalsIgnoreCase("professional")) {
             membershipId = 3;
         } else {
             redirectAttrs.addFlashAttribute("error", "Invalid Membership Type");
+            return "redirect:/myAccount";
         }
 
         try {

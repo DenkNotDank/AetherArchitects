@@ -11,6 +11,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -335,7 +336,7 @@ class S2Tests {
 
         when(databaseAccess.findUserAccount(email)).thenReturn(user);
         // Simulate that the new password is different from the current password
-        doNothing().when(databaseAccess).updateUserLogin(newPassword, email);
+        when(databaseAccess.updateUserLogin(newPassword, email)).thenReturn(true);
 
         Authentication auth = mock(Authentication.class);
         when(auth.getName()).thenReturn(email);
@@ -424,7 +425,7 @@ class S2Tests {
                 .encode("oldPassword123")); // Simulate current password
 
         when(databaseAccess.findUserAccount(email)).thenReturn(user);
-        doNothing().when(databaseAccess).updateUserLogin(newPassword, email);
+        when(databaseAccess.updateUserLogin(newPassword, email)).thenReturn(true);
 
         RedirectAttributes redirectAttrs = mock(RedirectAttributes.class);
 
@@ -499,12 +500,11 @@ class S2Tests {
         when(auth.getName()).thenReturn(email);
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        Model model = mock(Model.class);
         RedirectAttributes redirectAttrs = mock(RedirectAttributes.class);
 
         // Call method
-        String view = accountController.selectMembership(
-                membershipType, redirectAttrs);
+
+        String view = accountController.selectMembership(membershipType, redirectAttrs);
 
         // Verify
         assertEquals("redirect:/myAccount", view);
@@ -520,20 +520,16 @@ class S2Tests {
         String email = "test@example.com";
         String membershipType = "alumni";
 
-        when(databaseAccess.findUserAccount(email))
-                .thenReturn(null); // Simulate user not found
+        when(databaseAccess.findUserAccount(email)).thenReturn(null);
 
         Authentication auth = mock(Authentication.class);
         when(auth.getName()).thenReturn(email);
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        Model model = mock(Model.class);
         RedirectAttributes redirectAttrs = mock(RedirectAttributes.class);
 
         // Call method
-        String view = accountController.selectMembership(
-                membershipType, redirectAttrs);
-
+        String view = accountController.selectMembership(membershipType, redirectAttrs);
         // Verify
         assertEquals("redirect:/myAccount", view);
         verify(redirectAttrs).addFlashAttribute(
@@ -558,12 +554,10 @@ class S2Tests {
         when(auth.getName()).thenReturn(email);
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        Model model = mock(Model.class);
         RedirectAttributes redirectAttrs = mock(RedirectAttributes.class);
 
         // Call method
-        String view = accountController.selectMembership(
-                membershipType, redirectAttrs);
+        String view = accountController.selectMembership(membershipType, redirectAttrs);
 
         // Verify
         assertEquals("redirect:/myAccount", view);
@@ -586,7 +580,6 @@ class S2Tests {
         when(auth.getName()).thenReturn(email);
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        Model model = mock(Model.class);
         RedirectAttributes redirectAttrs = mock(RedirectAttributes.class);
 
         // Call method
@@ -596,5 +589,7 @@ class S2Tests {
         assertEquals("redirect:/myAccount", view);
         verify(redirectAttrs).addFlashAttribute(
                 "error", "Invalid Membership Type");
+                verify(databaseAccess, never())
+                .updateUserMembership(anyLong(), anyInt(), anyBoolean(), any());
     }
 }
