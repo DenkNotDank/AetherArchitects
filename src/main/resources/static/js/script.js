@@ -237,3 +237,13 @@ $(document).ready(function(){
             .stop(true, true).delay(100).fadeOut(200);
     });
 });
+
+//Check filter from inside div
+/*const fieldsetRows = document.querySelectorAll('.filter-fieldset-row');
+
+fieldsetRows.forEach(row => {
+    row.addEventListener('click', function() {
+        const checkbox = this.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+    });
+});*/
