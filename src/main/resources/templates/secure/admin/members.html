@@ -124,10 +124,36 @@
                 <td th:utext="${member.province}"></td>
                 <td th:utext="${member.city}"></td>
                 <td th:utext="${member.postalCode}"></td>
-                <td th:utext="${member.accountEnabled}"></td>
-                <td th:utext="${member.membershipID}"></td>
-                <td th:utext="${member.paid}"></td>
-                <td th:utext="${member.paidDate}"></td>
+
+                <td th:switch="${member.membershipID}" >
+                  <p th:case="'0'">Disabled</p>
+                  <p th:case="*">Enabled</p>
+                </td>
+
+                <td th:switch="${member.membershipID}">
+                  <p th:case="null">None</p>
+                  <p th:case="0">None</p>
+                  <p th:case="1">Alumni</p>
+                  <p th:case="2">General</p>
+                  <p th:case="3">Professional</p>
+                  <p th:case="*">None</p>
+                </td>
+
+
+                <td th:switch="${member.paid}">
+                  <p th:case="'true'">Paid</p>
+                  <p th:case="'True'">Paid</p>
+                  <p th:case="'TRUE'">Paid</p>
+                  <p th:case="*">Unpaid</p>
+                </td>
+
+                <td th:switch="${member.paid}">
+                  <p th:case="'true'" th:utext="${member.paidDate}"></p>
+                  <p th:case="'True'" th:utext="${member.paidDate}"></p>
+                  <p th:case="'TRUE'" th:utext="${member.paidDate}"></p>
+                  <p th:case="*"></p>
+                </td>
+
               </tr>
             </tbody>
             <tfoot>
