@@ -62,7 +62,6 @@ alter table USER_MEMBERSHIPS
 
 
 
-
 insert into SEC_USER (email,firstName, lastName, phone, province,city,encryptedPassword, accountEnabled) values ('admin@email.com','Default','Admin' ,'4161231234','Ontario','Toronto',  '$2a$10$DnNxZ0MNTMgs/m7QUWZu0u1jULd2Ltsl/tlUzONoUG7mxSZ..lvN2',1);
 insert into SEC_USER (email,firstName, lastName, phone, province,city,encryptedPassword, accountEnabled)values ('user@email.com','Default','User' ,'4161231234','Ontario','Toronto',  '$2a$10$DnNxZ0MNTMgs/m7QUWZu0u1jULd2Ltsl/tlUzONoUG7mxSZ..lvN2',1);
 insert into SEC_USER (email, firstName, lastName, phone, province, city, encryptedPassword, accountEnabled) values ('rabelwhite0@devhub.com', 'Reece', 'Abelwhite', '3056561781',  'Florida', 'Miami', '90b695ff3cb781eb53cbbe1f774a241fe4a0a3d8', 1);
