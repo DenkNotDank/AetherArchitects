@@ -82,7 +82,7 @@ input::-webkit-inner-spin-button {
     font-weight: bold;
 }
 
-input {
+.loginInput {
     width: 100%;
 }
 
@@ -141,7 +141,7 @@ fieldset legend {
     margin: 0 auto;
     width: 960px;
     height: 900px;
-    background-color: #bde6f2;
+    background-color: white;
 }
 
 .loginNotice {
@@ -363,7 +363,53 @@ fieldset legend {
 
 }
 
+
+
 .form-check-label{
-    margin-left: 54%
+    margin-left: 20px
+}
+
+.form-check-input{
+    margin-left: 50%;
+    padding-left: 20px;
+}
+
+.form-check{
+    margin-left: 25%;
+
+}
+
+.emailOutput h3{
+    margin-left: 45%;
+}
+
+.filter-submit{
+    width:80px;
+
+}
+
+.membersip-tier{
+    float: left;
+    padding-right: 20px;
+}
+
+.payment-status{
+    float: left;
+    padding-right: 20px;
+}
+
+.account-role{
+    float: left;
+    padding-right: 20px;
+}
+
+.suspended{
+    float: left;
+    padding-right: 20px;
+}
+
+.filter-submit{
+    margin-top: 50px;
+    margin-left: 21%;
 }
 

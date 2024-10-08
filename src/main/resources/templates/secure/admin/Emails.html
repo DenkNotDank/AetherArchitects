@@ -4,7 +4,7 @@
 >
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard</title>
+  <title>Filter Emails</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script th:src="@{/js/bootstrap/bootstrap.js}"></script>
   <script th:src="@{/js/bootstrap/bootstrap.bundle.js}"></script>
@@ -20,71 +20,106 @@
 
   <link rel="stylesheet" href="../static/css/mycss.css"
         media="all" th:href="@{/css/mycss.css}"/>
+  <link rel="stylesheet" href="../static/css/admin.css"
+        media="all" th:href="@{/css/admin.css}"/>
 </head>
 <body>
-<div class="container-fluid" style="background-color:#ffffff;color:#fff;height:67px;">
-  <p align="center">
-    <img src="/images/VOICE%20logo%202023-transparent.png"
-         alt="" title="" border="0" width="178" height="67"><br>
-  </p>
-</div>
 
 
-<div class="loginNoticeEmail" sec:authorize="isAuthenticated()">
-  <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-    Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span><a href="/" sec:authentication="name"></a>
-    <a href="#" th:href="@{/}"><button>Public pages</button></a>
+<div>
+
+  <div id="adminSideBar" class ="adminSideBar">
+    <div class="adminImageholder">
+      <img id="adminNavbarImage" src="/images/VOICE%20logo%202023-transparent.png"
+           width="178" height="67">
+    </div>
+
+    <ul style='list-style:none'>
+      <li ><a href="/admin/dashboard">Dashboard</a></li>
+      <li ><a href="/admin/members">Members</a></li>
+      <li><a href="/admin/emails">Emails</a></li>
+      <li><a href="#">Settings</a></li>
+    </ul>
   </div>
+
+  <div class="adminMainBody">
+    <div class="adminPageHeaderDiv">
+      <h1 class="adminPageHeader">Filter Emails</h1>
+    </div>
+    <div class="adminLoginNotice" sec:authorize="isAuthenticated()">
+      <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+        Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span><a href="/" sec:authentication="name"></a>
+        <a href="#" th:href="@{/}"><button>Return to Public</button></a>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<div id="adminSideBar" class ="admnSideBar">
-  <ul style='list-style:none'>
-
-    <li ><a href="#">Members</a></li>
-    <li><a href="">Emails</a></li>
-    <li><a href="#">Settings</a></li>
-  </ul>
-</div>
-
-</div>
-
-
-
-
-
-<!--<div class="check-inline" >-->
-<!--  <h3>Show Checkboxes</h3>-->
-<!--<form class ="checkboxes" action="/filterEmails">-->
-<!--  <input type="checkbox" id="Free" name="free">-->
-<!--  <label for="free"> Free</label><br>-->
-<!--  <input type="checkbox" id="Basic" name="basic">-->
-<!--  <label for="basic"> Basic</label><br>-->
-<!--  <input type="checkbox" id="Premium" name="premium">-->
-<!--  <label for="premium"> Premium</label><br><br>-->
-<!--  <input type="submit" value="Filter">-->
-<!--</form>-->
-<!--</div>-->
 
 <div class="form-check">
-  <h3>Filter Emails</h3><br>
-  <input class="form-check-input" type="checkbox" value="" id="free">
+
+
+  <form action="#" th:action="@{/filter}" method="post" name="form">
+    <div class = "membersip-tier">
+  <input class="form-check-input" type="checkbox" name="free" id="free">
   <label class="form-check-label" for="free">
     Free
   </label><br>
-  <input class="form-check-input" type="checkbox" value="" id="basic">
+  <input class="form-check-input" type="checkbox" name="basic" id="basic">
   <label class="form-check-label" for="basic">
     Basic
   </label><br>
-  <input class="form-check-input" type="checkbox" value="" id="premium">
+  <input class="form-check-input" type="checkbox" name="premium" id="premium">
   <label class="form-check-label" for="premium">
     Premium
-  </label>
+  </label><br>
+  </div>
+    <div class="payment-status">
+  <input class="form-check-input" type="checkbox" name="paid" id="paid">
+  <label class="form-check-label" for="paid">
+    Paid
+  </label><br>
+  <input class="form-check-input" type="checkbox" name="unpaid" id="unpaid">
+  <label class="form-check-label" for="unpaid">
+    Unpaid
+  </label><br>
+    </div>
+      <div class="account-role">
+  <input class="form-check-input" type="checkbox" name="admin" id="admin">
+  <label class="form-check-label" for="admin">
+    Admin
+  </label><br>
+  <input class="form-check-input" type="checkbox" name="user" id="user">
+  <label class="form-check-label" for="user">
+    User
+  </label><br>
+      </div>
+        <div class="suspended">
+  <input class="form-check-input" type="checkbox" name="suspended" id="suspended">
+  <label class="form-check-label" for="suspended">
+    Suspended
+  </label><br>
+  <input class="form-check-input" type="checkbox" name="notSuspended" id="notSuspended">
+  <label class="form-check-label" for="notSuspended">
+    Not Suspended
+  </label><br>
+        </div><br>
+    <div class="suspended">
+      <input class="form-check-input" type="checkbox" name="secondary" id="secondary">
+      <label class="form-check-label" for="secondary">
+        Secondary Email
+      </label><br>
+    </div><br>
+  <input class="filter-submit" type="submit" value="Filter Emails " id="filter">
+  </form>
+
 </div>
 
 
 
 <div class ="emailOutput">
-  <textarea readonly></textarea>
+  <textarea th:text = "${filteredEmails}" readonly></textarea>
 </div>
 
 

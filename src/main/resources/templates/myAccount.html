@@ -216,10 +216,12 @@
       </div>
 
       <div id="tab3" class="tab tab3">
-        <div>
-          <p>
-            Current Membership :<span th:text="${membershipType}"></span>
-          </p>
+        <div class="card">
+          <div class="card-body">
+          <h3>
+            Your Current Membership : <span th:text="${membershipType}"></span>
+          </h3>
+          </div>
         </div>
         <!--Membership-->
         <form th:action="@{/selectMembership}" method="post" class="membership-options">

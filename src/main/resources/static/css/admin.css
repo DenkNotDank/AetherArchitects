@@ -7,6 +7,7 @@
     position:relative;
     float: right;
     width: 83vw;
+    z-index: 1;
 }
 
 .adminPageHeaderDiv{
@@ -66,4 +67,25 @@
     padding-left: 0.5em;
     padding-right: 0.5em;
     padding-bottom: 0.5em;
+    margin-bottom: 3vh;
+}
+
+.membersPageBody{
+/*     height: 75vh; */
+    width: 76vw;
+}
+
+.membersPageSort{
+    height: 10vh;
+    height: 7vh;
+}
+
+.membersTable{
+    display: block;
+    overflow-x:auto;
+    white-space: nowrap;
+}
+
+#memberPasswordSubmit{
+    margin-top: 1vh;
 }
