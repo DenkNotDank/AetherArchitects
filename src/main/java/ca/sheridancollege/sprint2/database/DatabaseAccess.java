@@ -340,55 +340,79 @@ DatabaseAccess {
 
 
 
-        if (free || basic || premium || paid || unpaid) {
+        if (free || basic || premium ) {
+            boolean or = false;
             q += "WHERE ";
-            where =true;
+            where = true;
             //System.out.println("where is " + where + " in f b p p u");
             if (free) {
                 //System.out.println("free is true");
                 //Include basic members
                 q += "membershipId = 1 ";
                 and = true;
+                or = true;
             }
             if (basic) {
                 //System.out.println("basic is true");
                 //Include basic members
-                if(and){
-                    q+="AND ";
+                if(or){
+                    q += "OR ";
+                }
+                else if (and) {
+                    q += "AND ";
                 }
                 q += "membershipId = 2 ";
                 and = true;
+                or = true;
             }
             if (premium) {
                 //System.out.println("premium is true");
                 //Include premium members
-                if(and){
-                    q+="AND ";
+                if(or){
+                    q += "OR ";
+                }
+                else if (and) {
+                    q += "AND ";
                 }
                 q += "membershipId = 3 ";
                 and = true;
             }
+        }
+
+        if(paid || unpaid) {
+            boolean or = false;
+            if(!where){
+                q+="WHERE ";
+                where = true;
+            }
             if (paid) {
                 //System.out.println("paid is true");
                 //Include paid members
-                if(and){
-                    q+="AND ";
+                if (and) {
+                    q += "AND ";
                 }
                 q += "paid = TRUE ";
                 and = true;
+                or = true;
             }
             if (unpaid) {
                 //System.out.println("unpaid is true");
                 //Include unpaid members
-                if(and){
-                    q+="AND ";
+                if(or){
+                    q += "OR ";
                 }
+                else if (and) {
+                    q += "AND ";
+                }
+
                 q += "paid = FALSE ";
                 and = true;
             }
         }
 
+
         if (admin || user) {
+            boolean or = false;
             if(!where){
                 q+="WHERE ";
                 where = true;
@@ -403,12 +427,16 @@ DatabaseAccess {
             }
             q += "roleId = 1 ";
             and = true;
+            or = true;
         }
         if (user) {
             //System.out.println("user is true");
             //Include users
-            if(and){
-                q+="AND ";
+            if(or){
+                q += "OR ";
+            }
+            else if (and) {
+                q += "AND ";
             }
             q += "roleId = 2 ";
             and = true;
@@ -416,7 +444,7 @@ DatabaseAccess {
     }
 
        if(suspended || notSuspended) {
-
+           boolean or = false;
            if(!where){
                q+="WHERE ";
                where = true;
@@ -431,12 +459,16 @@ DatabaseAccess {
                 }
                 q += "accountEnabled = FALSE ";
                 and = true;
+                or = true;
             }
             if (notSuspended) {
                 //System.out.println("notSuspended is true");
                 //Include non suspended members
-                if(and){
-                    q+="AND ";
+                if(or){
+                    q += "OR ";
+                }
+                else if (and) {
+                    q += "AND ";
                 }
                 q += "accountEnabled = TRUE ";
                 and = true;
