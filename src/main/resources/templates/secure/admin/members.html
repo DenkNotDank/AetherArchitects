@@ -22,8 +22,11 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap4.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="../static/css/mycss.css" media="all" th:href="@{/css/mycss.css}" />
-  <link rel="stylesheet" href="../static/css/admin.css" media="all" th:href="@{/css/admin.css}" />
+  <link rel="stylesheet" href="../static/css/mycss.css"
+        media="all" th:href="@{/css/mycss.css}"/>
+  <link rel="stylesheet" href="../static/css/admin.css"
+        media="all" th:href="@{/css/admin.css}"/>
+
 </head>
 
 <body>
@@ -87,6 +90,7 @@
           </div>
         </div>
 
+
         <div class="card-body" th:if="${#lists.isEmpty(members)}">
           <h2>Error: No users found</h2>
         </div>
@@ -120,10 +124,36 @@
                 <td th:utext="${member.province}"></td>
                 <td th:utext="${member.city}"></td>
                 <td th:utext="${member.postalCode}"></td>
-                <td th:utext="${member.accountEnabled}"></td>
-                <td th:utext="${member.membershipID}"></td>
-                <td th:utext="${member.paid}"></td>
-                <td th:utext="${member.paidDate}"></td>
+
+                <td th:switch="${member.membershipID}" >
+                  <p th:case="'0'">Disabled</p>
+                  <p th:case="*">Enabled</p>
+                </td>
+
+                <td th:switch="${member.membershipID}">
+                  <p th:case="null">None</p>
+                  <p th:case="0">None</p>
+                  <p th:case="1">Alumni</p>
+                  <p th:case="2">General</p>
+                  <p th:case="3">Professional</p>
+                  <p th:case="*">None</p>
+                </td>
+
+
+                <td th:switch="${member.paid}">
+                  <p th:case="'true'">Paid</p>
+                  <p th:case="'True'">Paid</p>
+                  <p th:case="'TRUE'">Paid</p>
+                  <p th:case="*">Unpaid</p>
+                </td>
+
+                <td th:switch="${member.paid}">
+                  <p th:case="'true'" th:utext="${member.paidDate}"></p>
+                  <p th:case="'True'" th:utext="${member.paidDate}"></p>
+                  <p th:case="'TRUE'" th:utext="${member.paidDate}"></p>
+                  <p th:case="*"></p>
+                </td>
+
               </tr>
             </tbody>
             <tfoot>

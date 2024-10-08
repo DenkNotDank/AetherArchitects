@@ -7,6 +7,7 @@
     position:relative;
     float: right;
     width: 83vw;
+    z-index: 1;
 }
 
 .adminPageHeaderDiv{
@@ -70,10 +71,12 @@
 }
 
 .membersPageBody{
+/*     height: 75vh; */
     width: 76vw;
 }
 
 .membersPageSort{
+    height: 10vh;
     height: 7vh;
 }
 
