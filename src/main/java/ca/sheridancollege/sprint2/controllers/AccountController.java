@@ -22,7 +22,7 @@ public class AccountController {
 
     @Autowired
     @Lazy
-    private DatabaseAccess da;
+    public DatabaseAccess da;
 
     @GetMapping("/accessDenied")
     public String goError() {
@@ -88,8 +88,9 @@ public class AccountController {
         if (emailUpdated) {
             redirectAttrs.addFlashAttribute("Message", "Your email has been changed successfully.");
 
-            //Set user to new email
-            Authentication newAuth = new UsernamePasswordAuthenticationToken(newEmail, auth.getCredentials(), auth.getAuthorities());
+            // Set user to new email
+            Authentication newAuth = new UsernamePasswordAuthenticationToken(newEmail, auth.getCredentials(),
+                    auth.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(newAuth);
 
         } else {
@@ -100,7 +101,7 @@ public class AccountController {
 
     @PostMapping("/changePassword")
     public String changePassword(@RequestParam(name = "newPassword") String newPassword,
-                                 @RequestParam(name = "confirmPassword") String confirmPassword, Model model) {
+            @RequestParam(name = "confirmPassword") String confirmPassword, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User user = da.findUserAccount(email);
@@ -111,16 +112,52 @@ public class AccountController {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if (encoder.matches(newPassword, user.getEncryptedPassword())) {
             model.addAttribute("error", "New password cannot be the same as the current password.");
-            return "redirect:/myAccount";  // Show error on the account page
+            return "redirect:/myAccount"; // Show error on the account page
         }
         if (newPassword.equals(confirmPassword)) {
             da.updateUserLogin(newPassword, email);
             model.addAttribute("message", "Password has been changed successfully!");
-            return "login";  // Redirect to login after password change
+            return "login"; // Redirect to login after password change
         } else {
             model.addAttribute("error", "Passwords do not match.");
             return "redirect:/myAccount";
         }
+    }
+
+    @PostMapping("/changeUserPassword")
+    public String changeUserPassword(@RequestParam("email") String email,
+                                      @RequestParam("newPassword") String newPassword,
+                                      @RequestParam("confirmPassword") String confirmPassword,
+                                      RedirectAttributes redirectAttrs) {
+        // Validate the new passwords
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttrs.addFlashAttribute("errorMessage", "Passwords do not match.");
+            return "redirect:/admin/members";
+        }
+    
+        User user = da.findUserAccount(email);
+        if (user == null) {
+            redirectAttrs.addFlashAttribute("errorMessage", "User not found.");
+            return "redirect:/admin/members";
+        }
+    
+        // Check if the new password is the same as the current password
+        if (new BCryptPasswordEncoder().matches(newPassword, user.getEncryptedPassword())) {
+            redirectAttrs.addFlashAttribute("errorMessage", "New password cannot be the same as the current password.");
+            return "redirect:/admin/members";
+        }
+    
+        // Encode the password and update in the database
+        boolean updated = da.updateUserLogin(newPassword, email);
+        if(updated){
+            redirectAttrs.addFlashAttribute("successMessage", "Password changed successfully for user: " + email);
+            return "redirect:/admin/members";
+        }
+        else{
+            redirectAttrs.addFlashAttribute("errorMessage", "System error: User password not updated");
+            return "redirect:/admin/members";
+        }
+
     }
 
     @PostMapping("/deleteAccount")
@@ -130,7 +167,7 @@ public class AccountController {
 
         try {
             boolean deleted = da.deleteUser(email);
-            if(deleted){
+            if (deleted) {
                 redirectAttrs.addFlashAttribute("accountDeleted", true);
                 SecurityContextHolder.clearContext();// Clear the user session
             }
@@ -148,7 +185,8 @@ public class AccountController {
     }
 
     @PostMapping("/selectMembership")
-    public String selectMembership(@RequestParam("membershipType") String MembershipType, Model model,RedirectAttributes redirectAttrs) {
+    public String selectMembership(@RequestParam("membershipType") String MembershipType,
+            RedirectAttributes redirectAttrs) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
@@ -164,25 +202,23 @@ public class AccountController {
         Boolean paid = false;
         Date paidDate = null;
 
+        if (MembershipType.toLowerCase().equals("alumni")) {
+            membershipId = 1;
+        } else if (MembershipType.equals("general")) {
+            membershipId = 2;
+        } else if (MembershipType.toLowerCase().equals("professional")) {
+            membershipId = 3;
+        } else {
+            redirectAttrs.addFlashAttribute("error", "Invalid Membership Type");
+        }
 
-       if(MembershipType.toLowerCase().equals("alumni")){
-           membershipId = 1;
-       } else if (MembershipType.equals("general")){
-           membershipId = 2;
-       } else if (MembershipType.toLowerCase().equals("professional")) {
-           membershipId = 3;
-       }else {
-           redirectAttrs.addFlashAttribute("error", "Invalid Membership Type");
-       }
-
-       try {
-           da.updateUserMembership(userId,membershipId,paid,paidDate);
-           redirectAttrs.addFlashAttribute("message", "Membership has been updated successfully.");
-       }
-       catch (Exception e) {
-           redirectAttrs.addFlashAttribute("error", "There was a problem updating your account.");
-           return "redirect:/myAccount";
-       }
+        try {
+            da.updateUserMembership(userId, membershipId, paid, paidDate);
+            redirectAttrs.addFlashAttribute("message", "Membership has been updated successfully.");
+        } catch (Exception e) {
+            redirectAttrs.addFlashAttribute("error", "There was a problem updating your account.");
+            return "redirect:/myAccount";
+        }
         return "redirect:/myAccount";
     }
 

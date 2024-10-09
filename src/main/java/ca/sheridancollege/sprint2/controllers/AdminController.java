@@ -16,7 +16,7 @@ public class AdminController {
 
     @Autowired
     @Lazy
-    DatabaseAccess da;
+    public DatabaseAccess da;
 
     @GetMapping("/admin/dashboard")
     public String getAdminHome(){return "secure/admin/adminHome";
@@ -29,7 +29,9 @@ public class AdminController {
 
 
     @GetMapping("/admin/members")
-    public String getMembersPage(){
+    public String getMembersPage(Model model){
+        List<Member> members = da.getAllMembersInfo();
+        model.addAttribute("members", members);
         return "/secure/admin/members";
     }
 

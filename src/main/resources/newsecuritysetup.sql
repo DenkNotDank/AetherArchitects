@@ -47,7 +47,7 @@ insert into sec_role(roleName) values ('ROLE_USER');
 
 create table USER_MEMBERSHIPS(
         userID BIGINT NOT NULL PRIMARY KEY,
-        membershipID INT NOT NULL,
+        membershipID INT DEFAULT 0,
         paid BOOLEAN DEFAULT FALSE,
         paidDate DATE DEFAULT NULL
 );

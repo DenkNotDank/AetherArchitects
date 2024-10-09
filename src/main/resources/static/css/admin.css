@@ -71,10 +71,21 @@
 }
 
 .membersPageBody{
-    height: 75vh;
+/*     height: 75vh; */
     width: 76vw;
 }
 
 .membersPageSort{
     height: 10vh;
+    height: 7vh;
+}
+
+.membersTable{
+    display: block;
+    overflow-x:auto;
+    white-space: nowrap;
+}
+
+#memberPasswordSubmit{
+    margin-top: 1vh;
 }
