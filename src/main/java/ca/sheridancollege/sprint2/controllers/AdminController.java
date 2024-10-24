@@ -19,20 +19,21 @@ public class AdminController {
     public DatabaseAccess da;
 
     @GetMapping("/admin/dashboard")
-    public String getAdminHome(){return "secure/admin/adminHome";
+    public String getAdminHome(){
+        return "secure/admin/adminHome";
     }
-
-    @GetMapping("/admin/emails")
-    public String getAdminEmails(){
-    return "secure/admin/emails";
-}
 
 
     @GetMapping("/admin/members")
     public String getMembersPage(Model model){
         List<Member> members = da.getAllMembersInfo();
         model.addAttribute("members", members);
-        return "/secure/admin/members";
+        return "secure/admin/members";
+    }
+
+    @GetMapping("/admin/emails")
+    public String getMemberEmails(){
+        return "secure/admin/memberEmails";
     }
 
     @PostMapping("/filter")
@@ -57,7 +58,7 @@ public class AdminController {
            System.out.println("emails is empty");
            csvEmails="There are no results";
            model.addAttribute("filteredEmails", csvEmails);
-           return "/secure/admin/emails";
+           return "secure/admin/memberEmails";
        }
         System.out.println(emails.size());
 
@@ -78,7 +79,7 @@ public class AdminController {
 
         model.addAttribute("filteredEmails", csvEmails);
 
-        return "/secure/admin/emails";
+        return "secure/admin/memberEmails";
     }
 
 

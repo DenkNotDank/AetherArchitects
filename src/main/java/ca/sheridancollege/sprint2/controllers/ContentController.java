@@ -22,7 +22,6 @@ public class ContentController {
 //        System.out.println(content.getContentId());
 //        System.out.println(content.getContentBody());
 
-
         boolean result = da.saveContent(content.getContentId(), content.getContentBody());
         model.addAttribute("saveResult", result);
         return "index";
