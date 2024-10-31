@@ -196,7 +196,7 @@ public class DatabaseAccess {
 
         // Check that our arrayList actually contains some results
         if (contents.size() > 0) {
-            System.out.println(contents.get(0));
+//            System.out.println(contents.get(0));
 
             // String inside of the Content object at index 0 will contain our html
             return contents.get(0).getContentBody();

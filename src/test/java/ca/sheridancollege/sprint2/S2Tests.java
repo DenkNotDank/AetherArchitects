@@ -407,7 +407,7 @@ class S2Tests {
         String view = adminController.getMembersPage(model);
 
         // Verify
-        assertEquals("/secure/admin/members", view);
+        assertEquals("secure/admin/members", view);
         verify(model).addAttribute("members", members);
         verify(databaseAccess).getAllMembersInfo();
     }
