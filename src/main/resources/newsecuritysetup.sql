@@ -1,7 +1,8 @@
 
 CREATE TABLE  CONTENT (
                           contentId BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                          contentBody TEXT
+                          contentBody TEXT,
+                          pageHidden BIT NOT NULL DEFAULT 0
 );
 INSERT INTO CONTENT (contentBody) values ('Default text');
 

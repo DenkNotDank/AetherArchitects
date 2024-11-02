@@ -469,4 +469,29 @@ public class DatabaseAccess {
         return null;
     }
 
+    public boolean isPageHidden(long contentId) {
+        String sql = "SELECT pageHidden FROM CONTENT WHERE contentId = :contentId";
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("contentId", contentId);
+        
+        Boolean pageHidden = jdbc.queryForObject(sql, parameters, Boolean.class);
+        return pageHidden != null && pageHidden;
+    }
+
+    public boolean updatePageHiddenStatus(long contentId, boolean pageHidden) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String q = "UPDATE CONTENT SET pageHidden = :pageHidden WHERE contentId = :contentId";
+        parameters.addValue("pageHidden", pageHidden);
+        parameters.addValue("contentId", contentId);
+    
+        try {
+            System.out.println("Updating contentId: " + contentId + " to pageHidden: " + pageHidden);
+            int rowsUpdated = jdbc.update(q, parameters);
+            return rowsUpdated > 0;
+        } catch (Exception e) {
+            System.out.println("Error updating pageHidden status: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

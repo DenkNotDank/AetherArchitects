@@ -36,6 +36,7 @@
             Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span><a href="/"
                 sec:authentication="name"></a>
             <a href="#" th:href="@{/admin/dashboard}"><button>ADMIN PANEL</button></a>
+            <button id="toggleVisibilityButton" class="floating-button" data-content-id="1"  th:text="${pageHidden ? 'Hidden' : 'Public'}"></button>
         </div>
         <div th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
             Logged in as User <span class="glyphicon glyphicon-user"></span>&nbsp;<a href="/"
@@ -158,8 +159,14 @@
             </form>
         </div>
         <div class="form-group" th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-            <div>
-                [(${pageContent})]
+            <div th:if="${pageHidden}">
+                <p style="text-align: center; font-weight: bold; margin-top: 20px;">This page is currently hidden.</p>
+                <div th:if="${pageHidden != null ? !pageHidden : true}">
+                    <p>No content available.</p>
+                </div>
+            </div>
+            <div th:if="${!pageHidden}">
+                <p th:text="${pageContent}">[(${pageContent})]</p> <!-- Display content when not hidden -->
             </div>
         </div>
     </div>

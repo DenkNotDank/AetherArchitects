@@ -237,3 +237,24 @@ $(document).ready(function(){
             .stop(true, true).delay(100).fadeOut(200);
     });
 });
+
+$(document).ready(function () {
+    $('#toggleVisibilityButton').on('click', function () {
+        const contentId = $(this).data('content-id');
+        const isVisible = $(this).text() === 'Public';
+
+        $.ajax({
+            url: '/togglePageVisibility',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ contentId: contentId, hidden: !isVisible }), 
+            success: function () {
+                $('#toggleVisibilityButton').text(isVisible ? 'Hidden' : 'Public');
+                alert(`Content is now ${isVisible ? 'hidden' : 'public'}.`);
+            },
+            error: function () {
+                alert('Failed to update visibility.');
+            }
+        });
+    });
+});
