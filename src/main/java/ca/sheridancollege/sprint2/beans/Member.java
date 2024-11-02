@@ -23,5 +23,6 @@ public class Member {
     private String membershipID;
     private String paid;
     private String paidDate;
+    private long roleId;
 
 }

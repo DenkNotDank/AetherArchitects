@@ -128,6 +128,25 @@ public class DatabaseAccess {
         return false;
     }
 
+    public boolean updateUserPermissions(Integer perm, long userId) {
+
+        try {
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            String q = "UPDATE USER_ROLE " +
+            "SET roleId = :perm " +
+            "WHERE USER_ROLE.userId = :userId ";
+            parameters.addValue("perm", perm);
+            parameters.addValue("userId", userId);
+            int isUpdated = jdbc.update(q, parameters);
+            if (isUpdated == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Error Updating permissions " + e.getMessage());
+        }
+        return false;
+    }
+
     public boolean updateUserInfo(String email, String firstName, String lastName, long phone, String province,
             String city, String postalCode, String secondaryEmail) {
         try {
@@ -276,11 +295,12 @@ public class DatabaseAccess {
 
 
     public List<Member> getAllMembersInfo() {
-        String query = "SELECT SEC_USER.userId, SEC_USER.email, SEC_USER.firstName, " +
-                "SEC_USER.lastName, SEC_USER.phone,SEC_USER.secondaryEmail, SEC_USER.province, " +
-                "SEC_USER.city, SEC_USER.postalCode, SEC_USER.accountEnabled, " +
-                "USER_MEMBERSHIPS.membershipID, USER_MEMBERSHIPS.paid, USER_MEMBERSHIPS.paidDate " +
-                "FROM SEC_USER LEFT JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID;";
+        String query = "SELECT SEC_USER.userId, SEC_USER.email, SEC_USER.firstName," +
+                "SEC_USER.lastName, SEC_USER.phone,SEC_USER.secondaryEmail, SEC_USER.province," +
+              "SEC_USER.city, SEC_USER.postalCode, SEC_USER.accountEnabled," +
+               "USER_MEMBERSHIPS.membershipID, USER_MEMBERSHIPS.paid, USER_MEMBERSHIPS.paidDate," +
+                "USER_ROLE.roleId FROM SEC_USER LEFT JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID" +
+                " INNER JOIN USER_ROLE ON USER_ROLE.userId = SEC_USER.userId ";
         ArrayList<Member> members = (ArrayList<Member>) jdbc.query(query,
                 new BeanPropertyRowMapper<Member>(Member.class));
         if (members.size() > 0) {
