@@ -2,6 +2,7 @@ package ca.sheridancollege.sprint2.database;
 
 import ca.sheridancollege.sprint2.beans.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -9,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,7 +21,20 @@ import java.util.Map;
 @Repository
 public class DatabaseAccess {
     @Autowired
+    @Qualifier("H2-DataSource")
+    DataSource h2DataSource;
+
+    @Autowired
+    @Qualifier("H2JDBC")
     public NamedParameterJdbcTemplate jdbc;
+
+    @Autowired
+    @Qualifier("RDS-DataSource")
+    DataSource remoteDataSource;
+
+    @Autowired
+    @Qualifier("RemoteJDBC")
+    public NamedParameterJdbcTemplate jdbcRemote;
 
     public User findUserAccount(String email) {
         System.out.println(email);
@@ -467,6 +482,15 @@ public class DatabaseAccess {
             System.out.println("There was an error in retrieving all the user emails.");
         }
         return null;
+    }
+
+    public void remoteDBTest(){
+        System.out.print("Remote DB TEST called");
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+
+        String qu = "Insert into Dummy values (:email)";
+        parameters.addValue("email", "bruh@email.com");
+        jdbcRemote.update(qu,parameters);
     }
 
 }
