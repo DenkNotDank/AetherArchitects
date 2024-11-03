@@ -239,7 +239,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('#toggleVisibilityButton').on('click', function () {
         const contentId = $(this).data('content-id');
-        const isVisible = $(this).text() === 'PUBLIC';
+        const isVisible = $(this).text() === 'HIDE CURRENT PAGE';
 
         const confirmationMessage = isVisible
             ? 'Are you sure you want to make this page hidden?'
@@ -252,7 +252,7 @@ $(document).ready(function () {
                 contentType: 'application/json',
                 data: JSON.stringify({ contentId: contentId, isVisible: isVisible }),
                 success: function () {
-                    $('#toggleVisibilityButton').text(isVisible ? 'HIDDEN' : 'PUBLIC');
+                    $('#toggleVisibilityButton').text(isVisible ? 'UNHIDE CURRENT PAGE' : 'HIDE CURRENT PAGE');
                     alert(`Content is now ${isVisible ? 'hidden' : 'public'}.`);
 
                     if (!$('#toggleVisibilityButton').closest('.loginNotice').find('.glyphicon-sunglasses').length) {

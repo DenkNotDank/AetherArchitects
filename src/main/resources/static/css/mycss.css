@@ -148,7 +148,7 @@ fieldset legend {
     background-color: #cde1ff69;
     margin-left: auto;
     margin-right: auto;
-    width: 36vw;
+    width: fit-content;
     font-size: 1.1em;
     height: 7vh;
     padding: 0.5em;
@@ -453,4 +453,14 @@ fieldset legend {
 
 .filter-fieldset-row:has(input:checked) {
     background-color: #9bc2ff;
+}
+
+.hiddenPageContent{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 5vh;
+    height:38vh;
+    padding-top: 19vh;
+    color: #d75252;
 }

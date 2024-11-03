@@ -33,9 +33,9 @@
         <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span>
             <a href="/" sec:authentication="name"></a>
-            <a href="#" th:href="@{/admin/dashboard}"><button>ADMIN PANEL</button></a>
-            <button id="toggleVisibilityButton" class="floating-button" data-content-id="1"
-                th:text="${pageHidden != null ? (pageHidden ? 'HIDDEN' : 'PUBLIC') : 'PUBLIC'}"></button>
+            <a style="margin-left: 1vw;" href="#" th:href="@{/admin/dashboard}"><button>ADMIN PANEL</button></a>
+            <button style="margin-left: 1vw; margin-right: 1vw; color:#f77272;" id="toggleVisibilityButton" class="floating-button" data-content-id="1"
+                th:text="${pageHidden != null ? (pageHidden ? 'UNHIDE CURRENT PAGE' : 'HIDE CURRENT PAGE') : 'UNHIDE CURRENT PAGE'}"></button>
         </div>
         <div th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
             Logged in as User <span class="glyphicon glyphicon-user"></span>&nbsp;<a href="/"
@@ -160,7 +160,7 @@
         </div>
         <div class="form-group" th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             <div th:if="${pageHidden}">
-                <p style="text-align: center; font-weight: bold; margin-top: 20px;">This page is currently unavailable.
+                <p class="hiddenPageContent">Error: This page is currently unavailable.
                 </p>
                 <div th:if="${pageHidden != null ? !pageHidden : true}">
                     <p>No content available.</p>
