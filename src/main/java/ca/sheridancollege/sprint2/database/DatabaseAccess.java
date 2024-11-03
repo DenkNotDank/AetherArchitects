@@ -486,8 +486,8 @@ public class DatabaseAccess {
     
         try {
             System.out.println("Updating contentId: " + contentId + " to pageHidden: " + pageHidden);
-            int rowsUpdated = jdbc.update(q, parameters);
-            return rowsUpdated > 0;
+            jdbc.update(q, parameters);
+            return true;
         } catch (Exception e) {
             System.out.println("Error updating pageHidden status: " + e.getMessage());
             return false;

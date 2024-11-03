@@ -1,8 +1,5 @@
 package ca.sheridancollege.sprint2.controllers;
 
-import ca.sheridancollege.sprint2.beans.Content;
-import ca.sheridancollege.sprint2.database.DatabaseAccess;
-
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import ca.sheridancollege.sprint2.beans.Content;
+import ca.sheridancollege.sprint2.database.DatabaseAccess;
 
 @Controller
 public class ContentController {
@@ -24,13 +23,13 @@ public class ContentController {
 
     @PostMapping("/togglePageVisibility")
     public ResponseEntity<String> togglePageVisibility(@RequestBody Map<String, Object> payload) {
-        if (payload.get("contentId") == null || payload.get("hidden") == null) {
+        if (payload.get("contentId") == null || payload.get("isVisible") == null) {
             return ResponseEntity.badRequest().body("Missing required parameters.");
         }
         Long contentId = Long.valueOf(payload.get("contentId").toString());
-        boolean hidden = (Boolean) payload.get("hidden");
+        boolean isVisible = (Boolean) payload.get("isVisible");
 
-        boolean result = da.updatePageHiddenStatus(contentId, hidden);
+        boolean result = da.updatePageHiddenStatus(contentId, isVisible);
 
         if (result) {
             return ResponseEntity.ok("Visibility updated successfully");
