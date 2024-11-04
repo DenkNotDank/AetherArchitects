@@ -69,6 +69,8 @@
                    disabled data-toggle="collapse" data-target="#passwordResetForm">
             <input type="submit" id="memberMarkPaid" class="btn btn-primary btn-sm" value="Mark Paid Membership"
                     disabled data-toggle="collapse" data-target="#markPaidDiv">
+            <input type="submit" id="changePermissionsSubmit" class="btn btn-primary btn-sm" value="Change Permissions"
+                   disabled data-toggle="collapse" data-target="#changePermissionsForm">
           </div>
         </div>
 
@@ -124,6 +126,23 @@
               <div class="form-group">
                 <label for="datePaid">Date Paid:</label>
                 <input type="date" id="datePaid" name="datePaid">
+              </div>
+              <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Hidden change permissions form-->
+        <div id="changePermissionsForm" class="collapse mt-3">
+          <div class="card card-body">
+            <form id="permissionChangeForm" th:action="@{/changeUserPermissions}" method="post">
+              <input type="hidden" id="selectedUserId" name="userId">
+
+              <div class="form-group" >
+                <label for="admin">Admin</label>
+                <input  type="radio" id="admin" name="perm" value = 1>
+                <label for="user">User</label>
+                <input type="radio" id="user" name="perm" value = 2>
               </div>
               <button type="submit" class="btn btn-success">Submit</button>
             </form>

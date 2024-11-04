@@ -153,7 +153,24 @@ public class DatabaseAccess {
         }
     }
 
+    public boolean updateUserPermissions(Integer perm, long userId) {
 
+        try {
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            String q = "UPDATE USER_ROLE " +
+                    "SET roleId = :perm " +
+                    "WHERE USER_ROLE.userId = :userId ";
+            parameters.addValue("perm", perm);
+            parameters.addValue("userId", userId);
+            int isUpdated = jdbc.update(q, parameters);
+            if (isUpdated == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Error Updating permissions " + e.getMessage());
+        }
+        return false;
+    }
 
     public boolean updateUserLogin(String password, String email) {
         try {

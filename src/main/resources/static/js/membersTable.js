@@ -73,21 +73,27 @@ document.getElementById('markPaidForm').addEventListener('submit', validateMarkP
 function memberPasswordChange() {
     const checkboxes = document.querySelectorAll('#membersTable tbody input[type="checkbox"]');
     const changePasswordButton = document.getElementById('memberPasswordSubmit');
+    const changePermissionButton = document.getElementById('changePermissionsSubmit');
     const passwordResetForm = document.getElementById('passwordResetForm');
+    const changePermissionsForm = document.getElementById('changePermissionsForm');
     const selectedMemberEmailInput = document.getElementById('selectedMemberEmail');
+    const selectedUserIdInput = document.getElementById('selectedUserId');
+
 
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', () => {
 
             const selected = document.querySelectorAll('#membersTable tbody input[type="checkbox"]:checked');
-
             if (selected.length === 1) {
                 changePasswordButton.disabled = false;
+                changePermissionButton.disabled = false;
                 selectedMemberEmailInput.value = selected[0].getAttribute('data-email');
-                //$(passwordResetForm).collapse('show');
+                selectedUserIdInput.value = selected[0].getAttribute('data-userId')                //$(passwordResetForm).collapse('show');
             } else {
                 changePasswordButton.disabled = true;
+                changePermissionButton.disabled = true;
                 selectedMemberEmailInput.value = "";
+                selectedUserIdInput.value = "";
                 $(passwordResetForm).collapse('hide'); // Hide form if no checkbox is selected
             }
         });
@@ -95,6 +101,7 @@ function memberPasswordChange() {
 
     // Hide the form when the page loads
     $(passwordResetForm).collapse('hide');
+    $(changePermissionsForm).collapse('hide');
 }
 
 // Function to hide success and error messages after 3 seconds

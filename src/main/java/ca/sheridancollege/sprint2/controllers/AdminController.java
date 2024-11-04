@@ -1,12 +1,15 @@
 package ca.sheridancollege.sprint2.controllers;
 
 import ca.sheridancollege.sprint2.beans.Member;
+import ca.sheridancollege.sprint2.beans.User;
 import ca.sheridancollege.sprint2.database.DatabaseAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,5 +85,22 @@ public class AdminController {
         return "secure/admin/memberEmails";
     }
 
+    @PostMapping("/changeUserPermissions")
+    public String changeUserPermissions(@RequestParam("userId") long userId,
+                                        @RequestParam("perm") Integer perm,
+                                        RedirectAttributes redirectAttrs) {
+
+        // Encode the password and update in the database
+        boolean updated = da.updateUserPermissions(perm, userId);
+        if(updated){
+            redirectAttrs.addFlashAttribute("successMessage", "Permissions successfully changed");
+            return "redirect:/admin/members";
+        }
+        else{
+            redirectAttrs.addFlashAttribute("errorMessage", "System error: User password not updated");
+            return "redirect:/admin/members";
+        }
+
+    }
 
 }
