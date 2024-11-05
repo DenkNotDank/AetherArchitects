@@ -57,7 +57,7 @@
 </div>
 
 
-<div class="form-check">
+<div class="email-check">
 
 
   <form action="#" th:action="@{/filter}" method="post" name="form">
@@ -65,20 +65,20 @@
       <fieldset class="filter-fieldset">
         <legend>Membership Tier</legend>
         <div class="filter-fieldset-row">
-          <input class="form-check-input" type="checkbox" name="free" id="free">
-          <label class="form-check-label" for="free">
+          <input class="email-check-input" type="checkbox" name="free" id="free">
+          <label class="email-check-label" for="free">
             Free
           </label>
         </div>
         <div class="filter-fieldset-row">
-          <input class="form-check-input" type="checkbox" name="basic" id="basic">
-          <label class="form-check-label" for="basic">
+          <input class="email-check-input" type="checkbox" name="basic" id="basic">
+          <label class="email-check-label" for="basic">
             Basic
           </label>
         </div>
         <div class="filter-fieldset-row">
-          <input class="form-check-input" type="checkbox" name="premium" id="premium">
-          <label class="form-check-label" for="premium">
+          <input class="email-check-input" type="checkbox" name="premium" id="premium">
+          <label class="email-check-label" for="premium">
             Premium
           </label>
         </div>
@@ -86,14 +86,14 @@
       <fieldset class="filter-fieldset">
         <legend>Payment Status</legend>
         <div class="filter-fieldset-row">
-          <input class="form-check-input" type="checkbox" name="paid" id="paid">
-          <label class="form-check-label" for="paid">
+          <input class="email-check-input" type="checkbox" name="paid" id="paid">
+          <label class="email-check-label" for="paid">
             Paid
           </label>
         </div>
         <div class="filter-fieldset-row">
-          <input class="form-check-input" type="checkbox" name="unpaid" id="unpaid">
-          <label class="form-check-label" for="unpaid">
+          <input class="email-check-input" type="checkbox" name="unpaid" id="unpaid">
+          <label class="email-check-label" for="unpaid">
             Unpaid
           </label>
         </div>
@@ -101,14 +101,14 @@
       <fieldset class="filter-fieldset">
         <legend>Account Role</legend>
         <div class="filter-fieldset-row">
-          <input class="form-check-input" type="checkbox" name="admin" id="admin">
-          <label class="form-check-label" for="admin">
+          <input class="email-check-input" type="checkbox" name="admin" id="admin">
+          <label class="email-check-label" for="admin">
             Admin
           </label>
         </div>
         <div class="filter-fieldset-row">
-          <input class="form-check-input" type="checkbox" name="user" id="user">
-          <label class="form-check-label" for="user">
+          <input class="email-check-input" type="checkbox" name="user" id="user">
+          <label class="email-check-label" for="user">
             User
           </label>
         </div>
@@ -116,14 +116,14 @@
       <fieldset class="filter-fieldset">
         <legend>User Suspended</legend>
         <div class="filter-fieldset-row">
-          <input class="form-check-input" type="checkbox" name="suspended" id="suspended">
-          <label class="form-check-label" for="suspended">
+          <input class="email-check-input" type="checkbox" name="suspended" id="suspended">
+          <label class="email-check-label" for="suspended">
             Suspended
           </label>
         </div>
         <div class="filter-fieldset-row">
-          <input class="form-check-input" type="checkbox" name="notSuspended" id="notSuspended">
-          <label class="form-check-label" for="notSuspended">
+          <input class="email-check-input" type="checkbox" name="notSuspended" id="notSuspended">
+          <label class="email-check-label" for="notSuspended">
             Not Suspended
           </label>
         </div>
@@ -131,8 +131,8 @@
       <fieldset class="filter-fieldset">
         <legend>Secondary Email</legend>
         <div class="filter-fieldset-row">
-          <input class="form-check-input" type="checkbox" name="secondary" id="secondary">
-          <label class="form-check-label" for="secondary">
+          <input class="email-check-input" type="checkbox" name="secondary" id="secondary">
+          <label class="email-check-label" for="secondary">
             Secondary Email
           </label>
         </div>
@@ -146,10 +146,7 @@
     <textarea th:text = "${filteredEmails}" readonly></textarea>
   </div>
 </div>
-
-
-
-
-
+<!-- TEST -->
+<!-- TEST -->
 </body>
 </html>
