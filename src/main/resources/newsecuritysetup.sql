@@ -1,7 +1,8 @@
 
 CREATE TABLE  CONTENT (
                           contentId BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                          contentBody TEXT
+                          contentBody TEXT,
+                          pageHidden BIT NOT NULL DEFAULT 0
 );
 INSERT INTO CONTENT (contentBody) values ('Default text');
 
@@ -165,8 +166,8 @@ insert into SEC_USER (email, firstName, lastName, phone, province, city, encrypt
 insert into SEC_USER (email, firstName, lastName, phone, province, city, encryptedPassword, accountEnabled) values ('atenney2q@lycos.com', 'Annice', 'Tenney', '3184474406', 'Louisiana', 'Shreveport', '1036d409b92dd823f398fabf04ef07d1dfb90a81', 1);
 insert into SEC_USER (email, firstName, lastName, phone, secondaryEmail, province, city, encryptedPassword, accountEnabled) values ('jdanter2r@msu.edu', 'Jillayne', 'Danter', '8143134139', 'achane@yahoo.com', 'Pennsylvania', 'Erie', '6d3dafb8cd9281a490e714ebfb5eb6dbe9e6401c', 1);
 
-insert into user_role (userId, roleId) values (1,1);//Default Admin
-insert into user_role (userId, roleId) values (2,2);//Default User
+insert into user_role (userId, roleId) values (1,1); -- Default Admin
+insert into user_role (userId, roleId) values (2,2); -- Default User
 insert into user_role (userId, roleId) values (3, 2);
 insert into user_role (userId, roleId) values (4, 2);
 insert into user_role (userId, roleId) values (5, 2);

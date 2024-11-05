@@ -17,6 +17,7 @@ public class HomeController {
     @GetMapping("/")
     public String getHome(Model model) {
         model.addAttribute("pageContent", da.getContent(1));
+        model.addAttribute("pageHidden", da.isPageHidden(1));
         return "index";
     }
 
