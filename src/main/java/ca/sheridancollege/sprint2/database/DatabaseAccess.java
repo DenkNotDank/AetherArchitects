@@ -11,10 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class DatabaseAccess {
@@ -91,6 +89,87 @@ public class DatabaseAccess {
         parameters.addValue("postalCode", postalCode);
         parameters.addValue("password", passworEncoder().encode(password));
         jdbc.update(q, parameters);
+    }
+
+    public boolean updatePaidInfo(String paidMemberList, String paidToggle, String tier, String datePaid) {
+        try {
+            String q = "SELECT USERID FROM SEC_USER WHERE EMAIL IN (:emails)";
+            List<String> emailList = Arrays.stream(paidMemberList.split(","))
+                    .map(String::trim)
+                    .collect(Collectors.toList());
+
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            parameters.addValue("emails", emailList);
+
+            List<Long> userIds = jdbc.query(q, parameters, (rs, rowNum) -> rs.getLong("USERID"));
+
+            if (userIds.isEmpty()) {
+                System.out.println("No matching user IDs found for the provided emails.");
+                return false;
+            }
+
+            StringBuilder updatePaymentQuery = new StringBuilder("UPDATE USER_MEMBERSHIPS SET PAID = :paid ");
+
+            if (datePaid != null && !datePaid.trim().isEmpty()) {
+                System.out.println("Date Paid is not null, updating PAIDDATE");
+                updatePaymentQuery.append(", PAIDDATE = :datePaid ");
+            }
+
+            if (!tier.equals("1000")) {
+                System.out.println("TIER is not 1000, updating TIER");
+                updatePaymentQuery.append(", MEMBERSHIPID = :membershipId ");
+            }
+
+            updatePaymentQuery.append("WHERE USERID IN (:userIds)");
+
+            parameters.addValue("paid", paidToggle);
+            parameters.addValue("userIds", userIds);
+
+            System.out.println("Updating user memberships with the following parameters:");
+            System.out.println("Paid: " + paidToggle);
+            if (datePaid != null && !datePaid.trim().isEmpty()) {
+                java.sql.Date sqlDatePaid = java.sql.Date.valueOf(datePaid);
+                parameters.addValue("datePaid", sqlDatePaid);
+                System.out.println("Date Paid: " + sqlDatePaid);
+            } else {
+                System.out.println("Date Paid: null (not updating this field)");
+            }
+            if (!tier.equals("1000")) {
+                parameters.addValue("membershipId", tier);  // Ensure tier is being treated as a number in the database
+                System.out.println("Membership ID: " + tier);
+            } else {
+                System.out.println("Membership ID: 1000 (not updating this field)");
+            }
+            System.out.println("User IDs: " + userIds);
+
+            int rowsAffected = jdbc.update(updatePaymentQuery.toString(), parameters);
+            System.out.println("Rows affected: " + rowsAffected);
+
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("An issue has occurred in updating the user membership: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean updateUserPermissions(Integer perm, long userId) {
+
+        try {
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            String q = "UPDATE USER_ROLE " +
+                    "SET roleId = :perm " +
+                    "WHERE USER_ROLE.userId = :userId ";
+            parameters.addValue("perm", perm);
+            parameters.addValue("userId", userId);
+            int isUpdated = jdbc.update(q, parameters);
+            if (isUpdated == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Error Updating permissions " + e.getMessage());
+        }
+        return false;
     }
 
     public boolean updateUserLogin(String password, String email) {
@@ -276,11 +355,12 @@ public class DatabaseAccess {
 
 
     public List<Member> getAllMembersInfo() {
-        String query = "SELECT SEC_USER.userId, SEC_USER.email, SEC_USER.firstName, " +
-                "SEC_USER.lastName, SEC_USER.phone,SEC_USER.secondaryEmail, SEC_USER.province, " +
-                "SEC_USER.city, SEC_USER.postalCode, SEC_USER.accountEnabled, " +
-                "USER_MEMBERSHIPS.membershipID, USER_MEMBERSHIPS.paid, USER_MEMBERSHIPS.paidDate " +
-                "FROM SEC_USER LEFT JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID;";
+        String query = "SELECT SEC_USER.userId, SEC_USER.email, SEC_USER.firstName," +
+                "SEC_USER.lastName, SEC_USER.phone,SEC_USER.secondaryEmail, SEC_USER.province," +
+                "SEC_USER.city, SEC_USER.postalCode, SEC_USER.accountEnabled," +
+                "USER_MEMBERSHIPS.membershipID, USER_MEMBERSHIPS.paid, USER_MEMBERSHIPS.paidDate," +
+                "USER_ROLE.roleId FROM SEC_USER LEFT JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID" +
+                " INNER JOIN USER_ROLE ON USER_ROLE.userId = SEC_USER.userId ";
         ArrayList<Member> members = (ArrayList<Member>) jdbc.query(query,
                 new BeanPropertyRowMapper<Member>(Member.class));
         if (members.size() > 0) {
@@ -469,6 +549,7 @@ public class DatabaseAccess {
         return null;
     }
 
+
     public boolean isPageHidden(long contentId) {
         String sql = "SELECT pageHidden FROM CONTENT WHERE contentId = :contentId";
         MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -493,5 +574,6 @@ public class DatabaseAccess {
             return false;
         }
     }
+
 
 }
