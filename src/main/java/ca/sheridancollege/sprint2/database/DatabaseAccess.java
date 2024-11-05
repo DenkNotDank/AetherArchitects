@@ -20,13 +20,13 @@ import java.util.Map;
 
 @Repository
 public class DatabaseAccess {
-    @Autowired
-    @Qualifier("H2-DataSource")
-    DataSource h2DataSource;
-
-    @Autowired
-    @Qualifier("H2JDBC")
-    public NamedParameterJdbcTemplate jdbc;
+//    @Autowired
+//    @Qualifier("H2-DataSource")
+//    DataSource h2DataSource;
+//
+//    @Autowired
+//    @Qualifier("H2JDBC")
+//    public NamedParameterJdbcTemplate jdbc;
 
     @Autowired
     @Qualifier("RDS-DataSource")
@@ -34,7 +34,8 @@ public class DatabaseAccess {
 
     @Autowired
     @Qualifier("RemoteJDBC")
-    public NamedParameterJdbcTemplate jdbcRemote;
+    public NamedParameterJdbcTemplate jdbc;
+
 
     public User findUserAccount(String email) {
         System.out.println(email);
@@ -484,13 +485,6 @@ public class DatabaseAccess {
         return null;
     }
 
-    public void remoteDBTest(){
-        System.out.print("Remote DB TEST called");
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
 
-        String qu = "Insert into Dummy values (:email)";
-        parameters.addValue("email", "bruh@email.com");
-        jdbcRemote.update(qu,parameters);
-    }
 
 }

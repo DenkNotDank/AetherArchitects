@@ -16,7 +16,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String getHome(Model model) {
-        da.remoteDBTest();
         model.addAttribute("pageContent", da.getContent(1));
         return "index";
     }
