@@ -24,7 +24,9 @@ function memberMarkPaidChange() {
                 }
             }
 
-            if (selectedEmails.length > 0) {
+            paidMemberList.value = selectedEmails.join(', ');
+
+            /*if (selectedEmails.length > 0) {
                 markPaidButton.disabled = false;
                 selectedMemberEmailInput.value = selectedEmails[0]; // Set the first email for the hidden input
                 paidMemberList.value = selectedEmails.join(', '); // Join emails with commas and update textarea
@@ -33,7 +35,7 @@ function memberMarkPaidChange() {
                 selectedMemberEmailInput.value = "";
                 paidMemberList.value = ""; // Clear the textarea
                 $(markPaidDiv).collapse('hide'); // Hide form if no checkbox is selected
-            }
+            }*/
         });
     });
 
@@ -54,7 +56,7 @@ function validateMarkPaidForm(event) {
     }
 
     if (!paidToggleTrue.checked && !paidToggleFalse.checked) {
-        alert('Please select either "Yes" or "No" for payment status.');
+        alert('Please select either "Paid" or "Not Paid" for payment status.');
         event.preventDefault();
         return false;
     }
