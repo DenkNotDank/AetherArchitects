@@ -82,7 +82,7 @@ input::-webkit-inner-spin-button {
     font-weight: bold;
 }
 
-input {
+.loginInput {
     width: 100%;
 }
 
@@ -141,15 +141,16 @@ fieldset legend {
     margin: 0 auto;
     width: 960px;
     height: 900px;
-    background-color: #bde6f2;
+    background-color: white;
 }
 
 .loginNotice {
     background-color: #cde1ff69;
-    margin-left: 45%;
-    width: 36vw;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
     font-size: 1.1em;
-    height: 12vh;
+    height: 7vh;
     padding: 0.5em;
 }
 
@@ -345,13 +346,9 @@ fieldset legend {
 
 
 .emailOutput {
-
-
     margin: auto;
     height: 150px;
     width: 400px;
-    border: 2px solid black;
-    margin-top: 100px;
 }
 
 .emailOutput textarea {
@@ -363,7 +360,107 @@ fieldset legend {
 
 }
 
+
+
 .form-check-label{
-    margin-left: 54%
+    margin-left: 20px
 }
 
+.form-check-input{
+    margin-left: 50%;
+    padding-left: 20px;
+}
+
+.form-check{
+    float:right;
+    width:83vw;
+    padding-left:5vw;
+    display:flex;
+    flex-direction:column;
+}
+
+.emailOutput h3{
+    margin-left: 45%;
+}
+
+.filter-submit {
+    margin-bottom:30px;
+    background-color:#cde1ff;
+    color:black;
+    border-radius:5px;
+}
+
+.filter-submit:hover {
+    background-color:#3585ff;
+    color:#222;
+    border-radius:5px;
+    border-color:grey
+}
+
+.filter-fieldset legend {
+    background-color:darkblue;
+    color:#fff;
+    padding:3px 6px;
+    text-align:center;
+    margin-bottom:0px;
+    font-size: 1.2em;
+    border-radius:7px;
+    border: 4px #68a3ff solid;
+}
+
+.fieldsets-container {
+    display:flex;
+    flex-wrap:wrap;
+}
+
+.filter-fieldset {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    height:160px;
+    padding:15px;
+    margin-right:20px;
+    width:190px;
+}
+
+.filter-fieldset input {
+    margin-bottom:5px;
+}
+/*.submit-container {
+    display:flex;
+    justify-content:center;
+    margin-top:20px
+}
+
+ /
+
+.submit-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.filter-fieldset-row {
+    display: flex; / Use flexbox for row layout /
+    align-items: center; / Center vertically /
+    flex-grow: 1; / Allow row to grow and fill available space /
+    height: 100%; / Ensure row fills available height /
+    transition: background-color 0.3s; / Smooth hover transition} */
+
+
+.filter-fieldset-row:hover {
+    background-color:#cde1ff;
+}
+
+.filter-fieldset-row:has(input:checked) {
+    background-color: #9bc2ff;
+}
+
+.hiddenPageContent{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 5vh;
+    height:38vh;
+    padding-top: 19vh;
+    color: #d75252;
+}

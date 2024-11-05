@@ -3,6 +3,7 @@ package ca.sheridancollege.sprint2.database;
 import ca.sheridancollege.sprint2.beans.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,9 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class
-
-DatabaseAccess {
+public class DatabaseAccess {
     @Autowired
     public NamedParameterJdbcTemplate jdbc;
 
@@ -94,16 +93,22 @@ DatabaseAccess {
         jdbc.update(q, parameters);
     }
 
-    public void updateUserLogin(String password, String email) {
+    public boolean updateUserLogin(String password, String email) {
+        try {
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            String q = "UPDATE SEC_USER "
+                    + " SET (encryptedPassword) = :password"
+                    + " where email = :email";
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String q = "UPDATE SEC_USER "
-                + " SET (encryptedPassword) = :password"
-                + " where email = :email";
-
-        parameters.addValue("password", passworEncoder().encode(password));
-        parameters.addValue("email", email);
-        jdbc.update(q, parameters);
+            parameters.addValue("password", passworEncoder().encode(password));
+            parameters.addValue("email", email);
+            jdbc.update(q, parameters);
+            return true;
+        }
+        catch(Exception e){
+            System.out.println("An issue has occurred in updating the user login");
+            return false;
+        }
     }
 
     public boolean updateUserEmail(String email, String newEmail) {
@@ -191,7 +196,7 @@ DatabaseAccess {
 
         // Check that our arrayList actually contains some results
         if (contents.size() > 0) {
-            System.out.println(contents.get(0));
+//            System.out.println(contents.get(0));
 
             // String inside of the Content object at index 0 will contain our html
             return contents.get(0).getContentBody();
@@ -215,12 +220,11 @@ DatabaseAccess {
             parameters.addValue("userId", userId);
             int rolesDeleted = jdbc.update(deleteRolesQuery, parameters);
 
-            //Delete the related memebrship info
+            // Delete the related memebrship info
             parameters = new MapSqlParameterSource();
             String deleteMembershipsQuery = "DELETE FROM USER_MEMBERSHIPS WHERE userId = :userId";
             parameters.addValue("userId", userId);
             int membershipsDeleted = jdbc.update(deleteMembershipsQuery, parameters);
-
 
             // Delete the user
             String deleteUserQuery = "DELETE FROM SEC_USER WHERE email = :email";
@@ -228,7 +232,7 @@ DatabaseAccess {
             parameters.addValue("email", email);
             int usersDeleted = jdbc.update(deleteUserQuery, parameters);
 
-            if(rolesDeleted > 0 && membershipsDeleted > 0 && usersDeleted > 0){
+            if (rolesDeleted > 0 && membershipsDeleted > 0 && usersDeleted > 0) {
                 System.out.println("User with email " + email + " deleted successfully.");
                 return true;
             }
@@ -239,7 +243,7 @@ DatabaseAccess {
         return false;
     }
 
-    public void updateUserMembership(long userID, int membershipID, boolean paid, Date paidDate){
+    public void updateUserMembership(long userID, int membershipID, boolean paid, Date paidDate) {
         System.out.println("Updating user membership " + userID + " MembershipId " + membershipID);
         try {
             MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -270,29 +274,224 @@ DatabaseAccess {
 
     }
 
-    public List<Member> getAllMembersInfo(){
 
+    public List<Member> getAllMembersInfo() {
         String query = "SELECT SEC_USER.userId, SEC_USER.email, SEC_USER.firstName, " +
                 "SEC_USER.lastName, SEC_USER.phone,SEC_USER.secondaryEmail, SEC_USER.province, " +
                 "SEC_USER.city, SEC_USER.postalCode, SEC_USER.accountEnabled, " +
                 "USER_MEMBERSHIPS.membershipID, USER_MEMBERSHIPS.paid, USER_MEMBERSHIPS.paidDate " +
-                "FROM SEC_USER INNER JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID;";
+                "FROM SEC_USER LEFT JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID;";
         ArrayList<Member> members = (ArrayList<Member>) jdbc.query(query,
                 new BeanPropertyRowMapper<Member>(Member.class));
         if (members.size() > 0) {
-            for(Member m:members) {
-                try{
-                    System.out.println(m.toString());
-                }
-                catch (Exception e){
-
-                }
-            }
             return members;
         }
         return null;
     }
 
+    // method to retrieve the membershipID
+    public String getUserMembership(long userID) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+
+        String q = "SELECT membershipID FROM user_memberships WHERE userID = :userID";
+        parameters.addValue("userID", userID);
+        try {
+            Integer count = jdbc.queryForObject(q, parameters, Integer.class);
+            if (count != null) {
+                if (count.equals(1)) {
+                    return "Alumni";
+                } else if (count.equals(2)) {
+                    return "General";
+                } else if (count.equals(3)) {
+                    return "Professional";
+                } else {
+                    return "None";
+                }
+
+            }
+            return "None";
+        } catch (Exception e) {
+            return "None";
+        }
+    }
+
+    public List<Member> getFilteredList(boolean free, boolean basic, boolean premium,
+                                    boolean paid, boolean unpaid, boolean admin,
+                                    boolean user, boolean suspended, boolean notSuspended
+    , boolean secondary) {
+
+        String q = "SELECT email, secondaryEmail FROM SEC_USER u " +
+                "INNER JOIN USER_ROLE r " +
+                "ON u.userId = r.userId " +
+                "LEFT JOIN USER_MEMBERSHIPS m " +
+                "ON m.userId = r.userId ";
+
+        boolean where = false;
+        boolean and = false;
+
+
+
+        if (free || basic || premium || paid || unpaid) {
+            q += "WHERE ";
+            where =true;
+            //System.out.println("where is " + where + " in f b p p u");
+            if (free) {
+                //System.out.println("free is true");
+                //Include basic members
+                q += "membershipId = 1 ";
+                and = true;
+            }
+            if (basic) {
+                //System.out.println("basic is true");
+                //Include basic members
+                if(and){
+                    q+="AND ";
+                }
+                q += "membershipId = 2 ";
+                and = true;
+            }
+            if (premium) {
+                //System.out.println("premium is true");
+                //Include premium members
+                if(and){
+                    q+="AND ";
+                }
+                q += "membershipId = 3 ";
+                and = true;
+            }
+            if (paid) {
+                //System.out.println("paid is true");
+                //Include paid members
+                if(and){
+                    q+="AND ";
+                }
+                q += "paid = TRUE ";
+                and = true;
+            }
+            if (unpaid) {
+                //System.out.println("unpaid is true");
+                //Include unpaid members
+                if(and){
+                    q+="AND ";
+                }
+                q += "paid = FALSE ";
+                and = true;
+            }
+        }
+
+        if (admin || user) {
+            if(!where){
+                q+="WHERE ";
+                where = true;
+            }
+            //System.out.println("where is " + where + " in a u");
+
+        if (admin) {
+            //System.out.println("admin is true");
+            //Include admins
+            if(and){
+                q+="AND ";
+            }
+            q += "roleId = 1 ";
+            and = true;
+        }
+        if (user) {
+            //System.out.println("user is true");
+            //Include users
+            if(and){
+                q+="AND ";
+            }
+            q += "roleId = 2 ";
+            and = true;
+        }
+    }
+
+       if(suspended || notSuspended) {
+
+           if(!where){
+               q+="WHERE ";
+               where = true;
+           }
+           //System.out.println("where is " + where + " in s n");
+
+            if (suspended) {
+                //System.out.println("suspended is true");
+                //Include suspended accounts
+                if(and){
+                    q+="AND ";
+                }
+                q += "accountEnabled = FALSE ";
+                and = true;
+            }
+            if (notSuspended) {
+                //System.out.println("notSuspended is true");
+                //Include non suspended members
+                if(and){
+                    q+="AND ";
+                }
+                q += "accountEnabled = TRUE ";
+                and = true;
+            }
+        }
+
+       if(secondary){
+           if(!where){
+               q+="WHERE ";
+               where = true;
+           }
+           if(and){
+               q+="AND ";
+           }
+           q += "secondaryEmail IS NOT NULL";
+       }
+
+
+        ArrayList<Member> emails = (ArrayList<Member>) jdbc.query(q,
+                new BeanPropertyRowMapper<Member>(Member.class));
+
+        return emails;
+
+    }
+
+
+
+    public List<String> getAllEmails(){
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String q = "(SELECT email FROM SEC_USER) UNION (SELECT secondaryEmail FROM SEC_USER WHERE secondaryEmail IS NOT NULL)";
+        try{
+            List<String> allEmails = (List<String>) jdbc.query(q, parameters,
+                    new BeanPropertyRowMapper<String>(String.class));
+            return allEmails;
+        }
+        catch(Exception e){
+            System.out.println("There was an error in retrieving all the user emails.");
+        }
+        return null;
+    }
+
+    public boolean isPageHidden(long contentId) {
+        String sql = "SELECT pageHidden FROM CONTENT WHERE contentId = :contentId";
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("contentId", contentId);
+        
+        Boolean pageHidden = jdbc.queryForObject(sql, parameters, Boolean.class);
+        return pageHidden != null && pageHidden;
+    }
+
+    public boolean updatePageHiddenStatus(long contentId, boolean pageHidden) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        String q = "UPDATE CONTENT SET pageHidden = :pageHidden WHERE contentId = :contentId";
+        parameters.addValue("pageHidden", pageHidden);
+        parameters.addValue("contentId", contentId);
+    
+        try {
+            System.out.println("Updating contentId: " + contentId + " to pageHidden: " + pageHidden);
+            jdbc.update(q, parameters);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error updating pageHidden status: " + e.getMessage());
+            return false;
+        }
+    }
 
 }
-

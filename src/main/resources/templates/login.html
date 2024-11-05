@@ -41,7 +41,7 @@
         <!-- About us Dropdown -->
         <li class="nav-item dropdown px-2 ">
             <a class="nav-link dropdown-toggle" href="#" id="aboutusdrop" data-toggle="dropdown">
-                About us
+                About Us
             </a>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="#">Chapters</a>
@@ -124,15 +124,15 @@
                     </div>
                     <div>
                         <label for="email">Email:</label>
-                        <input type="text" id="email" name="username" autofocus="autofocus"
+                        <input class="loginInput" type="text" id="email" name="username" autofocus="autofocus"
                                placeholder="Email">
                     </div>
                     <div>
                         <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" placeholder="Password">
+                        <input class="loginInput" type="password" id="password" name="password" placeholder="Password">
                     </div>
                     <div class="pt-3">
-                        <input class="btn btn-outline-warning"
+                        <input class="btn btn-outline-warning loginInput"
                                 type="submit" id="login-submit" name="login-submit" value="Login">
                     </div>
 
@@ -163,34 +163,34 @@
                         <p class="smallestText">Please enter an email and password (minimum 6 characters) for your account.
                         This information will be required to register for products and programs.
                         </p>
-                        <div class="requiredInput thirdsDiv"><label>Email </label> <input class="verify" type="email" name="email" required></div>
-                        <div class="requiredInput thirdsDiv"><label>Password </label> <input class="verify password"  type="password" name="password" required></div>
-                        <div class="requiredInput thirdsDiv"><label>Confirm Password </label><input class="verify"  type="password" name="vpassword" required></div>
+                        <div class="requiredInput thirdsDiv"><label>Email </label> <input class="verify loginInput" type="email" name="email" required></div>
+                        <div class="requiredInput thirdsDiv"><label>Password </label> <input class="verify password loginInput"  type="password" name="password" required></div>
+                        <div class="requiredInput thirdsDiv"><label>Confirm Password </label><input class="verify loginInput"  type="password" name="vpassword" required></div>
 
                     </fieldset>
 
                     <fieldset>
                         <legend>Name & Contact</legend>
                         <div>
-                            <div class="requiredInput halvesDiv"><label>First Name </label> <input class="verify" type="text" name="firstName" required></div>
-                            <div class="requiredInput halvesDiv"><label>Last Name </label> <input class="verify" type="text" name="lastName" required></div>
+                            <div class="requiredInput halvesDiv"><label>First Name </label> <input class="verify loginInput" type="text" name="firstName" required></div>
+                            <div class="requiredInput halvesDiv"><label>Last Name </label> <input class="verify loginInput" type="text" name="lastName" required></div>
                         </div>
                         <div>
-                            <div class="requiredInput halvesDiv"> <label>Phone </label> <input class="verify" type="number" name="phone" maxlength="10" required></div>
-                            <div class="halvesDiv"> <label>Secondary Email </label> <input type="email" name="secondaryEmail"></div>
+                            <div class="requiredInput halvesDiv"> <label>Phone </label> <input class="verify loginInput" type="number" name="phone" maxlength="10" required></div>
+                            <div class="halvesDiv"> <label>Secondary Email </label> <input class="loginInput" type="email" name="secondaryEmail"></div>
                         </div>
 
                     </fieldset>
 
                     <fieldset>
                         <legend>Residence</legend>
-                        <div class="requiredInput thirdsDiv"><label>Province </label> <input class="verify" type="text" name="province" required></div>
-                        <div class="requiredInput thirdsDiv"><label>City </label> <input  class="verify" type="text" name="city" required></div>
-                        <div class="thirdsDiv"><label>Postal Code </label> <input type="text" name="postalCode"></div>
+                        <div class="requiredInput thirdsDiv"><label>Province </label> <input class="verify loginInput" type="text" name="province" required></div>
+                        <div class="requiredInput thirdsDiv"><label>City </label> <input  class="verify loginInput" type="text" name="city" required></div>
+                        <div class="thirdsDiv"><label>Postal Code </label> <input class="loginInput" type="text" name="postalCode"></div>
 
                     </fieldset>
 
-                    <input id="registerButton" class="btn btn-outline-warning" type="submit" value="Register">
+                    <input  id="registerButton" class="btn btn-outline-warning loginInput" type="submit" value="Register">
                 </form>
 
             </div>
