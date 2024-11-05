@@ -8,9 +8,9 @@ window.addEventListener(
         }
     });
 
-function verify(){
+function verify() {
     document.getElementById("registerButton").disabled = false
-    document.getElementById("signupError").innerHTML=""
+    document.getElementById("signupError").innerHTML = ""
     var pass1 = document.forms['form']['password'].value;
     var pass2 = document.forms['form']['vpassword'].value;
     var email = document.forms['form']['email'].value;
@@ -21,35 +21,35 @@ function verify(){
     var city = document.forms['form']['city'].value;
 
 
-    if(firstName==null || lastName==null || phone==null || province==null || city==null
-    ){
-        document.getElementById("signupError").innerHTML+="Please fill in all required fields." + "<br/>";
+    if (firstName == null || lastName == null || phone == null || province == null || city == null
+    ) {
+        document.getElementById("signupError").innerHTML += "Please fill in all required fields." + "<br/>";
         document.getElementById("registerButton").disabled = true
     }
 
-    if(firstName=="" || lastName=="" || phone=="" || province=="" || city==""
-    ){
-        document.getElementById("signupError").innerHTML+="Please fill in all required fields." + "<br/>";
+    if (firstName == "" || lastName == "" || phone == "" || province == "" || city == ""
+    ) {
+        document.getElementById("signupError").innerHTML += "Please fill in all required fields." + "<br/>";
         document.getElementById("registerButton").disabled = true
     }
 
-    if(!passwordStrength(pass1)){
+    if (!passwordStrength(pass1)) {
         document.getElementById("registerButton").disabled = true
-        document.getElementById("signupError").innerHTML+="Password must contain:" + "<br/>" + "" +
+        document.getElementById("signupError").innerHTML += "Password must contain:" + "<br/>" + "" +
             "<nb></nb> Minimum 8 Characters" + "<br/>"
             + "<nb></nb> A number (0-9) <br/>"
             + "<nb></nb> A lowercase letter (a-z) <br/>"
             + "<nb></nb> An upercase letter (A-Z) <br/>"
-            + "<nb></nb> A special character <br/>" ;
+            + "<nb></nb> A special character <br/>";
     }
 
 
-    if(pass1=null || pass1=="" || pass1 != pass2){
-        document.getElementById("signupError").innerHTML+="Please check your passwords are matching." + "<br/>";
+    if (pass1 = null || pass1 == "" || pass1 != pass2) {
+        document.getElementById("signupError").innerHTML += "Please check your passwords are matching." + "<br/>";
         document.getElementById("registerButton").disabled = true
     }
-    if(!validateEmail(email)){
-        document.getElementById("signupError").innerHTML+="Invalid email format." + "<br/>";
+    if (!validateEmail(email)) {
+        document.getElementById("signupError").innerHTML += "Invalid email format." + "<br/>";
         document.getElementById("registerButton").disabled = true
     }
 
@@ -64,16 +64,13 @@ window.addEventListener('load', () => {
     }
 });
 
-
-
-
 function verifyAccountChanges() {
     document.getElementById("saveChangesButton").disabled = false;
     document.getElementById("editError").innerHTML = "";
 
     console.log(document.getElementById("editSuccess"));
 
-    if(document.getElementById("editSuccess")!= null){
+    if (document.getElementById("editSuccess") != null) {
         document.getElementById("editSuccess").style.display = 'none'
     }
 
@@ -176,17 +173,17 @@ function verifyPasswordChange() {
 
 /**************** Validation Constraints ****************/
 //Validates password constraits
-function passwordStrength(password){
-    let isValid =false;
+function passwordStrength(password) {
+    let isValid = false;
     let validationRegex = [
         { regex: /.{8,}/ }, // min 8 letters,
         { regex: /[0-9]/ }, // numbers from 0 - 9
         { regex: /[a-z]/ }, // letters from a - z (lowercase)
-        { regex: /[A-Z]/}, // letters from A-Z (uppercase),
-        { regex: /[^A-Za-z0-9]/} // special characters
+        { regex: /[A-Z]/ }, // letters from A-Z (uppercase),
+        { regex: /[^A-Za-z0-9]/ } // special characters
     ]
 
-    validationRegex.forEach((item, i)=>{
+    validationRegex.forEach((item, i) => {
         isValid = item.regex.test(password);
     })
     return isValid
@@ -223,17 +220,53 @@ function confirmDeletion() {
 }
 
 //Alert for saving page changes
-function alertError(){
+function alertError() {
     window.alert("Error saving page content. Please contact an administrator.");
 }
 
 //Animation
-$(document).ready(function(){
-    $('.dropdown').hover(function(){
+$(document).ready(function () {
+    $('.dropdown').hover(function () {
         $(this).find('.dropdown-menu')
             .stop(true, true).delay(100).fadeIn(200);
-    }, function(){
+    }, function () {
         $(this).find('.dropdown-menu')
             .stop(true, true).delay(100).fadeOut(200);
+    });
+});
+
+/**************** Page Hiding ****************/
+$(document).ready(function () {
+    $('#toggleVisibilityButton').on('click', function () {
+        const contentId = $(this).data('content-id');
+        const isVisible = $(this).text() === 'HIDE CURRENT PAGE';
+
+        const confirmationMessage = isVisible
+            ? 'Are you sure you want to make this page hidden?'
+            : 'Are you sure you want to make this page public?';
+
+        if (confirm(confirmationMessage)) {
+            $.ajax({
+                url: '/togglePageVisibility',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ contentId: contentId, isVisible: isVisible }),
+                success: function () {
+                    $('#toggleVisibilityButton').text(isVisible ? 'UNHIDE CURRENT PAGE' : 'HIDE CURRENT PAGE');
+                    alert(`Content is now ${isVisible ? 'hidden' : 'public'}.`);
+
+                    if (!$('#toggleVisibilityButton').closest('.loginNotice').find('.glyphicon-sunglasses').length) {
+                        if (isVisible) {
+                            $('.navbar-nav .nav-link[href="/"]').closest('.nav-item').hide();
+                        } else {
+                            $('.navbar-nav .nav-link[href="/"]').closest('.nav-item').show();
+                        }
+                    }
+                },
+                error: function () {
+                    alert('Failed to update visibility.');
+                }
+            });
+        }
     });
 });

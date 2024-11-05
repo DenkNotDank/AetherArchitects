@@ -146,10 +146,11 @@ fieldset legend {
 
 .loginNotice {
     background-color: #cde1ff69;
-    margin-left: 45%;
-    width: 36vw;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
     font-size: 1.1em;
-    height: 12vh;
+    height: 7vh;
     padding: 0.5em;
 }
 
@@ -452,4 +453,14 @@ fieldset legend {
 
 .filter-fieldset-row:has(input:checked) {
     background-color: #9bc2ff;
+}
+
+.hiddenPageContent{
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 5vh;
+    height:38vh;
+    padding-top: 19vh;
+    color: #d75252;
 }
