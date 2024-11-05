@@ -38,7 +38,7 @@ public class DatabaseAccess {
     public User findUserAccount(String email) {
         System.out.println(email);
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String q = "Select * from sec_user where email = :email";
+        String q = "Select * from SEC_USER where email = :email";
         parameters.addValue("email", email);
 
         ArrayList<User> users = (ArrayList<User>) jdbc.query(q, parameters,
@@ -54,7 +54,7 @@ public class DatabaseAccess {
     public User findUserPassword(String email) {
         System.out.println(email);
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String q = "Select encryptedPassword from sec_user where email = :email";
+        String q = "Select encryptedPassword from SEC_USER where email = :email";
         parameters.addValue("email", email);
 
         ArrayList<User> users = (ArrayList<User>) jdbc.query(q, parameters,
@@ -71,9 +71,9 @@ public class DatabaseAccess {
         ArrayList<String> roles = new ArrayList<>();
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String q = "Select user_role.userid, sec_role.rolename"
-                + " From user_role, sec_role"
-                + " Where user_role.roleId = sec_role.roleId"
+        String q = "Select USER_ROLE.userid, SEC_ROLE.rolename"
+                + " From USER_ROLE, SEC_ROLE"
+                + " Where USER_ROLE.roleId = SEC_ROLE.roleId"
                 + " And userId = :userId";
         parameters.addValue("userId", userId);
 
@@ -107,9 +107,9 @@ public class DatabaseAccess {
         jdbc.update(q, parameters);
     }
 
-    public boolean updatePaidInfo(String paidMemberList, String paidToggle, String tier, String datePaid) {
+    public boolean updatePaidInfo(String paidMemberList, Boolean paidToggle, String tier, String datePaid) {
         try {
-            String q = "SELECT USERID FROM SEC_USER WHERE EMAIL IN (:emails)";
+            String q = "SELECT userId FROM SEC_USER WHERE email IN (:emails)";
             List<String> emailList = Arrays.stream(paidMemberList.split(","))
                     .map(String::trim)
                     .collect(Collectors.toList());
@@ -124,19 +124,19 @@ public class DatabaseAccess {
                 return false;
             }
 
-            StringBuilder updatePaymentQuery = new StringBuilder("UPDATE USER_MEMBERSHIPS SET PAID = :paid ");
+            StringBuilder updatePaymentQuery = new StringBuilder("UPDATE USER_MEMBERSHIPS SET paid = :paid ");
 
             if (datePaid != null && !datePaid.trim().isEmpty()) {
                 System.out.println("Date Paid is not null, updating PAIDDATE");
-                updatePaymentQuery.append(", PAIDDATE = :datePaid ");
+                updatePaymentQuery.append(", paidDate = :datePaid");
             }
 
             if (!tier.equals("1000")) {
                 System.out.println("TIER is not 1000, updating TIER");
-                updatePaymentQuery.append(", MEMBERSHIPID = :membershipId ");
+                updatePaymentQuery.append(", membershipID = :membershipId ");
             }
 
-            updatePaymentQuery.append("WHERE USERID IN (:userIds)");
+            updatePaymentQuery.append("WHERE userID IN (:userIds);");
 
             parameters.addValue("paid", paidToggle);
             parameters.addValue("userIds", userIds);
@@ -158,6 +158,7 @@ public class DatabaseAccess {
             }
             System.out.println("User IDs: " + userIds);
 
+            System.out.println("Query: " + updatePaymentQuery.toString());
             int rowsAffected = jdbc.update(updatePaymentQuery.toString(), parameters);
             System.out.println("Rows affected: " + rowsAffected);
 
@@ -250,7 +251,7 @@ public class DatabaseAccess {
 
     public void addRole(long userId, long roleId) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String q = "Insert into USER_ROLE (userId, roleId) values (:userId, :roleId)";
+        String q = "INSERT INTO USER_ROLE (userId, roleId) VALUES (:userId, :roleId)";
         parameters.addValue("userId", userId);
         parameters.addValue("roleId", roleId);
         jdbc.update(q, parameters);
@@ -281,7 +282,7 @@ public class DatabaseAccess {
      */
     public String getContent(long id) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        String q = "Select * from CONTENT where contentId = :id";
+        String q = "SELECT * FROM CONTENT WHERE contentId = :id";
         parameters.addValue("id", id);
 
         // Queries always have a chance of returning more than 1 row so we'll use
@@ -344,18 +345,18 @@ public class DatabaseAccess {
             MapSqlParameterSource parameters = new MapSqlParameterSource();
             parameters.addValue("userID", userID);
 
-            String checkQuery = "SELECT COUNT(*) FROM user_memberships WHERE userID = :userID";
+            String checkQuery = "SELECT COUNT(*) FROM USER_MEMBERSHIPS WHERE userID = :userID";
             int count = jdbc.queryForObject(checkQuery, parameters, Integer.class);
 
             if (count > 0) {
-                String updateQuery = "UPDATE user_memberships SET membershipID = :membershipID, paid = :paid, paidDate = :paidDate WHERE userID = :userID";
+                String updateQuery = "UPDATE USER_MEMBERSHIPS SET membershipID = :membershipID, paid = :paid, paidDate = :paidDate WHERE userID = :userID";
                 parameters.addValue("membershipID", membershipID);
                 parameters.addValue("paid", paid);
                 parameters.addValue("paidDate", paidDate);
                 jdbc.update(updateQuery, parameters);
                 System.out.println("User membership updated successfully for userID: " + userID);
             } else {
-                String insertQuery = "INSERT INTO user_memberships(userID, membershipID, paid, paidDate) VALUES (:userID, :membershipID, :paid, :paidDate)";
+                String insertQuery = "INSERT INTO USER_MEMBERSHIPS(userID, membershipID, paid, paidDate) VALUES (:userID, :membershipID, :paid, :paidDate)";
                 parameters.addValue("membershipID", membershipID);
                 parameters.addValue("paid", paid);
                 parameters.addValue("paidDate", paidDate);
@@ -389,7 +390,7 @@ public class DatabaseAccess {
     public String getUserMembership(long userID) {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
 
-        String q = "SELECT membershipID FROM user_memberships WHERE userID = :userID";
+        String q = "SELECT membershipID FROM USER_MEMBERSHIPS WHERE userID = :userID";
         parameters.addValue("userID", userID);
         try {
             Integer count = jdbc.queryForObject(q, parameters, Integer.class);

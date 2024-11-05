@@ -130,7 +130,8 @@ public class AccountController {
                                  @RequestParam("paidToggle") String paidToggle,
                                  @RequestParam("tier") String tier,
                                  @RequestParam("datePaid") String datePaid) {
-        da.updatePaidInfo(paidMemberList, paidToggle, tier, datePaid);
+        boolean toggle = Boolean.parseBoolean(paidToggle);
+        da.updatePaidInfo(paidMemberList, toggle, tier, datePaid);
         return "redirect:/admin/members";
     }
 
