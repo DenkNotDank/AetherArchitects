@@ -3,6 +3,7 @@ package ca.sheridancollege.sprint2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -28,6 +29,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -37,6 +40,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import ca.sheridancollege.sprint2.beans.Content;
 import ca.sheridancollege.sprint2.beans.Member;
@@ -101,6 +105,9 @@ class S2Tests {
     private AccountController accountController;
     private AdminController adminController;
 
+    @Autowired
+    private ContentController contentController;
+
     @BeforeEach
     public void setUp() {
         databaseAccess = mock(DatabaseAccess.class);
@@ -109,12 +116,19 @@ class S2Tests {
 
         adminController = new AdminController(); // New instance for AdminController
         adminController.da = databaseAccess; // Assign the same mocked DAO
+
+        contentController = new ContentController(); // New instance for ContentController
+        contentController.da = databaseAccess; // Assign the same mocked DAO
     }
 
     //
-    /********************************
+    //
+    //
+    /************************************************************************************************
      * SPRINT 1 AND 2 TEST CASES
-     ********************************/
+     ************************************************************************************************/
+    //
+    //
     //
 
     @Test
@@ -240,9 +254,13 @@ class S2Tests {
     }
 
     //
-    /********************************
+    //
+    //
+    /************************************************************************************************
      * SPRINT 3 TEST CASES
-     ********************************/
+     ************************************************************************************************/
+    //
+    //
     //
 
     @Test
@@ -381,9 +399,13 @@ class S2Tests {
     }
 
     //
-    /********************************
+    //
+    //
+    /************************************************************************************************
      * SPRINT 4 TEST CASES
-     ********************************/
+     ************************************************************************************************/
+    //
+    //
     //
 
     @Test
@@ -589,7 +611,146 @@ class S2Tests {
         assertEquals("redirect:/myAccount", view);
         verify(redirectAttrs).addFlashAttribute(
                 "error", "Invalid Membership Type");
-                verify(databaseAccess, never())
+        verify(databaseAccess, never())
                 .updateUserMembership(anyLong(), anyInt(), anyBoolean(), any());
+    }
+
+    //
+    //
+    //
+    /************************************************************************************************
+     * SPRINT 5 TEST CASES
+     ************************************************************************************************/
+    //
+    //
+    //
+
+    @Test
+    public void testMarkPaidSubmit_Success() {
+        // Setup
+        String paidMemberList = "member1,member2";
+        String paidToggle = "true";
+        String tier = "gold";
+        String datePaid = "2024-11-05";
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+
+        when(databaseAccess.updatePaidInfo(paidMemberList, Boolean.parseBoolean(paidToggle), tier, datePaid))
+                .thenReturn(true);
+
+        // Call method
+        String result = accountController.markPaidSubmit(paidMemberList, paidToggle, tier, datePaid,
+                redirectAttributes);
+
+        // Verify
+        assertEquals("redirect:/admin/members", result);
+        assertTrue(redirectAttributes.getFlashAttributes().containsKey("successMessage"));
+        assertEquals("User memberships updated successfully.",
+                redirectAttributes.getFlashAttributes().get("successMessage"));
+    }
+
+    @Test
+    public void testMarkPaidSubmit_Failure() {
+        // Setup
+        String paidMemberList = "invalidMember";
+        String paidToggle = "true";
+        String tier = "silver";
+        String datePaid = "2024-11-05";
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+
+        // Mocks failure response
+        when(databaseAccess.updatePaidInfo(paidMemberList, Boolean.parseBoolean(paidToggle), tier, datePaid))
+                .thenReturn(false);
+
+        // Call method
+        String result = accountController.markPaidSubmit(paidMemberList, paidToggle, tier, datePaid,
+                redirectAttributes);
+
+        // Verify
+        assertEquals("redirect:/admin/members", result);
+        assertTrue(redirectAttributes.getFlashAttributes().containsKey("errorMessage"));
+        assertEquals("Invalid user entered.", redirectAttributes.getFlashAttributes().get("errorMessage"));
+    }
+
+    @Test
+    public void testTogglePageVisibility_Success() {
+        // Setup
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("contentId", 123L);
+        payload.put("isVisible", true);
+
+        when(databaseAccess.updatePageHiddenStatus(123L, true)).thenReturn(true);
+
+        // Call method
+        ResponseEntity<String> response = contentController.togglePageVisibility(payload);
+
+        // Verify
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Visibility updated successfully", response.getBody());
+    }
+
+    @Test
+    public void testTogglePageVisibility_MissingParameters() {
+        // Setup
+        Map<String, Object> payload = new HashMap<>(); // Missing contentId and isVisible
+
+        // Call method
+        ResponseEntity<String> response = contentController.togglePageVisibility(payload);
+
+        // Verify
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Missing required parameters.", response.getBody());
+    }
+
+    @Test
+    public void testTogglePageVisibility_UpdateFailure() {
+        // Setup
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("contentId", 123L);
+        payload.put("isVisible", false);
+
+        when(databaseAccess.updatePageHiddenStatus(123L, false)).thenReturn(false);
+
+        // Call method
+        ResponseEntity<String> response = contentController.togglePageVisibility(payload);
+
+        // Verify
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Failed to update visibility.", response.getBody());
+    }
+
+    @Test
+    public void testChangeUserPermissions_Success() {
+        // Setup
+        long userId = 123L;
+        Integer perm = 1;
+        RedirectAttributes redirectAttrs = new RedirectAttributesModelMap();
+
+        when(databaseAccess.updateUserPermissions(perm, userId)).thenReturn(true);
+
+        // Call method
+        String result = adminController.changeUserPermissions(userId, perm, redirectAttrs);
+
+        // Verify
+        assertEquals("redirect:/admin/members", result);
+        assertTrue(redirectAttrs.getFlashAttributes().containsKey("successMessage"));
+        assertEquals("Permissions successfully changed", redirectAttrs.getFlashAttributes().get("successMessage"));
+    }
+
+    @Test
+    public void testChangeUserPermissions_Failure() {
+        // Setup
+        long userId = 123L;
+        Integer perm = 1;
+        RedirectAttributes redirectAttrs = new RedirectAttributesModelMap();
+
+        when(databaseAccess.updateUserPermissions(perm, userId)).thenReturn(false);
+
+        // Call method
+        String result = adminController.changeUserPermissions(userId, perm, redirectAttrs);
+
+        // Verify
+        assertEquals("redirect:/admin/members", result);
+        assertTrue(redirectAttrs.getFlashAttributes().containsKey("errorMessage"));
+        assertEquals("System error: User password not updated", redirectAttrs.getFlashAttributes().get("errorMessage"));
     }
 }
