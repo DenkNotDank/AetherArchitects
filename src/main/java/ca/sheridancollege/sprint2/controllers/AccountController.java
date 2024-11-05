@@ -131,8 +131,8 @@ public class AccountController {
                                  @RequestParam("tier") String tier,
                                  @RequestParam("datePaid") String datePaid,
                                  RedirectAttributes redirectAttributes) {
-
-        boolean updateSuccessful = da.updatePaidInfo(paidMemberList, paidToggle, tier, datePaid);
+        boolean toggle = Boolean.parseBoolean(paidToggle);
+        boolean updateSuccessful = da.updatePaidInfo(paidMemberList, toggle, tier, datePaid);
 
         if (updateSuccessful) {
             redirectAttributes.addFlashAttribute("successMessage", "User memberships updated successfully.");
@@ -140,7 +140,6 @@ public class AccountController {
             System.out.println("nope");
             redirectAttributes.addFlashAttribute("errorMessage", "Invalid user entered.");
         }
-
         return "redirect:/admin/members";
     }
 
