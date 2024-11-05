@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import static java.lang.Integer.parseInt;
@@ -122,6 +123,15 @@ public class AccountController {
             model.addAttribute("error", "Passwords do not match.");
             return "redirect:/myAccount";
         }
+    }
+
+    @PostMapping("/markPaidSubmit")
+    public String markPaidSubmit(@RequestParam("paidMemberList") String paidMemberList,
+                                 @RequestParam("paidToggle") String paidToggle,
+                                 @RequestParam("tier") String tier,
+                                 @RequestParam("datePaid") String datePaid) {
+        da.updatePaidInfo(paidMemberList, paidToggle, tier, datePaid);
+        return "redirect:/admin/members";
     }
 
     @PostMapping("/changeUserPassword")
