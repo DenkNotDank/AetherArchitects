@@ -20,5 +20,6 @@ public class User {
     private String city;
     private String postalCode;
     private String encryptedPassword;
+    private boolean accountEnabled;
 
 }
