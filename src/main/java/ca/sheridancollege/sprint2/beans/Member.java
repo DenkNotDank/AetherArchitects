@@ -24,5 +24,6 @@ public class Member {
     private String paid;
     private String paidDate;
     private long roleId;
+    private Boolean mailOpted;
 
 }

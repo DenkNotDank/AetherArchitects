@@ -147,6 +147,25 @@ public class DatabaseAccess {
         return false;
     }
 
+    public boolean updateUserSuspension(Integer suspend, String email) {
+
+        try {
+            MapSqlParameterSource parameters = new MapSqlParameterSource();
+            String q = "UPDATE SEC_USER " +
+                    "SET accountEnabled = :suspend " +
+                    "WHERE SEC_USER.email = :email ";
+            parameters.addValue("suspend", suspend);
+            parameters.addValue("email", email);
+            int isUpdated = jdbc.update(q, parameters);
+            if (isUpdated == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Error Updating suspension status " + e.getMessage());
+        }
+        return false;
+    }
+
     public boolean updateUserInfo(String email, String firstName, String lastName, long phone, String province,
             String city, String postalCode, String secondaryEmail) {
         try {
@@ -299,7 +318,8 @@ public class DatabaseAccess {
                 "SEC_USER.lastName, SEC_USER.phone,SEC_USER.secondaryEmail, SEC_USER.province," +
               "SEC_USER.city, SEC_USER.postalCode, SEC_USER.accountEnabled," +
                "USER_MEMBERSHIPS.membershipID, USER_MEMBERSHIPS.paid, USER_MEMBERSHIPS.paidDate," +
-                "USER_ROLE.roleId FROM SEC_USER LEFT JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID" +
+                "USER_MEMBERSHIPS.mailOpted, USER_ROLE.roleId " +
+                "FROM SEC_USER LEFT JOIN USER_MEMBERSHIPS ON SEC_USER.UserId = USER_MEMBERSHIPS.userID" +
                 " INNER JOIN USER_ROLE ON USER_ROLE.userId = SEC_USER.userId ";
         ArrayList<Member> members = (ArrayList<Member>) jdbc.query(query,
                 new BeanPropertyRowMapper<Member>(Member.class));
@@ -337,13 +357,13 @@ public class DatabaseAccess {
 
     public List<Member> getFilteredList(boolean free, boolean basic, boolean premium,
                                     boolean paid, boolean unpaid, boolean admin,
-                                    boolean user, boolean suspended, boolean notSuspended
-    , boolean secondary) {
+                                    boolean user, boolean suspended, boolean notSuspended,
+                                        boolean secondary, boolean optedIn, boolean optedOut) {
 
         String q = "SELECT email, secondaryEmail FROM SEC_USER u " +
                 "INNER JOIN USER_ROLE r " +
                 "ON u.userId = r.userId " +
-                "LEFT JOIN USER_MEMBERSHIPS m " +
+                "INNER JOIN USER_MEMBERSHIPS m " +
                 "ON m.userId = r.userId ";
 
         boolean where = false;
@@ -495,7 +515,37 @@ public class DatabaseAccess {
                q+="AND ";
            }
            q += "secondaryEmail IS NOT NULL";
+           and = true;
        }
+
+        if(optedIn || optedOut) {
+            boolean or = false;
+            if(!where){
+                q+="WHERE ";
+
+            }
+
+            if (optedIn) {
+                //Include opted In accounts
+                if(and){
+                    q+="AND ";
+                }
+                q += "mailOpted = TRUE ";
+                or = true;
+            }
+            if (optedOut) {
+
+                //Include opted out members
+                if(or){
+                    q += "OR ";
+                }
+                else if (and) {
+                    q += "AND ";
+                }
+                q += "mailOpted = False ";
+
+            }
+        }
 
 
         ArrayList<Member> emails = (ArrayList<Member>) jdbc.query(q,

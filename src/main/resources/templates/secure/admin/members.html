@@ -63,16 +63,16 @@
       <div class="card membersPageBody">
         <div class="card membersPageSort">
           <br>
-          <div style="margin-left: 10px; margin-bottom: 10px;">
+          <div style="margin-left: 10px;">
             <!-- Flash Messages -->
             <input type="submit" id="memberPasswordSubmit" class="btn btn-primary btn-sm" value="Change Password"
                    disabled data-toggle="collapse" data-target="#passwordResetForm">
-          </div>
-
-          <div style="margin-left: 200px; margin-bottom: 10px;">
-            <!-- Flash Messages -->
             <input type="submit" id="changePermissionsSubmit" class="btn btn-primary btn-sm" value="Change Permissions"
                    disabled data-toggle="collapse" data-target="#changePermissionsForm">
+            <input type="submit" id="memberMarkPaid" class="btn btn-primary btn-sm" value="Mark Paid Membership"
+                   data-toggle="collapse" data-target="#markPaidDiv">
+            <input type="submit" id="changeSuspensionSubmit" class="btn btn-primary btn-sm" value="Change Suspension"
+                   disabled data-toggle="collapse" data-target="#changeSuspensionForm">
           </div>
         </div>
 
@@ -113,6 +113,23 @@
           </div>
         </div>
 
+        <!-- Hidden suspend form-->
+        <div id="changeSuspensionForm" class="collapse mt-3">
+          <div class="card card-body">
+            <form id="suspensionChangeForm" th:action="@{/changeUserSuspension}" method="post">
+              <input type="hidden" id="selectedSuspensionEmail" name="email">
+
+              <div class="form-group" >
+                <label for="suspend">Suspend</label>
+                <input  type="radio" id="suspend" name="suspend" value = 0>
+                <label for="unSuspend">Unsuspend</label>
+                <input type="radio" id="unSuspend" name="suspend" value = 1>
+              </div>
+              <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+          </div>
+        </div>
+
 
         <div class="card-body" th:if="${#lists.isEmpty(members)}">
           <h2>Error: No users found</h2>
@@ -130,16 +147,17 @@
                 <th>Province</th>
                 <th>City</th>
                 <th>Postal Code</th>
-                <th>Account Status</th>
+                <th>Suspended</th>
                 <th>Membership</th>
                 <th>Membership Status</th>
                 <th>Paid Date</th>
+                <th>Mailing List</th>
                 <th>Admin</th>
               </tr>
             </thead>
             <tbody>
               <tr th:each="member: ${members}">
-                <td><input type="checkbox" th:data-email="${member.email}" th:data-userId="${member.userId}"></td>
+                <td><input onchange="toggleRowHighlight(this)" type="checkbox" th:data-email="${member.email}" th:data-userId="${member.userId}"></td>
                 <td th:utext="${member.firstName}"></td>
                 <td th:utext="${member.lastName}"></td>
                 <td th:utext="${member.phone}"></td>
@@ -148,10 +166,17 @@
                 <td th:utext="${member.province}"></td>
                 <td th:utext="${member.city}"></td>
                 <td th:utext="${member.postalCode}"></td>
-                <td th:utext="${member.accountEnabled}"></td>
+                <td><th:block th:switch="${member.accountEnabled}">
+                  <span th:case="0">Yes</span>
+                  <span th:case="1">No</span>
+                </th:block></td>
                 <td th:utext="${member.membershipID}"></td>
                 <td th:utext="${member.paid}"></td>
                 <td th:utext="${member.paidDate}"></td>
+                <td><th:block th:switch="${member.mailOpted}">
+                  <span th:case="true">Yes</span>
+                  <span th:case="false">No</span>
+                </th:block></td>
                 <td><th:block th:switch="${member.roleId}">
                   <span th:case="1">Yes</span>
                   <span th:case="2">No</span>
@@ -170,10 +195,11 @@
                 <th>Province</th>
                 <th>City</th>
                 <th>Postal Code</th>
-                <th>Account Status</th>
+                <th>Suspended</th>
                 <th>Membership</th>
                 <th>Membership Status</th>
                 <th>Paid Date</th>
+                <th>Mailing List</th>
                 <th>Admin</th>
               </tr>
             </tfoot>

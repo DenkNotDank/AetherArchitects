@@ -10300,6 +10300,7 @@
          * Note that the `pageLength` property will be automatically set to the
          * first value given in this array, unless `pageLength` is also provided.
          */
+        "pageLength": 100,
         "aLengthMenu": [ 10, 25, 50, 100 ],
 
 

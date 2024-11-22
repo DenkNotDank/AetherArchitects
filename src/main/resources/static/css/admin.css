@@ -71,13 +71,12 @@
 }
 
 .membersPageBody{
-/*     height: 75vh; */
+    /*     height: 75vh; */
     width: 76vw;
 }
 
 .membersPageSort{
     height: 10vh;
-    height: 7vh;
 }
 
 .membersTable{
@@ -86,10 +85,6 @@
     white-space: nowrap;
 }
 
-#memberPasswordSubmit{
+/*#memberPasswordSubmit{
     margin-top: 1vh;
-}
-
-#changePermissionsSubmit{
-    margin-top: -9.7vh;
-}
+}*/
