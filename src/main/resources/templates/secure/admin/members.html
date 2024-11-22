@@ -202,14 +202,14 @@
               </td>
 
               <td th:switch="${member.paid}">
-                <p th:case="'true'">Paid</p>
+                <p th:case="'1'">Paid</p>
                 <p th:case="'True'">Paid</p>
                 <p th:case="'TRUE'">Paid</p>
                 <p th:case="*">Unpaid</p>
               </td>
 
               <td th:switch="${member.paid}">
-                <p th:case="'true'" th:utext="${member.paidDate}"></p>
+                <p th:case="'1'" th:utext="${member.paidDate}"></p>
                 <p th:case="'True'" th:utext="${member.paidDate}"></p>
                 <p th:case="'TRUE'" th:utext="${member.paidDate}"></p>
                 <p th:case="*"></p>
