@@ -270,3 +270,16 @@ $(document).ready(function () {
         }
     });
 });
+
+
+function copyEmailToClipboard(){
+    var copyText = document.getElementById("filteredEmailOutput");
+    copyText.select()
+    copyText.setSelectionRange(0, 99999);
+
+    navigator.clipboard.writeText(copyText.value);
+
+    alert("Copied Emails to clipboard");
+
+}
+

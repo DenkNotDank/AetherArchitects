@@ -142,8 +142,10 @@
       <input class="filter-submit" type="submit" value="Filter Emails " id="filter">
     </div>
   </form>
+
   <div class ="emailOutput">
-    <textarea th:text = "${filteredEmails}" readonly></textarea>
+    <div class="copyToClipBoard"><button id="copyEmailClipboardBtn" onclick="copyEmailToClipboard()">Copy emails to clipboard</button></div>
+    <textarea id="filteredEmailOutput" th:text = "${filteredEmails}" readonly></textarea>
   </div>
 </div>
 <!-- TEST -->
