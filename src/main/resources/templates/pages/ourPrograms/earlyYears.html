@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>About Us: Chapters</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script th:src="@{/js/bootstrap/bootstrap.js}"></script>
     <script th:src="@{/js/bootstrap/bootstrap.bundle.js}"></script>
@@ -34,7 +34,7 @@
             Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span>
             <a href="/" sec:authentication="name"></a>
             <a style="margin-left: 1vw;" href="#" th:href="@{/admin/dashboard}"><button>ADMIN PANEL</button></a>
-            <button style="margin-left: 1vw; margin-right: 1vw; color:#f77272;" id="toggleVisibilityButton" class="floating-button" data-content-id="1"
+            <button style="margin-left: 1vw; margin-right: 1vw; color:#f77272;" id="toggleVisibilityButton" class="floating-button" data-content-id="9"
                 th:text="${pageHidden != null ? (pageHidden ? 'UNHIDE CURRENT PAGE' : 'HIDE CURRENT PAGE') : 'UNHIDE CURRENT PAGE'}"></button>
         </div>
         <div th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
@@ -51,10 +51,9 @@
         </button>
 
         <!-- Links -->
-        <ul class="navbar-nav" id="collapsibleNavbar" >
+        <ul class="navbar-nav" id="collapsibleNavbar">
             <!-- Home -->
-            <li class="nav-item active">
-                <!-- th:classappend="${pageHidden == null ? '' : (pageHidden && !#authorization.expression('hasRole(''ROLE_ADMIN'')') ? 'd-none' : '')}" -->
+            <li class="nav-item px-2">
                 <a class="nav-link" href="/">Home</a>
             </li>
 
@@ -74,14 +73,14 @@
             </li>
 
             <!-- Our Programs Dropdown -->
-            <li class="nav-item dropdown px-2">
+            <li class="nav-item dropdown active px-2">
                 <a class="nav-link dropdown-toggle" href="#" id="programsdrop" data-toggle="dropdown">
                     Our Programs
                 </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="#" th:href="@{/parents}">Parents</a>
                     <a class="dropdown-item" href="#" th:href="@{/childrenYouth}">Children/Youth</a>
-                    <a class="dropdown-item" href="#" th:href="@{/earlyYears}">Early Years</a>
+                    <a class="dropdown-item active" href="#" th:href="@{/earlyYears}">Early Years</a>
                     <a class="dropdown-item" href="#" th:href="@{/educators}">Educators/Alumni</a>
                     <a class="dropdown-item" href="#">Advocacy/Public Education</a>
                     <a class="dropdown-item" href="#">Youth Mentorship</a>
