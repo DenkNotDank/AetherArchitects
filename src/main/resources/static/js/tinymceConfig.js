@@ -42,7 +42,7 @@ tinymce.init({
         //Triggered by clicking off tinymce editor
         editor.on('change', (e) => {
             var myData = {
-                "contentId": 1,
+                "contentId": document.getElementById("contentId").value,
                 "contentBody": tinymce.get('editor').getContent()
                 }
             $.ajax({

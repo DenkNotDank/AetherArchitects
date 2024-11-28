@@ -151,6 +151,7 @@
 
         <div class="form-group" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             <form method="post">
+                <input type="hidden" id="contentId" value="1">
                 <textarea id="editor" th:text="${pageContent}"></textarea>
             </form>
         </div>
