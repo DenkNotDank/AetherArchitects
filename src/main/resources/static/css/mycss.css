@@ -125,8 +125,16 @@ h2 {
 }
 
 fieldset {
+    padding: 10px;
     margin: 10px 0;
     border: 3px solid #ddd;
+}
+
+fieldset legend {
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 0 10px;
+    white-space: nowrap;
 }
 
 .mainContent {
@@ -138,10 +146,11 @@ fieldset {
 
 .loginNotice {
     background-color: #cde1ff69;
-    margin-left: 45%;
-    width: 36vw;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
     font-size: 1.1em;
-    height: 12vh;
+    height: 7vh;
     padding: 0.5em;
 }
 
@@ -353,16 +362,16 @@ fieldset {
 
 
 
-.form-check-label{
+.email-check-label{
     margin-left: 20px
 }
 
-.form-check-input{
+.email-check-input{
     margin-left: 50%;
     padding-left: 20px;
 }
 
-.form-check{
+.email-check{
     float:right;
     width:83vw;
     padding-left:5vw;
@@ -423,7 +432,7 @@ fieldset {
     margin-top:20px
 }
 
- */
+ /
 
 .submit-container {
     text-align: center;
@@ -431,20 +440,21 @@ fieldset {
 }
 
 .filter-fieldset-row {
-    display: flex; /* Use flexbox for row layout */
-    align-items: center; /* Center vertically */
-    flex-grow: 1; /* Allow row to grow and fill available space */
-    height: 100%; /* Ensure row fills available height */
-    transition: background-color 0.3s; /* Smooth hover transition */
-}
+    display: flex; / Use flexbox for row layout /
+    align-items: center; / Center vertically /
+    flex-grow: 1; / Allow row to grow and fill available space /
+    height: 100%; / Ensure row fills available height /
+    transition: background-color 0.3s; / Smooth hover transition} */
+
 
 .filter-fieldset-row:hover {
     background-color:#cde1ff;
 }
 
-/*.filter-fieldset-row:has(input:checked) {*/
-/*    background-color: #9bc2ff;*/
-/*}*/
+.filter-fieldset-row:has(input:checked) {
+    background-color: #9bc2ff;
+}
+
 .hiddenPageContent{
     text-align: center;
     font-weight: bold;

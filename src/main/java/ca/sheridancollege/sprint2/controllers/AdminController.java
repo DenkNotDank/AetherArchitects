@@ -22,20 +22,21 @@ public class AdminController {
     public DatabaseAccess da;
 
     @GetMapping("/admin/dashboard")
-    public String getAdminHome(){return "secure/admin/adminHome";
+    public String getAdminHome(){
+        return "secure/admin/adminHome";
     }
-
-    @GetMapping("/admin/emails")
-    public String getAdminEmails(){
-    return "secure/admin/emails";
-}
 
 
     @GetMapping("/admin/members")
     public String getMembersPage(Model model){
         List<Member> members = da.getAllMembersInfo();
         model.addAttribute("members", members);
-        return "/secure/admin/members";
+        return "secure/admin/members";
+    }
+
+    @GetMapping("/admin/emails")
+    public String getMemberEmails(){
+        return "secure/admin/memberEmails";
     }
 
     @PostMapping("/filter")
@@ -50,19 +51,17 @@ public class AdminController {
             @RequestParam(defaultValue = "false",name = "suspended") boolean suspended,
             @RequestParam(defaultValue = "false",name = "notSuspended") boolean notSuspended,
             @RequestParam(defaultValue = "false",name = "secondary") boolean secondary,
-            @RequestParam(defaultValue = "false",name = "optedIn") boolean optedIn,
-            @RequestParam(defaultValue = "false",name = "optedOut") boolean optedOut,
             Model model){
 
        List<Member> emails = da.getFilteredList(free, basic, premium, paid, unpaid,
-               admin, user, suspended, notSuspended, secondary, optedIn, optedOut);
+               admin, user, suspended, notSuspended, secondary);
 
         String csvEmails;
        if(emails.isEmpty()){
            System.out.println("emails is empty");
            csvEmails="There are no results";
            model.addAttribute("filteredEmails", csvEmails);
-           return "/secure/admin/emails";
+           return "secure/admin/memberEmails";
        }
         System.out.println(emails.size());
 
@@ -83,13 +82,13 @@ public class AdminController {
 
         model.addAttribute("filteredEmails", csvEmails);
 
-        return "/secure/admin/emails";
+        return "secure/admin/memberEmails";
     }
 
     @PostMapping("/changeUserPermissions")
     public String changeUserPermissions(@RequestParam("userId") long userId,
-                                     @RequestParam("perm") Integer perm,
-                                     RedirectAttributes redirectAttrs) {
+                                        @RequestParam("perm") Integer perm,
+                                        RedirectAttributes redirectAttrs) {
 
         // Encode the password and update in the database
         boolean updated = da.updateUserPermissions(perm, userId);
@@ -98,29 +97,10 @@ public class AdminController {
             return "redirect:/admin/members";
         }
         else{
-            redirectAttrs.addFlashAttribute("errorMessage", "System error: User permissions not changed");
+            redirectAttrs.addFlashAttribute("errorMessage", "System error: User password not updated");
             return "redirect:/admin/members";
         }
 
     }
-
-    @PostMapping("/changeUserSuspension")
-    public String changeUserSuspension(@RequestParam("email") String email,
-                                        @RequestParam("suspend") Integer suspend,
-                                        RedirectAttributes redirectAttrs) {
-
-        // Encode the password and update in the database
-        boolean updated = da.updateUserSuspension(suspend, email);
-        if(updated){
-            redirectAttrs.addFlashAttribute("successMessage", "Suspension status successfully changed");
-            return "redirect:/admin/members";
-        }
-        else{
-            redirectAttrs.addFlashAttribute("errorMessage", "System error: Suspension status not changed");
-            return "redirect:/admin/members";
-        }
-
-    }
-
 
 }

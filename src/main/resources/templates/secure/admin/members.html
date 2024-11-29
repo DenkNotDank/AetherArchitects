@@ -60,6 +60,8 @@
         <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
       </div>
 
+
+
       <div class="card membersPageBody">
         <div class="card membersPageSort">
           <br>
@@ -67,12 +69,10 @@
             <!-- Flash Messages -->
             <input type="submit" id="memberPasswordSubmit" class="btn btn-primary btn-sm" value="Change Password"
                    disabled data-toggle="collapse" data-target="#passwordResetForm">
-            <input type="submit" id="changePermissionsSubmit" class="btn btn-primary btn-sm" value="Change Permissions"
-                   disabled data-toggle="collapse" data-target="#changePermissionsForm">
             <input type="submit" id="memberMarkPaid" class="btn btn-primary btn-sm" value="Mark Paid Membership"
                    data-toggle="collapse" data-target="#markPaidDiv">
-            <input type="submit" id="changeSuspensionSubmit" class="btn btn-primary btn-sm" value="Change Suspension"
-                   disabled data-toggle="collapse" data-target="#changeSuspensionForm">
+            <input type="submit" id="changePermissionsSubmit" class="btn btn-primary btn-sm" value="Change Permissions"
+                   disabled data-toggle="collapse" data-target="#changePermissionsForm">
           </div>
         </div>
 
@@ -96,6 +96,44 @@
           </div>
         </div>
 
+        <div id="markPaidDiv" class="collapse mt-3">
+          <div class="card card-body">
+            <form id="markPaidForm" th:action="@{/markPaidSubmit}" method="post">
+              <input type="hidden" id="selectedMemberEmail" name="email">
+              <input type="hidden" id="selectedMemberId" name="id">
+              <div class="form-group">
+                <label for="paidMemberList"><span style="color:red">* </span>Users:</label>
+                <textarea class="form-control" rows="1" id="paidMemberList" name="paidMemberList"></textarea>
+              </div>
+              <div class="form-group">
+              <label><span style="color:red">* </span>Payment Status:</label>
+                <div class="form-check form-check-inline ">
+                  <label class="form-check-label" for="paidToggleTrue" style="margin-right:5px;font-weight:normal">Paid: </label>
+                  <input class="form-check-input" type="radio" name="paidToggle" id="paidToggleTrue" value="true">
+                </div>
+                <div class="form-check form-check-inline">
+                  <label class="form-check-label" for="paidToggleFalse" style="margin-right:5px;font-weight:normal">Not Paid: </label>
+                  <input class="form-check-input" type="radio" name="paidToggle" id="paidToggleFalse" value="false">
+                </div>
+              </div>
+              <div class="form-group">
+              <label for="tiers"><span style="color:red">* </span>Tier:</label>
+                <select class="form-select" id="tiers" name="tier">
+                  <option value="1000">No Tier Change</option>
+                  <option value="1">Alumni</option>
+                  <option value="2">General</option>
+                  <option value="3">Professional</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="datePaid">Date Paid:</label>
+                <input type="date" id="datePaid" name="datePaid">
+              </div>
+              <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+          </div>
+        </div>
+
         <!-- Hidden change permissions form-->
         <div id="changePermissionsForm" class="collapse mt-3">
           <div class="card card-body">
@@ -113,23 +151,6 @@
           </div>
         </div>
 
-        <!-- Hidden suspend form-->
-        <div id="changeSuspensionForm" class="collapse mt-3">
-          <div class="card card-body">
-            <form id="suspensionChangeForm" th:action="@{/changeUserSuspension}" method="post">
-              <input type="hidden" id="selectedSuspensionEmail" name="email">
-
-              <div class="form-group" >
-                <label for="suspend">Suspend</label>
-                <input  type="radio" id="suspend" name="suspend" value = 0>
-                <label for="unSuspend">Unsuspend</label>
-                <input type="radio" id="unSuspend" name="suspend" value = 1>
-              </div>
-              <button type="submit" class="btn btn-success">Submit</button>
-            </form>
-          </div>
-        </div>
-
 
         <div class="card-body" th:if="${#lists.isEmpty(members)}">
           <h2>Error: No users found</h2>
@@ -137,71 +158,86 @@
         <div class="card-body" th:if="${not #lists.isEmpty(members)}">
           <table id="membersTable" class="table table-striped table-bordered membersTable" style="width:100%">
             <thead>
-              <tr>
-                <th></th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Secondary Email</th>
-                <th>Province</th>
-                <th>City</th>
-                <th>Postal Code</th>
-                <th>Suspended</th>
-                <th>Membership</th>
-                <th>Membership Status</th>
-                <th>Paid Date</th>
-                <th>Mailing List</th>
-                <th>Admin</th>
-              </tr>
+            <tr>
+              <th></th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Secondary Email</th>
+              <th>Province</th>
+              <th>City</th>
+              <th>Postal Code</th>
+              <th>Account Status</th>
+              <th>Membership</th>
+              <th>Membership Status</th>
+              <th>Paid Date</th>
+              <th>Admin</th>
+            </tr>
             </thead>
             <tbody>
-              <tr th:each="member: ${members}">
-                <td><input onchange="toggleRowHighlight(this)" type="checkbox" th:data-email="${member.email}" th:data-userId="${member.userId}"></td>
-                <td th:utext="${member.firstName}"></td>
-                <td th:utext="${member.lastName}"></td>
-                <td th:utext="${member.phone}"></td>
-                <td th:utext="${member.email}"></td>
-                <td th:utext="${member.secondaryEmail}"></td>
-                <td th:utext="${member.province}"></td>
-                <td th:utext="${member.city}"></td>
-                <td th:utext="${member.postalCode}"></td>
-                <td><th:block th:switch="${member.accountEnabled}">
-                  <span th:case="0">Yes</span>
-                  <span th:case="1">No</span>
-                </th:block></td>
-                <td th:utext="${member.membershipID}"></td>
-                <td th:utext="${member.paid}"></td>
-                <td th:utext="${member.paidDate}"></td>
-                <td><th:block th:switch="${member.mailOpted}">
-                  <span th:case="true">Yes</span>
-                  <span th:case="false">No</span>
-                </th:block></td>
-                <td><th:block th:switch="${member.roleId}">
-                  <span th:case="1">Yes</span>
-                  <span th:case="2">No</span>
-                </th:block></td>
+            <tr th:each="member: ${members}">
+              <td><input onchange="toggleRowHighlight(this)" type="checkbox" th:data-email="${member.email}" th:data-userId="${member.userId}"></td>
+              <td th:utext="${member.firstName}"></td>
+              <td th:utext="${member.lastName}"></td>
+              <td th:utext="${member.phone}"></td>
+              <td th:utext="${member.email}"></td>
+              <td th:utext="${member.secondaryEmail}"></td>
+              <td th:utext="${member.province}"></td>
+              <td th:utext="${member.city}"></td>
+              <td th:utext="${member.postalCode}"></td>
 
-              </tr>
+              <td th:switch="${member.membershipID}" >
+                <p th:case="'0'">Disabled</p>
+                <p th:case="*">Enabled</p>
+              </td>
+
+              <td th:switch="${member.membershipID}">
+                <p th:case="null">None</p>
+                <p th:case="0">None</p>
+                <p th:case="1">Alumni</p>
+                <p th:case="2">General</p>
+                <p th:case="3">Professional</p>
+                <p th:case="*">None</p>
+              </td>
+
+              <td th:switch="${member.paid}">
+                <p th:case="'1'">Paid</p>
+                <p th:case="'True'">Paid</p>
+                <p th:case="'TRUE'">Paid</p>
+                <p th:case="*">Unpaid</p>
+              </td>
+
+              <td th:switch="${member.paid}">
+                <p th:case="'1'" th:utext="${member.paidDate}"></p>
+                <p th:case="'True'" th:utext="${member.paidDate}"></p>
+                <p th:case="'TRUE'" th:utext="${member.paidDate}"></p>
+                <p th:case="*"></p>
+              </td>
+              <td><th:block th:switch="${member.roleId}">
+                <span th:case="1">Yes</span>
+                <span th:case="2">No</span>
+              </th:block></td>
+
+            </tr>
             </tbody>
             <tfoot>
-              <tr>
-                <th></th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Secondary Email</th>
-                <th>Province</th>
-                <th>City</th>
-                <th>Postal Code</th>
-                <th>Suspended</th>
-                <th>Membership</th>
-                <th>Membership Status</th>
-                <th>Paid Date</th>
-                <th>Mailing List</th>
-                <th>Admin</th>
-              </tr>
+            <tr>
+              <th></th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Secondary Email</th>
+              <th>Province</th>
+              <th>City</th>
+              <th>Postal Code</th>
+              <th>Account Status</th>
+              <th>Membership</th>
+              <th>Membership Status</th>
+              <th>Paid Date</th>
+              <th>Admin</th>
+            </tr>
             </tfoot>
           </table>
         </div>

@@ -71,7 +71,7 @@
 }
 
 .membersPageBody{
-    /*     height: 75vh; */
+/*     height: 75vh; */
     width: 76vw;
 }
 
@@ -88,3 +88,9 @@
 /*#memberPasswordSubmit{
     margin-top: 1vh;
 }*/
+
+#copyEmailClipboardBtn{
+    background-color: #cde1ff;
+    color: black;
+    border-radius: 5px;
+}

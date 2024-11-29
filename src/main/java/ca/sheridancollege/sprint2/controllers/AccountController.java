@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import static java.lang.Integer.parseInt;
@@ -124,6 +125,24 @@ public class AccountController {
         }
     }
 
+    @PostMapping("/markPaidSubmit")
+    public String markPaidSubmit(@RequestParam("paidMemberList") String paidMemberList,
+                                 @RequestParam("paidToggle") String paidToggle,
+                                 @RequestParam("tier") String tier,
+                                 @RequestParam("datePaid") String datePaid,
+                                 RedirectAttributes redirectAttributes) {
+        boolean toggle = Boolean.parseBoolean(paidToggle);
+        boolean updateSuccessful = da.updatePaidInfo(paidMemberList, toggle, tier, datePaid);
+
+        if (updateSuccessful) {
+            redirectAttributes.addFlashAttribute("successMessage", "User memberships updated successfully.");
+        } else {
+            System.out.println("nope");
+            redirectAttributes.addFlashAttribute("errorMessage", "Invalid user entered.");
+        }
+        return "redirect:/admin/members";
+    }
+
     @PostMapping("/changeUserPassword")
     public String changeUserPassword(@RequestParam("email") String email,
                                       @RequestParam("newPassword") String newPassword,
@@ -202,14 +221,15 @@ public class AccountController {
         Boolean paid = false;
         Date paidDate = null;
 
-        if (MembershipType.toLowerCase().equals("alumni")) {
+        if (MembershipType.equalsIgnoreCase("alumni")) {
             membershipId = 1;
         } else if (MembershipType.equals("general")) {
             membershipId = 2;
-        } else if (MembershipType.toLowerCase().equals("professional")) {
+        } else if (MembershipType.equalsIgnoreCase("professional")) {
             membershipId = 3;
         } else {
             redirectAttrs.addFlashAttribute("error", "Invalid Membership Type");
+            return "redirect:/myAccount";
         }
 
         try {

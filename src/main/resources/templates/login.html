@@ -41,7 +41,7 @@
         <!-- About us Dropdown -->
         <li class="nav-item dropdown px-2 ">
             <a class="nav-link dropdown-toggle" href="#" id="aboutusdrop" data-toggle="dropdown">
-                About us
+                About Us
             </a>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="#">Chapters</a>
@@ -118,6 +118,10 @@
                     <div class="errorNotice" th:if="${param.error}">
                         <span>Error Encountered:</span>
                         <p class="smallestText">Invalid username/password</p>
+                    </div>
+                    <div class="errorNotice" th:if="${errorMessage}">
+                        <span>Error Encountered:</span>
+                        <p class="smallestText" th:text="${errorMessage}"></p>
                     </div>
                     <div class="successNotice" th:if="${param.logout}">
                         <p>You have been successfully logged out</p>
