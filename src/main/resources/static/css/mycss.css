@@ -347,8 +347,8 @@ fieldset legend {
 
 .emailOutput {
     margin: auto;
-    height: 150px;
-    width: 400px;
+    height: 35vh;
+    width: 67vw;
 }
 
 .emailOutput textarea {

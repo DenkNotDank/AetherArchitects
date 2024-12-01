@@ -129,8 +129,17 @@ public class AccountController {
     public String markPaidSubmit(@RequestParam("paidMemberList") String paidMemberList,
                                  @RequestParam("paidToggle") String paidToggle,
                                  @RequestParam("tier") String tier,
-                                 @RequestParam("datePaid") String datePaid) {
-        da.updatePaidInfo(paidMemberList, paidToggle, tier, datePaid);
+                                 @RequestParam("datePaid") String datePaid,
+                                 RedirectAttributes redirectAttributes) {
+        boolean toggle = Boolean.parseBoolean(paidToggle);
+        boolean updateSuccessful = da.updatePaidInfo(paidMemberList, toggle, tier, datePaid);
+
+        if (updateSuccessful) {
+            redirectAttributes.addFlashAttribute("successMessage", "User memberships updated successfully.");
+        } else {
+            System.out.println("nope");
+            redirectAttributes.addFlashAttribute("errorMessage", "Invalid user entered.");
+        }
         return "redirect:/admin/members";
     }
 

@@ -24,7 +24,9 @@ function memberMarkPaidChange() {
                 }
             }
 
-            if (selectedEmails.length > 0) {
+            paidMemberList.value = selectedEmails.join(', ');
+
+            /*if (selectedEmails.length > 0) {
                 markPaidButton.disabled = false;
                 selectedMemberEmailInput.value = selectedEmails[0]; // Set the first email for the hidden input
                 paidMemberList.value = selectedEmails.join(', '); // Join emails with commas and update textarea
@@ -33,7 +35,7 @@ function memberMarkPaidChange() {
                 selectedMemberEmailInput.value = "";
                 paidMemberList.value = ""; // Clear the textarea
                 $(markPaidDiv).collapse('hide'); // Hide form if no checkbox is selected
-            }
+            }*/
         });
     });
 
@@ -54,7 +56,7 @@ function validateMarkPaidForm(event) {
     }
 
     if (!paidToggleTrue.checked && !paidToggleFalse.checked) {
-        alert('Please select either "Yes" or "No" for payment status.');
+        alert('Please select either "Paid" or "Not Paid" for payment status.');
         event.preventDefault();
         return false;
     }
@@ -74,9 +76,14 @@ function memberPasswordChange() {
     const checkboxes = document.querySelectorAll('#membersTable tbody input[type="checkbox"]');
     const changePasswordButton = document.getElementById('memberPasswordSubmit');
     const changePermissionButton = document.getElementById('changePermissionsSubmit');
+    const changeSuspensionButton = document.getElementById('changeSuspensionSubmit');
+
     const passwordResetForm = document.getElementById('passwordResetForm');
     const changePermissionsForm = document.getElementById('changePermissionsForm');
+    const changeSuspensionForm = document.getElementById('changeSuspensionForm');
+
     const selectedMemberEmailInput = document.getElementById('selectedMemberEmail');
+    const selectedSuspensionEmailInput = document.getElementById('selectedSuspensionEmail');
     const selectedUserIdInput = document.getElementById('selectedUserId');
 
 
@@ -87,14 +94,23 @@ function memberPasswordChange() {
             if (selected.length === 1) {
                 changePasswordButton.disabled = false;
                 changePermissionButton.disabled = false;
+                changeSuspensionButton.disabled = false;
+
                 selectedMemberEmailInput.value = selected[0].getAttribute('data-email');
+                selectedSuspensionEmailInput.value = selected[0].getAttribute('data-email');
                 selectedUserIdInput.value = selected[0].getAttribute('data-userId')                //$(passwordResetForm).collapse('show');
             } else {
                 changePasswordButton.disabled = true;
                 changePermissionButton.disabled = true;
+                changeSuspensionButton.disabled = true;
+
                 selectedMemberEmailInput.value = "";
+                selectedSuspensionEmailInput.value = "";
                 selectedUserIdInput.value = "";
+
                 $(passwordResetForm).collapse('hide'); // Hide form if no checkbox is selected
+                $(changePermissionsForm).collapse('hide');
+                $(changeSuspensionForm).collapse('hide');
             }
         });
     });
@@ -102,6 +118,7 @@ function memberPasswordChange() {
     // Hide the form when the page loads
     $(passwordResetForm).collapse('hide');
     $(changePermissionsForm).collapse('hide');
+    $(changeSuspensionForm).collapse('hide');
 }
 
 // Function to hide success and error messages after 3 seconds

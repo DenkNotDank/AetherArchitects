@@ -51,10 +51,12 @@ public class AdminController {
             @RequestParam(defaultValue = "false",name = "suspended") boolean suspended,
             @RequestParam(defaultValue = "false",name = "notSuspended") boolean notSuspended,
             @RequestParam(defaultValue = "false",name = "secondary") boolean secondary,
+            @RequestParam(defaultValue = "false",name = "optedIn") boolean optedIn,
+            @RequestParam(defaultValue = "false",name = "optedOut") boolean optedOut,
             Model model){
 
        List<Member> emails = da.getFilteredList(free, basic, premium, paid, unpaid,
-               admin, user, suspended, notSuspended, secondary);
+               admin, user, suspended, notSuspended, secondary, optedIn, optedOut);
 
         String csvEmails;
        if(emails.isEmpty()){
@@ -97,10 +99,26 @@ public class AdminController {
             return "redirect:/admin/members";
         }
         else{
-            redirectAttrs.addFlashAttribute("errorMessage", "System error: User password not updated");
+            redirectAttrs.addFlashAttribute("errorMessage", "System error: User permissions not changed");
             return "redirect:/admin/members";
         }
 
+    }
+
+    @PostMapping("/changeUserSuspension")
+    public String changeUserSuspension(@RequestParam("email") String email,
+                                       @RequestParam("suspend") Integer suspend,
+                                       RedirectAttributes redirectAttrs) {
+        // Encode the password and update in the database
+        boolean updated = da.updateUserSuspension(suspend, email);
+        if(updated){
+            redirectAttrs.addFlashAttribute("successMessage", "Suspension status successfully changed");
+            return "redirect:/admin/members";
+        }
+        else{
+            redirectAttrs.addFlashAttribute("errorMessage", "System error: Suspension status not changed");
+            return "redirect:/admin/members";
+        }
     }
 
 }

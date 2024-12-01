@@ -50,7 +50,8 @@ create table USER_MEMBERSHIPS(
         userID BIGINT NOT NULL PRIMARY KEY,
         membershipID INT DEFAULT 0,
         paid BOOLEAN DEFAULT FALSE,
-        paidDate DATE DEFAULT NULL
+        paidDate DATE DEFAULT NULL,
+        mailOpted BOOLEAN DEFAULT TRUE
 );
 
 alter table USER_MEMBERSHIPS
