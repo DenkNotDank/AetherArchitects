@@ -27,6 +27,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
+                .failureUrl("/login-error")
                 .and()
                 .logout() //
                 .invalidateHttpSession(true) //this clears the information after you log out

@@ -3,9 +3,15 @@ package ca.sheridancollege.sprint2.controllers;
 import ca.sheridancollege.sprint2.database.DatabaseAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class HomeController {
@@ -22,7 +28,8 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public String getLoginPage() {
+    public String getLoginPage(Model model) {
+        model.addAttribute("errorMessage", null);
         return "login";
     }
 
@@ -51,4 +58,23 @@ public class HomeController {
             return "redirect:/";
         }
     }
+
+
+    @GetMapping("/login-error")
+    public String login(HttpServletRequest request, Model model){
+        HttpSession session = request.getSession(false);
+        String errorMessage = null;
+        if(session!= null){
+            AuthenticationException ex = (AuthenticationException) session
+                    .getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+            if(ex != null){
+                errorMessage = ex.getMessage();
+            }
+        }
+        model.addAttribute("errorMessage", errorMessage);
+        return "login";
+    }
+
+
+
 }

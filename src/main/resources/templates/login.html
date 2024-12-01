@@ -119,6 +119,10 @@
                         <span>Error Encountered:</span>
                         <p class="smallestText">Invalid username/password</p>
                     </div>
+                    <div class="errorNotice" th:if="${errorMessage}">
+                        <span>Error Encountered:</span>
+                        <p class="smallestText" th:text="${errorMessage}"></p>
+                    </div>
                     <div class="successNotice" th:if="${param.logout}">
                         <p>You have been successfully logged out</p>
                     </div>

@@ -60,6 +60,8 @@
         <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
       </div>
 
+
+
       <div class="card membersPageBody">
         <div class="card membersPageSort">
           <br>
@@ -68,7 +70,7 @@
             <input type="submit" id="memberPasswordSubmit" class="btn btn-primary btn-sm" value="Change Password"
                    disabled data-toggle="collapse" data-target="#passwordResetForm">
             <input type="submit" id="memberMarkPaid" class="btn btn-primary btn-sm" value="Mark Paid Membership"
-                    disabled data-toggle="collapse" data-target="#markPaidDiv">
+                   data-toggle="collapse" data-target="#markPaidDiv">
             <input type="submit" id="changePermissionsSubmit" class="btn btn-primary btn-sm" value="Change Permissions"
                    disabled data-toggle="collapse" data-target="#changePermissionsForm">
           </div>
@@ -100,11 +102,11 @@
               <input type="hidden" id="selectedMemberEmail" name="email">
               <input type="hidden" id="selectedMemberId" name="id">
               <div class="form-group">
-                <label for="paidMemberList">Users:</label>
-                <textarea class="form-control" rows="1" id="paidMemberList" name="paidMemberList" readonly></textarea>
+                <label for="paidMemberList"><span style="color:red">* </span>Users:</label>
+                <textarea class="form-control" rows="1" id="paidMemberList" name="paidMemberList"></textarea>
               </div>
               <div class="form-group">
-              <label>Payment Status:</label>
+              <label><span style="color:red">* </span>Payment Status:</label>
                 <div class="form-check form-check-inline ">
                   <label class="form-check-label" for="paidToggleTrue" style="margin-right:5px;font-weight:normal">Paid: </label>
                   <input class="form-check-input" type="radio" name="paidToggle" id="paidToggleTrue" value="true">
@@ -115,7 +117,7 @@
                 </div>
               </div>
               <div class="form-group">
-              <label for="tiers">Tier:</label>
+              <label for="tiers"><span style="color:red">* </span>Tier:</label>
                 <select class="form-select" id="tiers" name="tier">
                   <option value="1000">No Tier Change</option>
                   <option value="1">Alumni</option>
@@ -200,14 +202,14 @@
               </td>
 
               <td th:switch="${member.paid}">
-                <p th:case="'true'">Paid</p>
+                <p th:case="'1'">Paid</p>
                 <p th:case="'True'">Paid</p>
                 <p th:case="'TRUE'">Paid</p>
                 <p th:case="*">Unpaid</p>
               </td>
 
               <td th:switch="${member.paid}">
-                <p th:case="'true'" th:utext="${member.paidDate}"></p>
+                <p th:case="'1'" th:utext="${member.paidDate}"></p>
                 <p th:case="'True'" th:utext="${member.paidDate}"></p>
                 <p th:case="'TRUE'" th:utext="${member.paidDate}"></p>
                 <p th:case="*"></p>
