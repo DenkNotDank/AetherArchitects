@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Voice Camp</title>
+    <title>Donate</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script th:src="@{/js/bootstrap/bootstrap.js}"></script>
     <script th:src="@{/js/bootstrap/bootstrap.bundle.js}"></script>
@@ -34,7 +34,7 @@
             Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span>
             <a href="/" sec:authentication="name"></a>
             <a style="margin-left: 1vw;" href="#" th:href="@{/admin/dashboard}"><button>ADMIN PANEL</button></a>
-            <button style="margin-left: 1vw; margin-right: 1vw; color:#f77272;" id="toggleVisibilityButton" class="floating-button" data-content-id="11"
+            <button style="margin-left: 1vw; margin-right: 1vw; color:#f77272;" id="toggleVisibilityButton" class="floating-button" data-content-id="6"
                 th:text="${pageHidden != null ? (pageHidden ? 'UNHIDE CURRENT PAGE' : 'HIDE CURRENT PAGE') : 'UNHIDE CURRENT PAGE'}"></button>
         </div>
         <div th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
@@ -68,7 +68,7 @@
                 </div>
             </li>
 
-            <li class="nav-item px-2 ">
+            <li class="nav-item active px-2 ">
                 <a class="nav-link" href="#" th:href="@{/donate}">Donate</a>
             </li>
 
@@ -99,7 +99,7 @@
                 </div>
             </li>
 
-            <li class="nav-item active px-2">
+            <li class="nav-item px-2 ">
                 <a class="nav-link" href="#" th:href="@{/camp}">Voice Camp 2024</a>
             </li>
 
@@ -150,7 +150,7 @@
 
         <div class="form-group" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             <form method="post">
-                <input type="hidden" id="contentId" value="11">
+                <input type="hidden" id="contentId" value="6">
                 <textarea id="editor" th:text="${pageContent}"></textarea>
             </form>
         </div>

@@ -42,6 +42,13 @@ public class PageController {
         return "pages/aboutUsPages/sponsor";
     }
 
+    @GetMapping("/donate")
+    public String getDonatePage(Model model) {
+        model.addAttribute("pageContent", da.getContent(6));
+        model.addAttribute("pageHidden", da.isPageHidden(6));
+        return "pages/donate";
+    }
+
     @GetMapping("/parents")
     public String getParentsPage(Model model) {
         model.addAttribute("pageContent", da.getContent(7));
@@ -72,8 +79,8 @@ public class PageController {
     
     @GetMapping("/camp")
     public String getCampPage(Model model) {
-        model.addAttribute("pageContent", da.getContent(16));
-        model.addAttribute("pageHidden", da.isPageHidden(16));
+        model.addAttribute("pageContent", da.getContent(11));
+        model.addAttribute("pageHidden", da.isPageHidden(11));
         return "pages/camp";
     }
 }

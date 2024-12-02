@@ -33,7 +33,7 @@
         <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             Logged in as Admin <span class="glyphicon glyphicon-sunglasses">&nbsp;</span>
             <a href="/" sec:authentication="name"></a>
-            <a style="margin-left: 1vw;" href="#" th:href="@{/admin/dashboard}"><button>ADMIN PANEL</button></a>
+            <a style="margin-left: 1vw;" th:href="@{/admin/dashboard}"><button>ADMIN PANEL</button></a>
             <button style="margin-left: 1vw; margin-right: 1vw; color:#f77272;" id="toggleVisibilityButton" class="floating-button" data-content-id="1"
                 th:text="${pageHidden != null ? (pageHidden ? 'UNHIDE CURRENT PAGE' : 'HIDE CURRENT PAGE') : 'UNHIDE CURRENT PAGE'}"></button>
         </div>
@@ -60,74 +60,74 @@
 
             <!-- About us Dropdown -->
             <li class="nav-item dropdown px-2 ">
-                <a class="nav-link dropdown-toggle" href="#" id="aboutusdrop" data-toggle="dropdown">About Us</a>
+                <a class="nav-link dropdown-toggle" id="aboutusdrop" data-toggle="dropdown">About Us</a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" th:href="@{/chapters}">Chapters</a>
-                    <a class="dropdown-item" href="#" th:href="@{/publications}">Publications</a>
-                    <a class="dropdown-item" href="#" th:href="@{/staff}">Staff & Board</a>
-                    <a class="dropdown-item" href="#" th:href="@{/sponsor}">Our Funders And Sponsors</a>
+                    <a class="dropdown-item" th:href="@{/chapters}">Chapters</a>
+                    <a class="dropdown-item" th:href="@{/publications}">Publications</a>
+                    <a class="dropdown-item" th:href="@{/staff}">Staff & Board</a>
+                    <a class="dropdown-item" th:href="@{/sponsor}">Our Funders And Sponsors</a>
                 </div>
             </li>
 
             <li class="nav-item px-2 ">
-                <a class="nav-link" href="#">Donate</a>
+                <a class="nav-link" th:href="@{/donate}">Donate</a>
             </li>
 
             <!-- Our Programs Dropdown -->
             <li class="nav-item dropdown px-2">
-                <a class="nav-link dropdown-toggle" href="#" id="programsdrop" data-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" id="programsdrop" data-toggle="dropdown">
                     Our Programs
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" th:href="@{/parents}">Parents</a>
-                    <a class="dropdown-item" href="#" th:href="@{/childrenYouth}">Children/Youth</a>
-                    <a class="dropdown-item" href="#" th:href="@{/earlyYears}">Early Years</a>
-                    <a class="dropdown-item" href="#" th:href="@{/educators}">Educators/Alumni</a>
-                    <a class="dropdown-item" href="#">Advocacy/Public Education</a>
-                    <a class="dropdown-item" href="#">Youth Mentorship</a>
-                    <a class="dropdown-item" href="#">SEAC</a>
+                    <a class="dropdown-item" th:href="@{/parents}">Parents</a>
+                    <a class="dropdown-item" th:href="@{/childrenYouth}">Children/Youth</a>
+                    <a class="dropdown-item" th:href="@{/earlyYears}">Early Years</a>
+                    <a class="dropdown-item" th:href="@{/educators}">Educators/Alumni</a>
+                    <a class="dropdown-item" >Advocacy/Public Education</a>
+                    <a class="dropdown-item" >Youth Mentorship</a>
+                    <a class="dropdown-item" >SEAC</a>
                 </div>
             </li>
 
             <!-- Events Dropdown -->
             <li class="nav-item dropdown px-2 ">
-                <a class="nav-link dropdown-toggle" href="#" id="eventsdrop" data-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" id="eventsdrop" data-toggle="dropdown">
                     Events
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Conference 2024</a>
-                    <a class="dropdown-item" href="#">Conference 2023</a>
+                    <a class="dropdown-item" >Conference 2024</a>
+                    <a class="dropdown-item" >Conference 2023</a>
                 </div>
             </li>
 
             <li class="nav-item px-2 ">
-                <a class="nav-link" href="#" th:href="@{/camp}">Voice Camp 2024</a>
+                <a class="nav-link" th:href="@{/camp}">Voice Camp 2024</a>
             </li>
 
             <!-- Resources Dropdown -->
             <li class="nav-item dropdown px-2 ">
-                <a class="nav-link dropdown-toggle" href="#" id="resourcesdrop" data-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" id="resourcesdrop" data-toggle="dropdown">
                     Resources
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Financial</a>
-                    <a class="dropdown-item" href="#">Mental Health</a>
-                    <a class="dropdown-item" href="#">Library</a>
-                    <a class="dropdown-item" href="#">Educational</a>
-                    <a class="dropdown-item" href="#">Other Languages</a>
-                    <a class="dropdown-item" href="#">Audiology</a>
-                    <a class="dropdown-item" href="#">AVT/LSLS</a>
-                    <a class="dropdown-item" href="#">Other Organization</a>
+                    <a class="dropdown-item" >Financial</a>
+                    <a class="dropdown-item" >Mental Health</a>
+                    <a class="dropdown-item" >Library</a>
+                    <a class="dropdown-item" >Educational</a>
+                    <a class="dropdown-item" >Other Languages</a>
+                    <a class="dropdown-item" >Audiology</a>
+                    <a class="dropdown-item" >AVT/LSLS</a>
+                    <a class="dropdown-item" >Other Organization</a>
                 </div>
             </li>
 
             <li class="nav-item px-2 ">
-                <a class="nav-link" href="#" th:href="@{/login}" sec:authorize="!isAuthenticated()">Login</a>
-                <a class="nav-link" href="#" th:href="@{/logout}" sec:authorize="isAuthenticated()">Logout</a>
+                <a class="nav-link" th:href="@{/login}" sec:authorize="!isAuthenticated()">Login</a>
+                <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()">Logout</a>
             </li>
 
             <li class="nav-item px-2 ">
-                <a class="nav-link" href="#" th:href="@{/myAccount}" sec:authorize="isAuthenticated()">My Account</a>
+                <a class="nav-link" th:href="@{/myAccount}" sec:authorize="isAuthenticated()">My Account</a>
             </li>
         </ul>
     </nav>
