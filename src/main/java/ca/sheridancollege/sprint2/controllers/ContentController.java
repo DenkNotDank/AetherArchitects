@@ -81,6 +81,24 @@ public class ContentController {
         }
     }
 
+    @PostMapping("/togglePageVisibility")
+    public ResponseEntity<String> togglePageVisibility(@RequestBody Map<String, Object> payload) {
+        if (payload.get("contentId") == null || payload.get("isVisible") == null) {
+            return ResponseEntity.badRequest().body("Missing required parameters.");
+        }
+        Long contentId = Long.valueOf(payload.get("contentId").toString());
+        boolean isVisible = (Boolean) payload.get("isVisible");
+
+        boolean result = da.updatePageHiddenStatus(contentId, isVisible);
+
+        if (result) {
+            return ResponseEntity.ok("Visibility updated successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update visibility.");
+        }
+    }
+
 
 
 }
