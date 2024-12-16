@@ -105,6 +105,12 @@ public class DatabaseAccess {
         parameters.addValue("postalCode", postalCode);
         parameters.addValue("password", passworEncoder().encode(password));
         jdbc.update(q, parameters);
+
+        //Create membership entry for user
+        q = "SELECT userId FROM SEC_USER WHERE email = :email";
+        parameters.addValue("email", email);
+        Long id = jdbc.queryForObject(q, parameters, Long.class);
+        updateUserMembership(id, 0, false, null);
     }
 
     public boolean updatePaidInfo(String paidMemberList, Boolean paidToggle, String tier, String datePaid) {

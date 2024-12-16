@@ -276,10 +276,10 @@ function copyEmailToClipboard(){
     var copyText = document.getElementById("filteredEmailOutput");
     copyText.select()
     copyText.setSelectionRange(0, 99999);
-
+    alert("Copied Emails to clipboard");
     navigator.clipboard.writeText(copyText.value);
 
-    alert("Copied Emails to clipboard");
+
 
 }
 

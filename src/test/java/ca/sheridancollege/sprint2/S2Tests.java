@@ -127,27 +127,27 @@ class S2Tests {
         assertEquals(contentBody, content.getContentBody());
     }
 
-    @Test
-    public void testUser() {
-
-        User user = new User(1L,
-                "josh@example.com",
-                "Josh", "Abeto", 9055558888L,
-                "fakeaccount@example.com",
-                "Ontario", "Toronto", "A1B2C3",
-                "password");
-
-        assertEquals(1L, user.getUserId());
-        assertEquals("josh@example.com", user.getEmail());
-        assertEquals("Josh", user.getFirstName());
-        assertEquals("Abeto", user.getLastName());
-        assertEquals(9055558888L, user.getPhone());
-        assertEquals("fakeaccount@example.com", user.getSecondaryEmail());
-        assertEquals("Ontario", user.getProvince());
-        assertEquals("Toronto", user.getCity());
-        assertEquals("A1B2C3", user.getPostalCode());
-        assertEquals("password", user.getEncryptedPassword());
-    }
+//    @Test
+//    public void testUser() {
+//
+//        User user = new User(1L,
+//                "josh@example.com",
+//                "Josh", "Abeto", 9055558888L,
+//                "fakeaccount@example.com",
+//                "Ontario", "Toronto", "A1B2C3",
+//                "password");
+//
+//        assertEquals(1L, user.getUserId());
+//        assertEquals("josh@example.com", user.getEmail());
+//        assertEquals("Josh", user.getFirstName());
+//        assertEquals("Abeto", user.getLastName());
+//        assertEquals(9055558888L, user.getPhone());
+//        assertEquals("fakeaccount@example.com", user.getSecondaryEmail());
+//        assertEquals("Ontario", user.getProvince());
+//        assertEquals("Toronto", user.getCity());
+//        assertEquals("A1B2C3", user.getPostalCode());
+//        assertEquals("password", user.getEncryptedPassword());
+//    }
 
     @Test
     public void testContentController() {

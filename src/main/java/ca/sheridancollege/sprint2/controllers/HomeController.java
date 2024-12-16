@@ -8,6 +8,7 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +45,7 @@ public class HomeController {
             @RequestParam(name = "province") String province,
             @RequestParam(name = "city") String city,
             @RequestParam(name = "postalCode", required = false, defaultValue = "") String postalCode,
-            Model model) {
+            Model model, RedirectAttributes redirectAttributes) {
 
         if (da.findUserAccount(email) != null) {
             model.addAttribute("userExists", true);
@@ -55,7 +56,8 @@ public class HomeController {
             long userId = da.findUserAccount(email).getUserId();
             // Add user roles to database. roleId=2 means they are a user, not an admin
             da.addRole(userId, 2);
-            return "redirect:/";
+            redirectAttributes.addFlashAttribute("message", "Account Successfully Created");
+            return "redirect:/login";
         }
     }
 
